@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlzrQuiz.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlzrQuiz
 {
@@ -29,7 +30,7 @@ namespace BlzrQuiz
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
+            //services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
