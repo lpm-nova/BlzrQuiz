@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlzrQuiz", "BlzrQuiz\BlzrQuiz.csproj", "{0A96F037-4520-4E53-8741-ED3757B3AD13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlzrQuiz.Shared", "BlzrQuiz.Shared\BlzrQuiz.Shared.csproj", "{29A41FE4-B527-4480-9597-B7901A3229B7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{0A96F037-4520-4E53-8741-ED3757B3AD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A96F037-4520-4E53-8741-ED3757B3AD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A96F037-4520-4E53-8741-ED3757B3AD13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29A41FE4-B527-4480-9597-B7901A3229B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29A41FE4-B527-4480-9597-B7901A3229B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29A41FE4-B527-4480-9597-B7901A3229B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29A41FE4-B527-4480-9597-B7901A3229B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

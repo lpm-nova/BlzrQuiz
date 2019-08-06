@@ -19,6 +19,7 @@ namespace BlzrQuiz
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+          
         }
 
         public IConfiguration Configuration { get; }
@@ -30,7 +31,7 @@ namespace BlzrQuiz
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            //services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
+            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite("Data Source=quiz.db"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +47,11 @@ namespace BlzrQuiz
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>();
+                context.Database.EnsureCreated();
+            }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

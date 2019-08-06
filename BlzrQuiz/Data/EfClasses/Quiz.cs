@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlzrQuiz
+namespace BlzrQuiz.Data.EfClasses
 {
     public class Quiz
     {
@@ -10,5 +10,7 @@ namespace BlzrQuiz
         public string Name { get; set; }
         public string Description { get; set; }
         public List<Question> Questions { get; set; }
+
+        public int GetScore() { return 0; }
     }
 }
