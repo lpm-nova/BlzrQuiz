@@ -1,0 +1,66 @@
+﻿@page "/questions/overview"
+@using BlzrQuiz.ServiceLayer
+@using BlzrQuiz.Data.EfClasses
+@inject QuestionService QService
+<h3>Questions</h3>
+@if (questions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Text</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var question in questions)
+            {
+                <tr>
+                    <td>@question.QuestionId</td>
+                    <td>@question.Text</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h3>Create</h3>
+
+<h4>Question</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label for="Text" class="control-label">Text</label>
+            <input bind="@question.Text" class="form-control" type="text" id="question-text" placeholder="Insert Text" />
+            <span asp-validation-for="Question.Text" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button onclick=AddNewQuestion type="button" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+@code {
+    IEnumerable<Question> questions;
+    private Question question { get; set; } = new Question();
+
+    protected override async Task OnInitAsync()
+    {
+        questions = await QService.GetQuestions();
+    }
+    protected async Task AddNewQuestion()
+    {
+       await QService.AddQuestion(question);
+    }
+}
+

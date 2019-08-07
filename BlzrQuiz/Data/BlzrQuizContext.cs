@@ -22,6 +22,7 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<QuestionTags>().HasKey(qt => new { qt.QuestionId, qt.TagId });
             modelBuilder.Entity<QuestionTags>().HasOne<Question>().WithMany(t => t.Tags);
             modelBuilder.Entity<QuestionTags>().HasOne(t => t.Tag).WithMany();
+            modelBuilder.Entity<Question>().Ignore(q => q.Result);
 
         }
     }

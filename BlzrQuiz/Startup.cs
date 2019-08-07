@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlzrQuiz.Data;
 using Microsoft.EntityFrameworkCore;
+using BlzrQuiz.ServiceLayer;
 
 namespace BlzrQuiz
 {
@@ -31,6 +32,7 @@ namespace BlzrQuiz
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<QuestionService>();
             services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite("Data Source=quiz.db"));
         }
 
@@ -50,6 +52,7 @@ namespace BlzrQuiz
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>();
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
             }
             app.UseHttpsRedirection();
