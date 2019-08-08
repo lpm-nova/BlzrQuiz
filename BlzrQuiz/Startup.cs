@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BlzrQuiz.Data;
+using BlzrQuiz.ServiceLayer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlzrQuiz.Data;
-using Microsoft.EntityFrameworkCore;
-using BlzrQuiz.ServiceLayer;
 
 namespace BlzrQuiz
 {
@@ -20,7 +14,7 @@ namespace BlzrQuiz
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-          
+
         }
 
         public IConfiguration Configuration { get; }
@@ -32,7 +26,7 @@ namespace BlzrQuiz
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<QuestionService>();
+            services.AddScoped<QuizService>();
             services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite("Data Source=quiz.db"));
         }
 

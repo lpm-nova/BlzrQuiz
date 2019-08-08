@@ -1,12 +1,10 @@
-﻿using System;
+﻿using BlzrQuiz.Data;
+using BlzrQuiz.Data.EfClasses;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BlzrQuiz.Data;
-using BlzrQuiz.Data.EfClasses;
 
 namespace BlzrQuiz.Controllers
 {

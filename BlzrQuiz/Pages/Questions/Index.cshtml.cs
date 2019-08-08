@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using BlzrQuiz.Data.EfClasses;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BlzrQuiz.Data;
-using BlzrQuiz.Data.EfClasses;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlzrQuiz.Pages.Questions
 {
@@ -19,7 +15,7 @@ namespace BlzrQuiz.Pages.Questions
             _context = context;
         }
 
-        public IList<Question> Question { get;set; }
+        public IList<Question> Question { get; set; }
 
         public async Task OnGetAsync()
         {

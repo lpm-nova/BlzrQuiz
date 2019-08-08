@@ -11,7 +11,7 @@ namespace BlzrQuiz.Data
         public DbSet<Tag> Tags { get; set; }
 
         public BlzrQuizContext(DbContextOptions options) : base(options) { }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuring a one-to-many question -> answer relationship that is friendly for serialisation
@@ -22,8 +22,26 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<QuestionTags>().HasKey(qt => new { qt.QuestionId, qt.TagId });
             modelBuilder.Entity<QuestionTags>().HasOne<Question>().WithMany(t => t.Tags);
             modelBuilder.Entity<QuestionTags>().HasOne(t => t.Tag).WithMany();
+
+            modelBuilder.Entity<Question>().HasKey(q => q.QuestionId);
+            modelBuilder.Entity<Question>().Property<int>("QuestionId").ValueGeneratedOnAdd();
             modelBuilder.Entity<Question>().Ignore(q => q.Result);
 
+            modelBuilder.Entity<Answer>().Property<int>("AnswerId").ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Quiz>().Property<int>("QuizId").ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Tag>().Property<int>("TagId").ValueGeneratedOnAdd();
+            //// Configuring a one-to-many question -> answer relationship that is friendly for serialisation
+            //modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
+            //modelBuilder.Entity<QuizQuestion>().HasOne<Quiz>().WithMany(q => q.Questions);
+            modelBuilder.Entity<Quiz>().HasData(
+            new Quiz
+            {
+                QuizId = 1,
+                Name = "AZ-900",
+                Description = "Microsoft Azure Fundamentals"
+            });
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BlzrQuiz.Data.EfClasses
+﻿namespace BlzrQuiz.Data.EfClasses
 {
     public class Answer
     {

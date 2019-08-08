@@ -1,6 +1,4 @@
-﻿using BlzrQuiz.Data.EfClasses;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BlzrQuiz.Data.EfClasses
 {
@@ -18,8 +16,8 @@ namespace BlzrQuiz.Data.EfClasses
         public List<QuestionTags> Tags { get; set; }
         public List<QuestionAnswer> Answers { get; set; }
         public QResult Result { get; set; }
-        public virtual void AddTag(string tag) { }
-        public virtual void RemoveTag(string tag) { }
+        public int QuizId { get; set; }
+        public Quiz Quiz { get; set; }
     }
 
     public enum QResult

@@ -1,7 +1,10 @@
 ﻿@page "/questions/overview"
 @using BlzrQuiz.ServiceLayer
 @using BlzrQuiz.Data.EfClasses
-@inject QuestionService QService
+@using System.Diagnostics;
+@inject QuizService QService
+@inject IUriHelper urihelper;
+
 <h3>Questions</h3>
 @if (questions == null)
 {
@@ -14,16 +17,17 @@ else
             <tr>
                 <th>Id</th>
                 <th>Text</th>
-
+                <th>Quiz</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var question in questions)
             {
-                <tr>
-                    <td>@question.QuestionId</td>
-                    <td>@question.Text</td>
-                </tr>
+            <tr>
+                <td>@question.QuestionId</td>
+                <td>@question.Text</td>
+                <td>@question.Quiz.Name</td>
+            </tr>
             }
         </tbody>
     </table>
@@ -35,15 +39,22 @@ else
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label for="Text" class="control-label">Text</label>
-            <input bind="@question.Text" class="form-control" type="text" id="question-text" placeholder="Insert Text" />
-            <span asp-validation-for="Question.Text" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <button onclick=AddNewQuestion type="button" class="btn btn-primary">Save</button>
-        </div>
+      
+        <EditForm Model="@question" OnValidSubmit="@AddNewQuestion">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+                <label for="classification">Primary Classification: </label>
+                <InputSelect id="quiz" @bind-Value="@quizId">
+                    <option value="">Select Quiz ...</option>
+                    @foreach (var quiz in quizes)
+                    {
+                        <option value="@quiz.QuizId">@quiz.Name</option>
+                    }
+                </InputSelect>
+            <InputText Class="text-md-center" id="name" @bind-Value="@question.Text" />
+
+            <button type="submit">Submit</button>
+        </EditForm>
     </div>
 </div>
 
@@ -51,16 +62,29 @@ else
     <a asp-page="Index">Back to List</a>
 </div>
 @code {
+    private string quizId;
     IEnumerable<Question> questions;
+    IEnumerable<Quiz> quizes;
     private Question question { get; set; } = new Question();
 
     protected override async Task OnInitAsync()
     {
         questions = await QService.GetQuestions();
+        quizes = await QService.GetQuizes();
     }
-    protected async Task AddNewQuestion()
+    void AddNewQuestion()
     {
-       await QService.AddQuestion(question);
+        Debug.WriteLine("In AddNewQuestion");
+        AddQuizId();
+        QService.AddQuestion(question);
+        urihelper.NavigateTo("/questions/overview");
+    }
+    void AddQuizId()
+    {
+        if (!string.IsNullOrEmpty(quizId))
+        {
+            question.QuizId = int.TryParse(quizId, out int result) ? result : 0;
+        }
     }
 }
 
