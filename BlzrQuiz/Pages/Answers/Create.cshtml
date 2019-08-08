@@ -1,5 +1,5 @@
 ﻿@page
-@model BlzrQuiz.Pages.Questions.CreateModel
+@model BlzrQuiz.Pages.Answers.CreateModel
 
 @{
     ViewData["Title"] = "Create";
@@ -7,16 +7,21 @@
 
 <h1>Create</h1>
 
-<h4>Question</h4>
+<h4>Answer</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Question.Text" class="control-label"></label>
-                <input asp-for="Question.Text" class="form-control" />
-                <span asp-validation-for="Question.Text" class="text-danger"></span>
+                <label asp-for="Answer.Text" class="control-label"></label>
+                <input asp-for="Answer.Text" class="form-control" />
+                <span asp-validation-for="Answer.Text" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Answer.IsCorrect" /> @Html.DisplayNameFor(model => model.Answer.IsCorrect))
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

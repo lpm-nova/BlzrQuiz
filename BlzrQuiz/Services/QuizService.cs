@@ -3,6 +3,7 @@ using BlzrQuiz.Data.EfClasses;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlzrQuiz.ServiceLayer
@@ -31,6 +32,24 @@ namespace BlzrQuiz.ServiceLayer
             _context.SaveChangesAsync();
 
             //return new Question{ QuestionId = question.QuestionId };
+        }
+        public  Task<Question> GetQuestion(int id)
+        {
+            return _context.Questions.SingleAsync<Question>(e => e.QuestionId == id);
+            //return new Question{ QuestionId = question.QuestionId };
+        }
+        public void DeleteQuestion(Question question)
+        {
+            Debug.WriteLine($"Question: Id: {question.QuestionId}, Text: {question.Text}");
+            _context.Questions.Remove(question);
+            _context.SaveChangesAsync();
+
+            //return new Question{ QuestionId = question.QuestionId };
+        }
+        public void UpdateQuestion(Question question)//#D
+        {
+            _context.Questions.Update(question);
+            _context.SaveChanges(); //#G
         }
     }
 }

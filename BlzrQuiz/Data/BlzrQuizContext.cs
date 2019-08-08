@@ -41,6 +41,12 @@ namespace BlzrQuiz.Data
                 QuizId = 1,
                 Name = "AZ-900",
                 Description = "Microsoft Azure Fundamentals"
+            },
+            new Quiz
+            {
+                QuizId = 2,
+                Name = "SY0-501",
+                Description = "CompTIA Security+"
             });
         }
     }

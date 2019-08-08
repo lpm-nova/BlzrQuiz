@@ -2,7 +2,7 @@
 
 namespace BlzrQuiz.Data.EfClasses
 {
-    public class Question
+    public partial class Question
     {
         //protected Question(string text, List<string> tags, List<Answer> answers)
         //{
@@ -15,13 +15,14 @@ namespace BlzrQuiz.Data.EfClasses
         public string Text { get; set; }
         public List<QuestionTags> Tags { get; set; }
         public List<QuestionAnswer> Answers { get; set; }
-        public QResult Result { get; set; }
+
         public int QuizId { get; set; }
         public Quiz Quiz { get; set; }
     }
 
     public enum QResult
     {
+        NoResult,
         Correct,
         PartiallyCorrect,
         Incorrect

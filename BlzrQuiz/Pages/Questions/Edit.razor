@@ -1,0 +1,69 @@
+﻿@page "/questions/{QuestionId:int}"
+@using BlzrQuiz.ServiceLayer
+@using BlzrQuiz.Data.EfClasses
+@using System.Diagnostics
+@inject QuizService QService
+@inject IUriHelper urihelper;
+
+<h1>Edit</h1>
+
+<h4>Question</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <EditForm Model="@Question" OnValidSubmit="@UpdateQuestion">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label for="classification">Primary Classification: </label>
+            <InputSelect id="quiz" @bind-Value="@QuizId">
+                @foreach (var quiz in Quizes)
+                {
+                    if (quiz.QuizId == Question.QuizId)
+                    {
+                        <option id="opt-@quiz.QuizId" selected value="@quiz.QuizId">@quiz.Name</option>
+                    }
+                    else
+                    {
+                        <option id="opt-@quiz.QuizId" value="@quiz.QuizId">@quiz.Name</option>
+                    }
+                }
+            </InputSelect>
+            <InputText id="name" @bind-Value="@Question.Text" />
+
+            <button type="submit">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@code {
+    [Parameter]
+    private int QuestionId { get; set; }
+    private string QuizId { get; set; } = string.Empty;
+    private IEnumerable<Quiz> Quizes { get; set; } = new List<Quiz>();
+    private Question Question { get; set; } = new Question();
+
+    protected override async Task OnInitAsync()
+    {
+        Question = await QService.GetQuestion(QuestionId);
+        Quizes = await QService.GetQuizes();
+    }
+    void UpdateQuestion()
+    {
+        AddQuizId();
+        QService.UpdateQuestion(Question);
+        urihelper.NavigateTo("/questions/overview");
+    }
+
+    void AddQuizId()
+    {
+        if (!string.IsNullOrEmpty(QuizId))
+        {
+            Question.QuizId = int.TryParse(QuizId, out int result) ? result : 0;
+        }
+    }
+}
