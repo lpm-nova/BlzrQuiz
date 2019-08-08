@@ -72,13 +72,15 @@ else
         questions = await QService.GetQuestions();
         quizes = await QService.GetQuizes();
     }
-    void AddNewQuestion()
+
+    async Task AddNewQuestion()
     {
         Debug.WriteLine("In AddNewQuestion");
         AddQuizId();
         QService.AddQuestion(question);
-        urihelper.NavigateTo("/questions/overview");
+        questions = await QService.GetQuestions();
     }
+
     void AddQuizId()
     {
         if (!string.IsNullOrEmpty(quizId))
