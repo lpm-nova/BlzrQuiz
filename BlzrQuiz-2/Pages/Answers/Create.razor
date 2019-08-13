@@ -1,0 +1,58 @@
+﻿@page "/answers/create"
+@using BlzrQuiz.ServiceLayer
+@using BlzrQuiz.Data.EfClasses
+@inject QuizService QService
+@inject IUriHelper urihelper;
+
+<h3>Create</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <EditForm Model="@Answer" OnValidSubmit="@AddNewAnswer">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label for="classification">Primary Classification: </label>
+            <InputSelect T="int" id="question"  @bind-Value="@questionId">
+                <option value="">Select Quiz ...</option>
+                @foreach (var question in Questions)
+                {
+                    <option value="@question.QuestionId">@question.Text</option>
+                }
+            </InputSelect>
+            <InputText id="name" @bind-Value="@Answer.Text" />
+            <InputSelect T="bool" id="answer-correct" @bind-Value="@Answer.IsCorrect">
+                <option value="False">False</option>
+                <option value="True">True</option>
+            </InputSelect>
+            <button type="submit">Submit</button>
+        </EditForm>
+    </div>
+</div>
+@code {
+    private string questionId { get; set; }
+    private IEnumerable<Question> Questions { get; set; }
+    private Answer Answer { get; set; } = new Answer();
+    private string isCorrect { get; set; } = "False";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Questions = await QService.GetQuestions();
+    }
+
+    async Task AddNewAnswer()
+    {
+        if (!string.IsNullOrEmpty(questionId))
+        {
+            Answer.QuestionId = int.TryParse(questionId, out int result) ? result : 0;
+            Answer.IsCorrect = GetCorrectness();
+            QService.AddAnswer(Answer);
+        }
+        urihelper.NavigateTo(".");
+    }
+    bool GetCorrectness()
+    {
+        bool.TryParse(isCorrect, out bool result);
+        return result;
+    }
+}

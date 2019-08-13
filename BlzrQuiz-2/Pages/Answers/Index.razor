@@ -1,0 +1,58 @@
+﻿@page "/answers/index"
+@using BlzrQuiz.ServiceLayer
+@using BlzrQuiz.Data.EfClasses
+@inject QuizService QService
+@inject IUriHelper urihelper;
+<h3>Answers</h3>
+@if (Answers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Text</th>
+            <th>QuestionId</th>
+            <th>IsCorrect</th>
+            <th>Actions</th>
+        </tr>
+    </thead>Severity	Code	Description	Project	File	Line	Suppression State
+    Error	CS0234	The type or namespace name 'Layouts' does not exist in the namespace 'Microsoft.AspNetCore.Components' (are you missing an assembly reference?)	BlzrQuiz	C:\Users\leon.mansfield\Source\repos\BlzrQuiz\BlzrQuiz\Pages\Answers\Index.razor	1	Active
+
+    <tbody>
+        @foreach (var answer in Answers)
+        {
+            <tr>
+                <td>@answer.AnswerId</td>
+                <td>@answer.Text</td>
+                <td>@answer.QuestionId</td>
+                <td>@answer.IsCorrect</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="@(e => urihelper.NavigateTo("/answers/" + answer.QuestionId))">Edit</button>
+                    <button class="btn btn-primary" @onclick="@(e => DeleteAnswer(answer))">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    <br />
+    <NavLink class="nav-link" href="answers/create">
+        <span class="oi oi-list-rich" aria-hidden="true"></span> Add
+    </NavLink>
+}
+@code {
+    private IEnumerable<Answer> Answers { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Answers = await QService.GetAnswers();
+    }
+    async Task DeleteAnswer(Answer entity)
+    {
+        QService.DeleteAnswer(entity);
+        Answers = await QService.GetAnswers();
+    }
+
+}
