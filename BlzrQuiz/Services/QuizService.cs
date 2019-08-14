@@ -30,21 +30,20 @@ namespace BlzrQuiz.ServiceLayer
             Debug.WriteLine($"Question: Id: {question.QuestionId}, Text: {question.Text}");
             _context.Questions.Add(question);
             _context.SaveChangesAsync();
-
-            //return new Question{ QuestionId = question.QuestionId };
         }
         public  Task<Question> GetQuestion(int id)
         {
             return _context.Questions.SingleAsync<Question>(e => e.QuestionId == id);
-            //return new Question{ QuestionId = question.QuestionId };
+        }
+        public async Task<IEnumerable<Certification>> GetCertifications()
+        {
+            return await _context.Certifications.ToListAsync();
         }
         public void DeleteQuestion(Question question)
         {
             Debug.WriteLine($"Question: Id: {question.QuestionId}, Text: {question.Text}");
             _context.Questions.Remove(question);
             _context.SaveChangesAsync();
-
-            //return new Question{ QuestionId = question.QuestionId };
         }
         public void UpdateQuestion(Question question)//#D
         {
