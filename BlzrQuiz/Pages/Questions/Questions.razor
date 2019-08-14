@@ -17,7 +17,7 @@ else
                 <th>Id</th>
                 <th>Text</th>
                 <th>Quiz</th>
-                <th>Actions</th>
+                @*<th>Actions</th>*@
             </tr>
         </thead>
         <tbody>
@@ -44,18 +44,18 @@ else
 <div class="row">
     <div class="col-md-4">
 
-        <EditForm Model="@question" OnValidSubmit="@AddNewQuestion">
+        <EditForm Model="@Question" OnValidSubmit="@AddNewQuestion">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            <InputSelect T="int" id="certification" @bind-Value="@question.CertificationId">
-                <option value="">Select Certification ...</option>
+            <InputSelect T="string" id="certification" @bind-Value="@Question.CertificationId">
+                <option value="0">Select Certification ...</option>
                 @foreach (var certification in certifications)
                 {
                     <option value="@certification.CertificationId">@certification.Name</option>
                 }
             </InputSelect>
-            <InputText id="name" @bind-Value="@question.Text" />
+            <InputText id="name" @bind-Value="@Question.Text" />
 
             <button type="submit">Submit</button>
         </EditForm>
@@ -68,7 +68,7 @@ else
 @code {
     IEnumerable<Question> questions;
     IEnumerable<Certification> certifications;
-    private Question question { get; set; } = new Question();
+    public Question Question { get; set; } = new Question();
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,8 +78,8 @@ else
 
     async Task AddNewQuestion()
     {
-        QService.AddQuestion(question);
-        question = question.Reset();
+        QService.AddQuestion(Question);
+        Question = new Question();
         questions = await QService.GetQuestions();
     }
 

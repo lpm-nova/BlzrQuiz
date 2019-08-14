@@ -31,11 +31,12 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<Answer>().Property<int>("AnswerId").ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Quiz>().Property<int>("QuizId").ValueGeneratedOnAdd();
-
             modelBuilder.Entity<Tag>().Property<int>("TagId").ValueGeneratedOnAdd();
+
             //// Configuring a one-to-many question -> answer relationship that is friendly for serialisation
-            //modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
-            //modelBuilder.Entity<QuizQuestion>().HasOne<Quiz>().WithMany(q => q.Questions);
+            modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
+            modelBuilder.Entity<QuizQuestion>().HasOne<Quiz>().WithMany(q => q.Questions);
+
             modelBuilder.Entity<Certification>().HasData(
             new Certification
             {
