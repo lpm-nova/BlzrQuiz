@@ -47,7 +47,7 @@
     private IEnumerable<Quiz> Quizes { get; set; } = new List<Quiz>();
     private Question Question { get; set; } = new Question();
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
         Question = await QService.GetQuestion(QuestionId);
         Quizes = await QService.GetQuizes();
