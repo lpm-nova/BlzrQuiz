@@ -37,15 +37,15 @@ namespace BlzrQuiz.Data
             //modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
             //modelBuilder.Entity<QuizQuestion>().HasOne<Quiz>().WithMany(q => q.Questions);
             modelBuilder.Entity<Certification>().HasData(
-            new Quiz
+            new Certification
             {
-                QuizId = 1,
+                CertificationId = 1,
                 Name = "AZ-900",
                 Description = "Microsoft Azure Fundamentals"
             },
-            new Quiz
+            new Certification
             {
-                QuizId = 2,
+                CertificationId = 2,
                 Name = "SY0-501",
                 Description = "CompTIA Security+"
             });

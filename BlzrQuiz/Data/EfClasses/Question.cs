@@ -12,7 +12,8 @@ namespace BlzrQuiz.Data.EfClasses
         //}
 
         public int QuestionId { get; set; }
-        public int CertificateId { get; set; }
+        public Certification Certification { get; set; }
+        public int CertificationId { get; set; }
         public string Text { get; set; }
         public List<QuestionTags> Tags { get; set; }
         public List<QuestionAnswer> Answers { get; set; }

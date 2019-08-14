@@ -26,11 +26,11 @@ else
                 <tr>
                     <td>@question.QuestionId</td>
                     <td>@question.Text</td>
-                    <td>@question.Quiz.Name</td>
-                    <td>
+                    <td>@question.Certification.Name</td>
+                    @*<td>
                         <button class="btn btn-primary" @onclick="@(e => urihelper.NavigateTo("/questions/"+question.QuestionId))">Edit</button>
                         <button class="btn btn-primary" @onclick="@(e=> DeleteQuestion(question))">Delete</button>
-                    </td>
+                    </td>*@
                 </tr>
             }
         </tbody>
@@ -48,11 +48,11 @@ else
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            <InputSelect id="quiz" @bind-Value="@quizId">
-                <option value="">Select Quiz ...</option>
-                @foreach (var quiz in quizes)
+            <InputSelect T="int" id="certification" @bind-Value="@question.CertificationId">
+                <option value="">Select Certification ...</option>
+                @foreach (var certification in certifications)
                 {
-                    <option value="@quiz.QuizId">@quiz.Name</option>
+                    <option value="@certification.CertificationId">@certification.Name</option>
                 }
             </InputSelect>
             <InputText id="name" @bind-Value="@question.Text" />
@@ -66,20 +66,18 @@ else
 
 
 @code {
-    private string quizId;
     IEnumerable<Question> questions;
-    IEnumerable<Quiz> quizes;
+    IEnumerable<Certification> certifications;
     private Question question { get; set; } = new Question();
 
     protected override async Task OnInitializedAsync()
     {
         questions = await QService.GetQuestions();
-        quizes = await QService.GetQuizes();
+        certifications = await QService.GetCertifications();
     }
 
     async Task AddNewQuestion()
     {
-        AddQuizId();
         QService.AddQuestion(question);
         question = question.Reset();
         questions = await QService.GetQuestions();
@@ -89,14 +87,6 @@ else
     {
         QService.DeleteQuestion(entity);
         questions = await QService.GetQuestions();
-    }
-
-    void AddQuizId()
-    {
-        if (!string.IsNullOrEmpty(quizId))
-        {
-            question.QuizId = int.TryParse(quizId, out int result) ? result : 0;
-        }
     }
 }
 
