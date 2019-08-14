@@ -5,7 +5,7 @@
 @inject IUriHelper urihelper;
 
 <h3>Questions</h3>
-@if (questions == null)
+@if (QuestionList == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -21,8 +21,8 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var question in questions)
-            {
+            @foreach (var question in QuestionList)
+{
                 <tr>
                     <td>@question.QuestionId</td>
                     <td>@question.Text</td>
@@ -48,13 +48,13 @@ else
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            <InputSelect T="string" id="certification" @bind-Value="@Question.CertificationId">
-                <option value="0">Select Certification ...</option>
-                @foreach (var certification in certifications)
-                {
-                    <option value="@certification.CertificationId">@certification.Name</option>
-                }
-            </InputSelect>
+            <InputSelectOfType TValue="int" id="certification-id" @bind-Value="@Question.CertificationId">
+            <option value="0">Select Certification ...</option>
+            @foreach (var certification in Certifications)
+            {
+                <option value="@certification.CertificationId">@certification.Name</option>
+            }
+            </InputSelectOfType>
             <InputText id="name" @bind-Value="@Question.Text" />
 
             <button type="submit">Submit</button>
@@ -66,27 +66,27 @@ else
 
 
 @code {
-    IEnumerable<Question> questions;
-    IEnumerable<Certification> certifications;
+    IEnumerable<Question> QuestionList;
+    IEnumerable<Certification> Certifications;
     public Question Question { get; set; } = new Question();
 
     protected override async Task OnInitializedAsync()
     {
-        questions = await QService.GetQuestions();
-        certifications = await QService.GetCertifications();
+        QuestionList = await QService.GetQuestions();
+        Certifications = await QService.GetCertifications();
     }
 
     async Task AddNewQuestion()
     {
         QService.AddQuestion(Question);
         Question = new Question();
-        questions = await QService.GetQuestions();
+        QuestionList = await QService.GetQuestions();
     }
 
     async Task DeleteQuestion(Question entity)
     {
         QService.DeleteQuestion(entity);
-        questions = await QService.GetQuestions();
+        QuestionList = await QService.GetQuestions();
     }
 }
 
