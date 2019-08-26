@@ -1,19 +1,21 @@
 using BlzrQuiz.Data.EfClasses;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BlzrQuiz.Data
 {
-    public class BlzrQuizContext : DbContext
+    public class BlzrQuizContext : IdentityDbContext
     {
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Quiz> Quizes { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Tag> Tags { get; set; }
 
-        public BlzrQuizContext(DbContextOptions options) : base(options) { }
+        public BlzrQuizContext(DbContextOptions<BlzrQuizContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             // Configuring a one-to-many question -> answer relationship that is friendly for serialisation
             modelBuilder.Entity<QuestionAnswer>().HasKey(qa => new { qa.QuestionId, qa.AnswerId });
             modelBuilder.Entity<QuestionAnswer>().HasOne<Question>().WithMany(q => q.Answers);

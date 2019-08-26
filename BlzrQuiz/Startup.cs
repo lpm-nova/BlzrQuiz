@@ -3,9 +3,13 @@ using BlzrQuiz.ServiceLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BlzrAuth.Areas.Identity;
+using Microsoft.AspNetCore.Identity;
+using BlzrAuth.Data;
 
 namespace BlzrQuiz
 {
@@ -26,8 +30,20 @@ namespace BlzrQuiz
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<QuizService>();
             services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDefaultIdentity<IdentityUser>(
+             o =>
+             {
+                 o.Password.RequireDigit = false;
+                 o.Password.RequireLowercase = false;
+                 o.Password.RequireUppercase = false;
+                 o.Password.RequiredLength = 20;
+                 o.Password.RequireNonAlphanumeric = false;
+             })
+             .AddEntityFrameworkStores<BlzrQuizContext>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<QuizService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +52,7 @@ namespace BlzrQuiz
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -45,18 +62,25 @@ namespace BlzrQuiz
             }
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>();
-                //context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
+                using (var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>())
+                {
+                    //context.Database.EnsureDeleted();
+                    context.Database.EnsureCreated();
+                    context.Database.Migrate();
+                }
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapBlazorHub();
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub<App>(selector: "app");
+                // endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
