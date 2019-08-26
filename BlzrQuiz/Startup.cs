@@ -27,7 +27,7 @@ namespace BlzrQuiz
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<QuizService>();
-            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite("Data Source=quiz.db"));
+            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
