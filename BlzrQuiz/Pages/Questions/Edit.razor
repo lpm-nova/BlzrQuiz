@@ -16,16 +16,16 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            <InputSelect id="quiz" @bind-Value="@QuizId">
-                @foreach (var quiz in Quizes)
+            <InputSelect T="int" id="quiz" @bind-Value="@Question.CertificationId">
+                @foreach (var cert in Certifications)
                 {
-                    if (quiz.QuizId == Question.QuizId)
+                    if (cert.CertificationId == Question.CertificationId)
                     {
-                        <option id="opt-@quiz.QuizId" selected value="@quiz.QuizId">@quiz.Name</option>
+                        <option id="opt-@cert.CertificationId" selected value="@cert.CertificationId">@cert.Name</option>
                     }
                     else
                     {
-                        <option id="opt-@quiz.QuizId" value="@quiz.QuizId">@quiz.Name</option>
+                        <option id="opt-@cert.CertificationId" value="@cert.CertificationId">@cert.Name</option>
                     }
                 }
             </InputSelect>
@@ -42,28 +42,18 @@
 
 @code {
     [Parameter]
-    public int QuestionId { get; set; }
-    private string QuizId { get; set; } = string.Empty;
-    private IEnumerable<Quiz> Quizes { get; set; } = new List<Quiz>();
+    public int QuestionId { get; set; } 
+    private IEnumerable<Certification> Certifications { get; set; } = new List<Certification>();
     private Question Question { get; set; } = new Question();
 
     protected override async Task OnInitializedAsync()
     {
         Question = await QService.GetQuestion(QuestionId);
-        Quizes = await QService.GetQuizes();
+        Certifications = await QService.GetCertifications();
     }
     void UpdateQuestion()
     {
-        AddQuizId();
         QService.UpdateQuestion(Question);
         urihelper.NavigateTo("/questions/overview");
-    }
-
-    void AddQuizId()
-    {
-        if (!string.IsNullOrEmpty(QuizId))
-        {
-            Question.QuizId = int.TryParse(QuizId, out int result) ? result : 0;
-        }
     }
 }
