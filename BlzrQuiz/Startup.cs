@@ -64,7 +64,7 @@ namespace BlzrQuiz
             {
                 using (var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>())
                 {
-                    //context.Database.EnsureDeleted();
+                    context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
                     context.Database.Migrate();
                 }

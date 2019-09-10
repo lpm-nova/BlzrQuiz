@@ -29,11 +29,16 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<Question>().HasKey(q => q.QuestionId);
             modelBuilder.Entity<Question>().Property<int>("QuestionId").ValueGeneratedOnAdd();
             modelBuilder.Entity<Question>().Ignore(q => q.Result);
+            
 
             modelBuilder.Entity<Answer>().Property<int>("AnswerId").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Answer>().HasOne<Question>();
 
             modelBuilder.Entity<Quiz>().Property<int>("QuizId").ValueGeneratedOnAdd();
             modelBuilder.Entity<Tag>().Property<int>("TagId").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Explanation>().HasKey(e => e.ExplanationId);
+            modelBuilder.Entity<Explanation>().Property<int>("ExplanationId").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Explanation>().HasOne<Question>();
 
             //// Configuring a one-to-many question -> answer relationship that is friendly for serialisation
             modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
@@ -51,6 +56,12 @@ namespace BlzrQuiz.Data
                 CertificationId = 2,
                 Name = "SY0-501",
                 Description = "CompTIA Security+"
+            },
+            new Certification
+            {
+                CertificationId = 3,
+                Name = "AWS-CP",
+                Description = "AWS Cloud Practitioner"
             });
         }
     }
