@@ -5,7 +5,7 @@
 @inject IUriHelper urihelper;
 
 <h3>Questions</h3>
-@if (questions == null)
+@if (QuestionList == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -17,20 +17,20 @@ else
                 <th>Id</th>
                 <th>Text</th>
                 <th>Quiz</th>
-                <th>Actions</th>
+                @*<th>Actions</th>*@
             </tr>
         </thead>
         <tbody>
-            @foreach (var question in questions)
-            {
+            @foreach (var question in QuestionList)
+{
                 <tr>
                     <td>@question.QuestionId</td>
                     <td>@question.Text</td>
-                    <td>@question.Quiz.Name</td>
-                    <td>
+                    <td>@question.Certification.Name</td>
+                    @*<td>
                         <button class="btn btn-primary" @onclick="@(e => urihelper.NavigateTo("/questions/"+question.QuestionId))">Edit</button>
                         <button class="btn btn-primary" @onclick="@(e=> DeleteQuestion(question))">Delete</button>
-                    </td>
+                    </td>*@
                 </tr>
             }
         </tbody>
@@ -44,18 +44,18 @@ else
 <div class="row">
     <div class="col-md-4">
 
-        <EditForm Model="@question" OnValidSubmit="@AddNewQuestion">
+        <EditForm Model="@Question" OnValidSubmit="@AddNewQuestion">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            <InputSelect id="quiz" @bind-Value="@quizId">
-                <option value="">Select Quiz ...</option>
-                @foreach (var quiz in quizes)
-                {
-                    <option value="@quiz.QuizId">@quiz.Name</option>
-                }
-            </InputSelect>
-            <InputText id="name" @bind-Value="@question.Text" />
+            <InputSelectOfType TValue="int" id="certification-id" @bind-Value="@Question.CertificationId">
+            <option value="0">Select Certification ...</option>
+            @foreach (var certification in Certifications)
+            {
+                <option value="@certification.CertificationId">@certification.Name</option>
+            }
+            </InputSelectOfType>
+            <InputText id="name" @bind-Value="@Question.Text" />
 
             <button type="submit">Submit</button>
         </EditForm>
@@ -66,37 +66,27 @@ else
 
 
 @code {
-    private string quizId;
-    IEnumerable<Question> questions;
-    IEnumerable<Quiz> quizes;
-    private Question question { get; set; } = new Question();
+    IEnumerable<Question> QuestionList;
+    IEnumerable<Certification> Certifications;
+    public Question Question { get; set; } = new Question();
 
     protected override async Task OnInitializedAsync()
     {
-        questions = await QService.GetQuestions();
-        quizes = await QService.GetQuizes();
+        QuestionList = await QService.GetQuestions();
+        Certifications = await QService.GetCertifications();
     }
 
     async Task AddNewQuestion()
     {
-        AddQuizId();
-        QService.AddQuestion(question);
-        question = question.Reset();
-        questions = await QService.GetQuestions();
+        QService.AddQuestion(Question);
+        Question = new Question();
+        QuestionList = await QService.GetQuestions();
     }
 
     async Task DeleteQuestion(Question entity)
     {
         QService.DeleteQuestion(entity);
-        questions = await QService.GetQuestions();
-    }
-
-    void AddQuizId()
-    {
-        if (!string.IsNullOrEmpty(quizId))
-        {
-            question.QuizId = int.TryParse(quizId, out int result) ? result : 0;
-        }
+        QuestionList = await QService.GetQuestions();
     }
 }
 
