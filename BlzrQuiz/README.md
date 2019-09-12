@@ -20,3 +20,14 @@ https://stackoverflow.com/questions/54303437/redirecting-in-blazor-with-paramete
 Sample Docs:
 
 https://github.com/aspnet/AspNetCore.Docs.git
+
+
+* I want to be able to  register/log in with a username and password.
+* I want to be able to create a new quiz.
+* I want to be able to take a quiz.
+* I want to be able to delete an existing quiz.
+* I want to be able to resume a quiz that I've previously started
+* I want to be able to retake a quiz that I've previously finished
+* I want to be able to reset a quiz, wiping out any previously entered answers, in a quiz that I've previously started, but not finished.
+* I want to see a list of quizes that I've taken.
+* For each quiz in the list that I've finished. I want to be shown the score.
