@@ -16,7 +16,7 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            <InputSelect T="int" id="quiz" @bind-Value="@Question.CertificationId">
+            @*<InputSelect T="int" id="quiz" @bind-Value="@Question.CertificationId">
                 @foreach (var cert in Certifications)
                 {
                     if (cert.CertificationId == Question.CertificationId)
@@ -28,7 +28,7 @@
                         <option id="opt-@cert.CertificationId" value="@cert.CertificationId">@cert.Name</option>
                     }
                 }
-            </InputSelect>
+            </InputSelect>*@
             <InputText id="name" @bind-Value="@Question.Text" />
 
             <button type="submit">Submit</button>

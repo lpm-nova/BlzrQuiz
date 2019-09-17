@@ -26,7 +26,7 @@ else
                 <tr>
                     <td>@question.QuestionId</td>
                     <td>@question.Text</td>
-                    <td>@question.Certification.Name</td>
+                    @*<td>@question.Certification.Name</td>*@
                     @*<td>
                         <button class="btn btn-primary" @onclick="@(e => urihelper.NavigateTo("/questions/"+question.QuestionId))">Edit</button>
                         <button class="btn btn-primary" @onclick="@(e=> DeleteQuestion(question))">Delete</button>
@@ -48,13 +48,13 @@ else
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            <InputSelectOfType TValue="int" id="certification-id" @bind-Value="@Question.CertificationId">
+            @*<InputSelectOfType TValue="int" id="certification-id" @bind-Value="@Certifications.CertificationId">
             <option value="0">Select Certification ...</option>
             @foreach (var certification in Certifications)
             {
                 <option value="@certification.CertificationId">@certification.Name</option>
             }
-            </InputSelectOfType>
+            </InputSelectOfType>*@
             <InputText id="name" @bind-Value="@Question.Text" />
 
             <button type="submit">Submit</button>
