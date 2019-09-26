@@ -2,10 +2,11 @@
 {
     public class QuizQuestion
     {
-        public Question Question { get; set; }
-        public byte QuestionNumber { get; set; }
         public int QuestionId { get; set; }
         public int QuizId { get; set; }
-        public QResult Result { get; set; }
+        public Question Question { get; set; }
+        public Quiz Quiz { get; set; }
+        public byte QuestionNumber { get; set; }
+        //public QResult Result { get; set; }
     }
 }

@@ -7,5 +7,6 @@ namespace BlzrQuiz.Data.EfClasses
         public int QuizId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public ICollection<QuizQuestion> QuizQuestions { get; set; }
     }
 }

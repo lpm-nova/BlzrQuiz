@@ -1,0 +1,36 @@
+﻿@page "/quizes/quiz"
+@using BlzrQuiz.ServiceLayer
+@using BlzrQuiz.Data.EfClasses
+@inject QuizService QService
+@inject IUriHelper urihelper;
+<h3>Quiz</h3>
+<div class="container">
+    @if (Question == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div class="blockquote">@Question.Text</div>
+
+        @foreach (var answer in Question.Answers)
+        {
+            <input type="radio" aria-label="Radio button for following text input">
+            <label class="text-left" name="@($"option-{answer.AnswerId}")" id="@($"answer-{answerCount++}")" value="@answer.AnswerId">@answer.Text</label><br />
+        }
+    }
+</div>
+
+@code {
+    int answerCount = 1;
+    IEnumerable<Question> QuestionList { get; set; } = new List<Question>();
+    public Question Question { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Question = await QService.GetQuestion();
+    }
+    void SubmitQuizQuestion()
+    {
+
+    }
+}

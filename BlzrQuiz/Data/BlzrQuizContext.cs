@@ -10,7 +10,8 @@ namespace BlzrQuiz.Data
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Quiz> Quizes { get; set; }
-        public DbSet<Tag> Tags { get; set; }
+        public DbSet<QuizQuestion> QuizQuestions { get; set; }
+        //public DbSet<Tag> Tags { get; set; }
 
         public BlzrQuizContext(DbContextOptions<BlzrQuizContext> options) : base(options) { }
 
@@ -27,14 +28,16 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<QuestionTags>().HasOne(t => t.Tag).WithMany();
 
             modelBuilder.Entity<Question>().HasKey(q => q.QuestionId);
-            modelBuilder.Entity<Question>().Property<int>("QuestionId").ValueGeneratedOnAdd();
+            //modelBuilder.Entity<Question>().Property<int>("QuestionId").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Question>().HasOne(c => c.Certification);
+            modelBuilder.Entity<Question>().HasMany(q => q.Answers).WithOne(q => q.Question).HasForeignKey(q => q.QuestionId);
             modelBuilder.Entity<Question>().Ignore(q => q.Result);
-            
 
+            modelBuilder.Entity<Answer>().HasKey(q => q.AnswerId);
             modelBuilder.Entity<Answer>().Property<int>("AnswerId").ValueGeneratedOnAdd();
-            modelBuilder.Entity<Answer>().HasOne<Question>();
+            //modelBuilder.Entity<Answer>().HasOne(q => q.Question).WithMany(q => q.Answers).HasForeignKey(q => q.QuestionId);
 
-            modelBuilder.Entity<Quiz>().Property<int>("QuizId").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Quiz>().HasKey(q => q.QuizId);
             modelBuilder.Entity<Tag>().Property<int>("TagId").ValueGeneratedOnAdd();
             modelBuilder.Entity<Explanation>().HasKey(e => e.ExplanationId);
             modelBuilder.Entity<Explanation>().Property<int>("ExplanationId").ValueGeneratedOnAdd();
@@ -42,7 +45,12 @@ namespace BlzrQuiz.Data
 
             //// Configuring a one-to-many question -> answer relationship that is friendly for serialisation
             modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
-            modelBuilder.Entity<QuizQuestion>().HasOne<Question>();
+            //modelBuilder.Entity<QuizQuestion>().HasOne(qe => qe.Question).WithMany(q => q.Answers).HasForeignKey(qe => qe.QuestionId).OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<QuizQuestion>().HasOne(qz => qz.Quiz).WithMany(qe => qe.QuizQuestions).HasForeignKey(qz => qz.QuizId).OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<QuestionAnswer>().HasKey(qa => new { qa.AnswerId, qa.QuestionId });
+            modelBuilder.Entity<QuestionAnswer>().HasOne(qe => qe.Question).WithMany(qz => qz.QuestionAnswers).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<QuestionAnswer>().HasOne(qz => qz.Answer).WithMany(qe => qe.QuestionAnswers).OnDelete(DeleteBehavior.NoAction);
             //modelBuilder.Entity<QuizQuestion>().HasOne<Quiz>().WithMany(q => q.Questions);
 
             modelBuilder.Entity<Certification>().HasData(
@@ -61,7 +69,7 @@ namespace BlzrQuiz.Data
             new Certification
             {
                 CertificationId = 3,
-                Name = "AWS-CP",
+                Name = "AWS-CCP",
                 Description = "AWS Cloud Practitioner"
             });
         }

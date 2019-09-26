@@ -16,10 +16,17 @@ namespace BlzrQuiz.ServiceLayer
         {
             _context = context;
         }
-
+        public async Task<IEnumerable<QuizQuestion>> GetQuizQuestions()
+        {
+            return await _context.QuizQuestions.Include(a => a.Question.Answers).ToListAsync();
+        }
         public async Task<IEnumerable<Question>> GetQuestions()
         {
-            return await _context.Questions.ToListAsync();
+            return await _context.Questions.Include(a => a.Answers).ToListAsync();
+        }
+        public async Task<Question> GetQuestion()
+        {
+            return await _context.Questions.Include(a => a.Answers).FirstAsync();
         }
         public async Task<IEnumerable<Quiz>> GetQuizes()
         {
@@ -31,7 +38,7 @@ namespace BlzrQuiz.ServiceLayer
             _context.Questions.Add(question);
             _context.SaveChangesAsync();
         }
-        public  Task<Question> GetQuestion(int id)
+        public Task<Question> GetQuestion(int id)
         {
             return _context.Questions.SingleAsync<Question>(e => e.QuestionId == id);
         }
