@@ -27,7 +27,14 @@
     public Question Question { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        Question = await QService.GetQuestion();
+        try
+        {
+            Question = await QService.GetQuestion();
+        }
+        catch (InvalidOperationException)
+        {
+            Question = new Question { Answers = new List<Answer>() };
+        }
     }
     void SubmitQuizQuestion()
     {

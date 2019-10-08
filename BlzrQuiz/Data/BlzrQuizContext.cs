@@ -1,6 +1,7 @@
 using BlzrQuiz.Data.EfClasses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using BlzrQuiz.Core;
 
 namespace BlzrQuiz.Data
 {
@@ -52,26 +53,7 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<QuestionAnswer>().HasOne(qe => qe.Question).WithMany(qz => qz.QuestionAnswers).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<QuestionAnswer>().HasOne(qz => qz.Answer).WithMany(qe => qe.QuestionAnswers).OnDelete(DeleteBehavior.NoAction);
             //modelBuilder.Entity<QuizQuestion>().HasOne<Quiz>().WithMany(q => q.Questions);
-
-            modelBuilder.Entity<Certification>().HasData(
-            new Certification
-            {
-                CertificationId = 1,
-                Name = "AZ-900",
-                Description = "Microsoft Azure Fundamentals"
-            },
-            new Certification
-            {
-                CertificationId = 2,
-                Name = "SY0-501",
-                Description = "CompTIA Security+"
-            },
-            new Certification
-            {
-                CertificationId = 3,
-                Name = "AWS-CCP",
-                Description = "AWS Cloud Practitioner"
-            });
+            DataInjector.Inject(modelBuilder);
         }
     }
 }
