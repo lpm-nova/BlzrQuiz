@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using BlzrAuth.Areas.Identity;
 using Microsoft.AspNetCore.Identity;
 using BlzrAuth.Data;
+using System.Linq;
+using BlzrQuiz.Core;
 
 namespace BlzrQuiz
 {
@@ -67,6 +69,11 @@ namespace BlzrQuiz
                     context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
                     context.Database.Migrate();
+                    if(context.QuizQuestions.Count() == 0)
+                    {
+                        var qc = new QuizCreator(context);
+                        qc.Create();
+                    }
                 }
             }
             app.UseHttpsRedirection();

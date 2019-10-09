@@ -15,16 +15,21 @@
 
         @foreach (var answer in Question.Answers)
         {
-            <input type="radio" aria-label="Radio button for following text input">
-            <label class="text-left" name="@($"option-{answer.AnswerId}")" id="@($"answer-{answerCount++}")" value="@answer.AnswerId">@answer.Text</label><br />
+            <button type="button" @onclick="AddToAnswers" name="@($"option-{answer.AnswerId}")" id="@($"answer-{answerCount++}")" value="@answer.AnswerId" class="btn btn-primary btn-lg btn-block">@answer.Text</button>
+
         }
+        @*<button onclick="@(() => Console.WriteLine("Button Clicked!");)">
+            Press Me
+        </button>*@
     }
 </div>
 
-@code {
+@code { 
+    byte[] QuizAnswers = new byte[50];
     int answerCount = 1;
     IEnumerable<Question> QuestionList { get; set; } = new List<Question>();
     public Question Question { get; set; }
+    public QuizQuestion ThisQuestion { get; set; }
     protected override async Task OnInitializedAsync()
     {
         try
@@ -40,4 +45,5 @@
     {
 
     }
+   void AddToAnswers() { }
 }

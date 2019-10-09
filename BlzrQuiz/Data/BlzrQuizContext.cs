@@ -39,6 +39,7 @@ namespace BlzrQuiz.Data
             //modelBuilder.Entity<Answer>().HasOne(q => q.Question).WithMany(q => q.Answers).HasForeignKey(q => q.QuestionId);
 
             modelBuilder.Entity<Quiz>().HasKey(q => q.QuizId);
+            modelBuilder.Entity<Quiz>().HasOne(c => c.Certification).WithMany().HasForeignKey(x => x.CertificationId);
             modelBuilder.Entity<Tag>().Property<int>("TagId").ValueGeneratedOnAdd();
             modelBuilder.Entity<Explanation>().HasKey(e => e.ExplanationId);
             modelBuilder.Entity<Explanation>().Property<int>("ExplanationId").ValueGeneratedOnAdd();

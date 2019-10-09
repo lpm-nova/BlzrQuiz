@@ -31,26 +31,26 @@ namespace BlzrQuiz.Core
                     QuestionId = 3,
                     CertificationId = 3,
                     IsMultiple = false,
-                    Text = "Which of the following is a benefit of Amazon ElasticCompute Cloud (Amazon EC2) over physicalservers?"
+                    Text = "Which of the following is a benefit of Amazon Elastic Compute Cloud (Amazon EC2) over physical servers?"
                 },
                 new Question
                 {
                     QuestionId = 4,
                     CertificationId = 3,
                     IsMultiple = false,
-                    Text = "Which AWS service provides infrastructure securityoptimization recommendations?"
+                    Text = "Which AWS service provides infrastructure security-optimization recommendations?"
                 }
             );
             modelBuilder.Entity<Explanation>().HasData(
                  new Explanation
                  {
                      ExplanationId = 3,
-                     Text = "One of the advantages of EC2 Instances is the persecond billing concept. This is given in the AWSdocumentation also With per-second billing, you pay foronly what you use. It takes cost of unused minutes andseconds in an hour off of the bill, so you can focus onimproving your applications instead of maximizing usageto the hour. Especially, if you manage instances runningfor irregular periods of time, such as dev/testing, dataprocessing, analytics, batch processing and gamingapplications, can benefit. For more information on EC2Pricing, please refer to the below URL:https://aws.amazon.com/e02/pricing/",
+                     Text = "One of the advantages of EC2 Instances is the persecond billing concept. This is given in the AWS documentation also with per-second billing, you pay foronly what you use. It takes cost of unused minutes andseconds in an hour off of the bill, so you can focus onimproving your applications instead of maximizing usageto the hour. Especially, if you manage instances runningfor irregular periods of time, such as dev/testing, dataprocessing, analytics, batch processing and gamingapplications, can benefit. For more information on EC2Pricing, please refer to the below URL:https://aws.amazon.com/e02/pricing/",
                  },
                 new Explanation
                 {
                     ExplanationId = 4,
-                    Text = "The AWS documentation mentions the following Anonline resource to help you reduce cost, increaseperformance, and improve security by optimizing yourAWS environment, Trusted Advisor provides real timeguidance to help you provision your resources followingAWS best practices For more information on the AWSTrusted Advisor, please refer to the below URL:https://aws.amazon.com/premiumsupport/trustedadvisor/",
+                    Text = "The AWS documentation mentions the following Anonline resource to help you reduce cost, increase performance, and improve security by optimizing your AWS environment, Trusted Advisor provides real-time guidance to help you provision your resources following AWS best practices. For more information on the AWS Trusted Advisor, please refer to the below URL:https://aws.amazon.com/premiumsupport/trustedadvisor/",
 
                 }
             );
@@ -132,7 +132,7 @@ namespace BlzrQuiz.Core
            new Certification
            {
                CertificationId = 3,
-               Name = "AWS-CCP",
+               Name = "CLF-C01",
                Description = "AWS Cloud Practitioner"
            });
         }
