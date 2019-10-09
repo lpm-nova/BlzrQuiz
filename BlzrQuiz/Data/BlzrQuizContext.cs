@@ -33,9 +33,10 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<Question>().HasOne(c => c.Certification);
             modelBuilder.Entity<Question>().HasMany(q => q.Answers).WithOne(q => q.Question).HasForeignKey(q => q.QuestionId);
             modelBuilder.Entity<Question>().Ignore(q => q.Result);
-
+            modelBuilder.Entity<Question>().HasOne(e => e.Explanation).WithOne();
             modelBuilder.Entity<Answer>().HasKey(q => q.AnswerId);
             modelBuilder.Entity<Answer>().Property<int>("AnswerId").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Question>().HasOne(c => c.Explanation);
             //modelBuilder.Entity<Answer>().HasOne(q => q.Question).WithMany(q => q.Answers).HasForeignKey(q => q.QuestionId);
 
             modelBuilder.Entity<Quiz>().HasKey(q => q.QuizId);
@@ -43,12 +44,12 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<Tag>().Property<int>("TagId").ValueGeneratedOnAdd();
             modelBuilder.Entity<Explanation>().HasKey(e => e.ExplanationId);
             modelBuilder.Entity<Explanation>().Property<int>("ExplanationId").ValueGeneratedOnAdd();
-            modelBuilder.Entity<Explanation>().HasOne<Question>();
+
 
             //// Configuring a one-to-many question -> answer relationship that is friendly for serialisation
             modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
             //modelBuilder.Entity<QuizQuestion>().HasOne(qe => qe.Question).WithMany(q => q.Answers).HasForeignKey(qe => qe.QuestionId).OnDelete(DeleteBehavior.NoAction);
-            //modelBuilder.Entity<QuizQuestion>().HasOne(qz => qz.Quiz).WithMany(qe => qe.QuizQuestions).HasForeignKey(qz => qz.QuizId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<QuizQuestion>().HasOne(qz => qz.Quiz).WithMany(qe => qe.QuizQuestions).HasForeignKey(qz => qz.QuizId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<QuestionAnswer>().HasKey(qa => new { qa.AnswerId, qa.QuestionId });
             modelBuilder.Entity<QuestionAnswer>().HasOne(qe => qe.Question).WithMany(qz => qz.QuestionAnswers).OnDelete(DeleteBehavior.NoAction);

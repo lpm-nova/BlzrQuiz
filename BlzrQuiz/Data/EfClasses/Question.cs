@@ -9,10 +9,13 @@ namespace BlzrQuiz.Data.EfClasses
         public int CertificationId { get; set; }
         public string Text { get; set; }
         public bool IsMultiple { get; set; }
+        
         public virtual ICollection<Answer> Answers { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
         public List<QuestionAnswer> QuestionAnswers { get; set; }
+
+        public Explanation Explanation { get; set; }
     }
 
     public enum QResult
