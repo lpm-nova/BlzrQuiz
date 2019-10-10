@@ -33,7 +33,8 @@ namespace BlzrQuiz
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LocalSql")));
+            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HomeSql")));
+            //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LocalSql")));
             services.AddDefaultIdentity<IdentityUser>(
              o =>
              {

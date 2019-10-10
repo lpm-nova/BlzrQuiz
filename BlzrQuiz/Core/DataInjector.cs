@@ -44,14 +44,15 @@ namespace BlzrQuiz.Core
             modelBuilder.Entity<Explanation>().HasData(
                  new Explanation
                  {
-                     ExplanationId = 3,
+                     ExplanationId = 1,
                      Text = "One of the advantages of EC2 Instances is the persecond billing concept. This is given in the AWS documentation also with per-second billing, you pay foronly what you use. It takes cost of unused minutes andseconds in an hour off of the bill, so you can focus onimproving your applications instead of maximizing usageto the hour. Especially, if you manage instances runningfor irregular periods of time, such as dev/testing, dataprocessing, analytics, batch processing and gamingapplications, can benefit. For more information on EC2Pricing, please refer to the below URL:https://aws.amazon.com/e02/pricing/",
+                    QuestionId = 3,
                  },
                 new Explanation
                 {
-                    ExplanationId = 4,
+                    ExplanationId = 2,
                     Text = "The AWS documentation mentions the following Anonline resource to help you reduce cost, increase performance, and improve security by optimizing your AWS environment, Trusted Advisor provides real-time guidance to help you provision your resources following AWS best practices. For more information on the AWS Trusted Advisor, please refer to the below URL:https://aws.amazon.com/premiumsupport/trustedadvisor/",
-
+                    QuestionId = 4,
                 }
             );
             modelBuilder.Entity<Answer>().HasData(
@@ -116,7 +117,7 @@ namespace BlzrQuiz.Core
 
         public void AddCertifications()
         {
-            modelBuilder.Entity<Certification>().HasData(
+           modelBuilder.Entity<Certification>().HasData(
            new Certification
            {
                CertificationId = 1,

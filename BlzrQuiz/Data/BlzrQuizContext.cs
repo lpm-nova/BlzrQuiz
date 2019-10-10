@@ -33,16 +33,17 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<Question>().HasOne(c => c.Certification);
             modelBuilder.Entity<Question>().HasMany(q => q.Answers).WithOne(q => q.Question).HasForeignKey(q => q.QuestionId);
             modelBuilder.Entity<Question>().Ignore(q => q.Result);
-            modelBuilder.Entity<Question>().HasOne(e => e.Explanation).WithOne();
+            //modelBuilder.Entity<Question>().HasOne(e => e.Explanation).WithOne();
             modelBuilder.Entity<Answer>().HasKey(q => q.AnswerId);
             modelBuilder.Entity<Answer>().Property<int>("AnswerId").ValueGeneratedOnAdd();
-            modelBuilder.Entity<Question>().HasOne(c => c.Explanation);
+            //modelBuilder.Entity<Question>().HasOne(c => c.Explanation);
             //modelBuilder.Entity<Answer>().HasOne(q => q.Question).WithMany(q => q.Answers).HasForeignKey(q => q.QuestionId);
 
             modelBuilder.Entity<Quiz>().HasKey(q => q.QuizId);
             modelBuilder.Entity<Quiz>().HasOne(c => c.Certification).WithMany().HasForeignKey(x => x.CertificationId);
             modelBuilder.Entity<Tag>().Property<int>("TagId").ValueGeneratedOnAdd();
             modelBuilder.Entity<Explanation>().HasKey(e => e.ExplanationId);
+            modelBuilder.Entity<Explanation>().HasOne(q => q.Question);
             modelBuilder.Entity<Explanation>().Property<int>("ExplanationId").ValueGeneratedOnAdd();
 
 

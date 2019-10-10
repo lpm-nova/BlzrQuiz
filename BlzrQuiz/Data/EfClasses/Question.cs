@@ -14,8 +14,6 @@ namespace BlzrQuiz.Data.EfClasses
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
         public List<QuestionAnswer> QuestionAnswers { get; set; }
-
-        public Explanation Explanation { get; set; }
     }
 
     public enum QResult
