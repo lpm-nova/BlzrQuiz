@@ -4,29 +4,42 @@
 @inject QuizService QService
 @inject IUriHelper urihelper;
 
-    <div class="container">
-        @if (QuestionList.Count() == 0)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            @*<CascadingValue Value="@QuestionList.First()">*@
-            <UserQuizQuestion Quiz="Question"></UserQuizQuestion>
-            <div style="margin-top: 20px;" class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary">Previous</button>
-                <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="btn btn-secondary">Next</button>
+<div class="container">
+    @if (QuestionList.Count() == 0)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+            <div class="row">
+                <div class="col-3">
+                    <h3>Question: @Question.QuestionNumber</h3>
+                </div>
+                <div class="col-6"></div>
+                <div style="vertical-align:top; margin-bottom: 10px;" class="col-3 align-content-right">
+                    <div class="btn-group align-top" role="group" aria-label="Basic example">
+                        <button id="btn-previous" @onclick="PreviousQuestion" type="button" class="@BtnPreviousClasses">Previous</button>
+                        <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="@BtnNextClasses">Next</button>
+                    </div>
+                </div>
             </div>
-        }
-    </div>
+            <div class="row col-12">
+                <UserQuizQuestion Quiz="Question" Answers="Answers"></UserQuizQuestion>
+            </div>
+
+    }
+</div>
 
 @code {
     [Parameter]
     public int Id { get; set; }
+    private readonly string Enabled = "btn btn-secondary";
+    private readonly string Disabled = "btn btn-secondary disabled";
+    private string BtnPreviousClasses { get; set; }
+    private string BtnNextClasses { get; set; }
 
-
-    byte[] QuizAnswers = new byte[50];
-
+    Dictionary<int, bool[]> QuizAnswers = new Dictionary<int, bool[]>();
+    bool[] Answers { get; set; }
     IEnumerable<QuizQuestion> QuestionList { get; set; } = new List<QuizQuestion>();
     int QLCount = 0;
     int counter = 0;
@@ -34,28 +47,94 @@
     public QuizQuestion ThisQuestion { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine($"<**********> QuestionList size: {QuestionList.Count()}");
+
         try
         {
             QuestionList = await QService.GetQuizQuestions(1);
             QLCount = QuestionList.Count() - 1;
             counter = 0;
             Question = QuestionList.ElementAt(0);
+            foreach (var x in QuestionList)
+            {
+                QuizAnswers[counter++] = new bool[x.Question.Answers.Count()];
+            }
+            Answers = QuizAnswers[0];
+            counter = 0;
+            SetButtons();
         }
         catch (InvalidOperationException)
         {
             Console.WriteLine($"<**********> BAAAAAD");
         }
+        Console.WriteLine($"<**********> QuestionList size: {QLCount}");
+
     }
     void NextQuestion()
     {
-        if (QLCount > ++counter)
+        Console.WriteLine("Tring to move to next question");
+        if (QLCount > counter++)
         {
-            Question = QuestionList.ElementAt(counter);
-        }else
-        {
-            --counter;
+            Console.WriteLine($"QLCount({QLCount}) is more than the counter({counter - 1})");
+            SetProperties();
+            SetButtons();
         }
+        else
+        {
+            Console.WriteLine($"QLCount({QLCount}) is less than the counter({counter - 1})");
+            --counter;
+            SetButtons();
+        }
+        Console.WriteLine($"End of NextQuestion. Counter {counter}");
+    }
+    void PreviousQuestion()
+    {
+        Console.WriteLine($"In PreviousQuestion counter({counter})");
+        if (counter-- > 0)
+        {
+            Console.WriteLine($"Counter({counter + 1}) is greater than 0");
+            SetProperties();
+            SetButtons();
+        }
+        else
+        {
+            ++counter;
+            SetButtons();
+        }
+        Console.WriteLine($"End of PrevQuestion. Counter {counter}");
+    }
+    void SetButtons()
+    {
+        if (counter > 0 && counter < QLCount)
+        {
+            if (counter == 1)
+            {
+                BtnPreviousClasses = Enabled;
+            }
+            else if (counter == QLCount - 1)
+            {
+                BtnNextClasses = Enabled;
+            }
+        }
+        else
+        {
+            if (counter == QLCount)
+            {
+                BtnNextClasses = Disabled;
+                BtnPreviousClasses = Enabled;
+            }
+            else if (counter == 0)
+            {
+                BtnPreviousClasses = Disabled;
+                BtnNextClasses = Enabled;
+            }
+        }
+
+    }
+    void SetProperties()
+    {
+        Console.WriteLine("Passed QLCount check");
+        Question = QuestionList.ElementAt(counter);
+        Answers = QuizAnswers[counter];
     }
     void SubmitQuizQuestion()
     {

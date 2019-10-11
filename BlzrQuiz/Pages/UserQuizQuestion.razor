@@ -1,17 +1,43 @@
 ﻿@using BlzrQuiz.Data.EfClasses
 
-<div class="blockquote">@Quiz.Question.Text</div>
-
-@foreach (var answer in Quiz.Question.Answers)
-{
-    <button type="button" @onclick="UpdateAnswers" name="@($"option-{answer.AnswerId}")" id="@($"answer-{answerCount++}")" value="@answer.AnswerId" class="btn btn-primary btn-lg btn-block">@answer.Text</button>
-}
+<div class="row">
+    <div style="height: 100px;" class="col-12">@Quiz.Question.Text</div>
+</div>
+<div class="row">
+    @for (var i = 0; i < Quiz.Question.Answers.Count(); i++)
+    {
+        var answer = Quiz.Question.Answers.ElementAt(i);
+        int c = i;
+        <div class="col-12">
+            <button type="button" @onclick="@(e => UpdateAnswers(c) )" name="@($"option-{ answer.AnswerId}")" id="@($"quiz-question-{Quiz.QuestionNumber}-answer-{i}")" value="@answer.AnswerId" class="btn btn-primary btn-lg btn-block">@answer.Text</button>
+        </div>
+    }
+</div>
 
 @code {
+    [Parameter] public bool[] Answers { get; set; }
     [Parameter] public QuizQuestion Quiz { get; set; }
-    int answerCount = 1;
-    void UpdateAnswers()
+    void UpdateAnswers(int index)
     {
+        Console.WriteLine($"Answers has {Answers.Length} elements");
+        if (Quiz.Question.HasMultipleAnswers)
+        {
+            Console.WriteLine($"Toggling Answer Value for element {index}");
+            toggle(index);
+            Console.WriteLine($"Answer is now: {Answers[index]}");
+        }
+        else
+        {
+            Console.WriteLine("Clearing Array");
+            Array.Clear(Answers, 0, Answers.Length);
+            Console.WriteLine($"Toggling Answer Value for element {index}");
+            toggle(index);
+            Console.WriteLine($"Answer is now: {Answers[index]}");
+        }
+    }
 
+    void toggle(int element)
+    {
+        Answers[element] = !Answers[element];
     }
 }
