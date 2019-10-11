@@ -2,6 +2,7 @@ using BlzrQuiz.Data.EfClasses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using BlzrQuiz.Core;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlzrQuiz.Data
 {
@@ -45,6 +46,9 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<Explanation>().HasKey(e => e.ExplanationId);
             modelBuilder.Entity<Explanation>().HasOne(q => q.Question);
             modelBuilder.Entity<Explanation>().Property<int>("ExplanationId").ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<UserQuiz>().HasKey(x => x.UserQuizId);
+            modelBuilder.Entity<UserQuiz>().Property(x => x.Score).HasDefaultValue(0);
 
 
             //// Configuring a one-to-many question -> answer relationship that is friendly for serialisation

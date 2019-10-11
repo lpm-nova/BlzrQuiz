@@ -1,0 +1,17 @@
+﻿@using BlzrQuiz.Data.EfClasses
+
+<div class="blockquote">@Quiz.Question.Text</div>
+
+@foreach (var answer in Quiz.Question.Answers)
+{
+    <button type="button" @onclick="UpdateAnswers" name="@($"option-{answer.AnswerId}")" id="@($"answer-{answerCount++}")" value="@answer.AnswerId" class="btn btn-primary btn-lg btn-block">@answer.Text</button>
+}
+
+@code {
+    [Parameter] public QuizQuestion Quiz { get; set; }
+    int answerCount = 1;
+    void UpdateAnswers()
+    {
+
+    }
+}

@@ -156,7 +156,7 @@ namespace BlzrQuiz.Core
                 new Answer { AnswerId = 136, QuestionId = 34, Text = "All users should have the same baseline permissions granted to them to use basic AWS services.", IsCorrect = false },
                 new Answer { AnswerId = 137, QuestionId = 34, Text = "Users should be granted permission to access only resources they need to do their assigned job.", IsCorrect = true },
                 new Answer { AnswerId = 138, QuestionId = 34, Text = "Users should submit all access request in written so that there is a paper trail of who needs access to different AWS resources.", IsCorrect = false },
-                new Answer { AnswerId = 139, QuestionId = 34, Text = "Users should always have a little more accessgranted to them then they need, just in case they end up needed it in the future.", IsCorrect = false },
+                new Answer { AnswerId = 139, QuestionId = 34, Text = "Users should always have a little more access granted to them then they need, just in case they end up needed it in the future.", IsCorrect = false },
                 new Answer { AnswerId = 140, QuestionId = 35, Text = "AWS IAM", IsCorrect = false },
                 new Answer { AnswerId = 141, QuestionId = 35, Text = "AWS Server", IsCorrect = false },
                 new Answer { AnswerId = 142, QuestionId = 35, Text = "AWS EC2", IsCorrect = true },
@@ -269,7 +269,7 @@ namespace BlzrQuiz.Core
                 new Answer { AnswerId = 249, QuestionId = 63, Text = "Using a mix of user names", IsCorrect = false },
                 new Answer { AnswerId = 250, QuestionId = 63, Text = "Using AWS WAF", IsCorrect = false },
                 new Answer { AnswerId = 251, QuestionId = 63, Text = "Using MFA", IsCorrect = true },
-                new Answer { AnswerId = 252, QuestionId = 64, Text = "Pilot lightB. Warm standby", IsCorrect = false },
+                new Answer { AnswerId = 252, QuestionId = 64, Text = "Pilot light", IsCorrect = false },
                 new Answer { AnswerId = 253, QuestionId = 64, Text = "Backup Restore", IsCorrect = false },
                 new Answer { AnswerId = 254, QuestionId = 64, Text = "Devops", IsCorrect = false },
                 new Answer { AnswerId = 255, QuestionId = 65, Text = "Amazon EBS", IsCorrect = false },
@@ -540,7 +540,6 @@ namespace BlzrQuiz.Core
                 new Answer { AnswerId = 520, QuestionId = 131, Text = "Amazon Glacier", IsCorrect = false },
                 new Answer { AnswerId = 521, QuestionId = 131, Text = "Amazon EBS Volumes", IsCorrect = false },
                 new Answer { AnswerId = 522, QuestionId = 131, Text = "Amazon EBS Snapshots.", IsCorrect = true },
-                new Answer { AnswerId = 776, QuestionId = 131, Text = "Amazon SQS", IsCorrect = false },
                 new Answer { AnswerId = 523, QuestionId = 132, Text = "EMR", IsCorrect = true },
                 new Answer { AnswerId = 524, QuestionId = 132, Text = "S3", IsCorrect = false },
                 new Answer { AnswerId = 525, QuestionId = 132, Text = "Glacier1", IsCorrect = false },
@@ -793,7 +792,9 @@ namespace BlzrQuiz.Core
                 new Answer { AnswerId = 772, QuestionId = 194, Text = "Consolidating billing", IsCorrect = true },
                 new Answer { AnswerId = 773, QuestionId = 194, Text = "Combined Billing", IsCorrect = false },
                 new Answer { AnswerId = 774, QuestionId = 194, Text = "Cost Explorer", IsCorrect = false },
-                new Answer { AnswerId = 775, QuestionId = 194, Text = "IAM", IsCorrect = false }
+                new Answer { AnswerId = 775, QuestionId = 194, Text = "IAM", IsCorrect = false },
+                new Answer { AnswerId = 776, QuestionId = 131, Text = "Amazon SQS", IsCorrect = false },
+                new Answer { AnswerId = 777, QuestionId = 64, Text = "Warm standby", IsCorrect = true }
                 );
         }
 

@@ -9,9 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlzrAuth.Areas.Identity;
 using Microsoft.AspNetCore.Identity;
-using BlzrAuth.Data;
+using System;
 using System.Linq;
 using BlzrQuiz.Core;
+using System.Diagnostics;
 
 namespace BlzrQuiz
 {
@@ -33,8 +34,7 @@ namespace BlzrQuiz
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HomeSql")));
-            //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LocalSql")));
+            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
             services.AddDefaultIdentity<IdentityUser>(
              o =>
              {
@@ -78,6 +78,7 @@ namespace BlzrQuiz
                     }
                 }
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -20,6 +20,10 @@ namespace BlzrQuiz.ServiceLayer
         {
             return await _context.QuizQuestions.Include(a => a.Question.Answers).ToListAsync();
         }
+        public async Task<IEnumerable<QuizQuestion>> GetQuizQuestions(int quizId)
+        {
+            return await _context.QuizQuestions.Where(x => x.QuizId == quizId).Include(a => a.Question.Answers).Take(50).ToListAsync();
+        }
         public async Task<IEnumerable<Question>> GetQuestions()
         {
             return await _context.Questions.Include(a => a.Answers).ToListAsync();

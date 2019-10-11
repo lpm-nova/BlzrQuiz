@@ -7,6 +7,5 @@
         public Question Question { get; set; }
         public Quiz Quiz { get; set; }
         public byte QuestionNumber { get; set; }
-        //public QResult Result { get; set; }
     }
 }

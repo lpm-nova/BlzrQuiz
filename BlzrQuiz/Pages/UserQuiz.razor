@@ -1,0 +1,68 @@
+﻿@page "/quizes/userquiz"
+@using BlzrQuiz.ServiceLayer
+@using BlzrQuiz.Data.EfClasses
+@inject QuizService QService
+@inject IUriHelper urihelper;
+
+    <div class="container">
+        @if (QuestionList.Count() == 0)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            @*<CascadingValue Value="@QuestionList.First()">*@
+            <UserQuizQuestion Quiz="Question"></UserQuizQuestion>
+            <div style="margin-top: 20px;" class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-secondary">Previous</button>
+                <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="btn btn-secondary">Next</button>
+            </div>
+        }
+    </div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+
+    byte[] QuizAnswers = new byte[50];
+
+    IEnumerable<QuizQuestion> QuestionList { get; set; } = new List<QuizQuestion>();
+    int QLCount = 0;
+    int counter = 0;
+    public QuizQuestion Question { get; set; } = new QuizQuestion();
+    public QuizQuestion ThisQuestion { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine($"<**********> QuestionList size: {QuestionList.Count()}");
+        try
+        {
+            QuestionList = await QService.GetQuizQuestions(1);
+            QLCount = QuestionList.Count() - 1;
+            counter = 0;
+            Question = QuestionList.ElementAt(0);
+        }
+        catch (InvalidOperationException)
+        {
+            Console.WriteLine($"<**********> BAAAAAD");
+        }
+    }
+    void NextQuestion()
+    {
+        if (QLCount > ++counter)
+        {
+            Question = QuestionList.ElementAt(counter);
+        }else
+        {
+            --counter;
+        }
+    }
+    void SubmitQuizQuestion()
+    {
+
+    }
+    void AddToAnswers()
+    {
+
+    }
+}
