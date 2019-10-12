@@ -15,7 +15,7 @@
 </div>
 
 @code {
-    [Parameter] public bool[] Answers { get; set; }
+    [Parameter] public UserQuizQuestionAnswer[] Answers { get; set; }
     [Parameter] public QuizQuestion Quiz { get; set; }
     void UpdateAnswers(int index)
     {
@@ -38,6 +38,6 @@
 
     void toggle(int element)
     {
-        Answers[element] = !Answers[element];
+        Answers[element] = Answers[element].QuestionAnswers.;
     }
 }

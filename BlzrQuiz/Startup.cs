@@ -73,8 +73,8 @@ namespace BlzrQuiz
                     context.Database.Migrate();
                     if(context.QuizQuestions.Count() == 0)
                     {
-                        var qc = new QuizCreator(context);
-                        qc.Create();
+                        var q = new QuizService(context);
+                        q.CreateQuiz();
                     }
                 }
             }

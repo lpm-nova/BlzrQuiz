@@ -1,6 +1,7 @@
-﻿@page "/quizes/userquiz"
+﻿@page "/quizes/userquiz/{id:int}"
 @using BlzrQuiz.ServiceLayer
 @using BlzrQuiz.Data.EfClasses
+@using System.Text
 @inject QuizService QService
 @inject IUriHelper urihelper;
 
@@ -31,33 +32,41 @@
 </div>
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
+
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int CertId { get; set; }
     private readonly string Enabled = "btn btn-secondary";
     private readonly string Disabled = "btn btn-secondary disabled";
     private string BtnPreviousClasses { get; set; }
     private string BtnNextClasses { get; set; }
 
-    Dictionary<int, bool[]> QuizAnswers = new Dictionary<int, bool[]>();
-    bool[] Answers { get; set; }
+    Dictionary<int, UserQuizQuestionAnswer[]> QuizAnswers = new Dictionary<int, UserQuizQuestionAnswer[]>();
+    UserQuizQuestionAnswer[] Answers { get; set; }
     IEnumerable<QuizQuestion> QuestionList { get; set; } = new List<QuizQuestion>();
     int QLCount = 0;
     int counter = 0;
     public QuizQuestion Question { get; set; } = new QuizQuestion();
     public QuizQuestion ThisQuestion { get; set; }
+    private  BlzrQuiz.Data.EfClasses.UserQuiz ThisUserQuiz { get; set; }
     protected override async Task OnInitializedAsync()
     {
-
+        CertId = 3;
         try
         {
-            QuestionList = await QService.GetQuizQuestions(1);
+            ThisUserQuiz = await QService.GetUserQuizQuestions(Id);
+            if(ThisUserQuiz is null)
+            {
+                ThisUserQuiz = await QService.CreateUserQuiz(CertId);
+            }
+            QuestionList = ThisUserQuiz.Quiz.QuizQuestions;
             QLCount = QuestionList.Count() - 1;
             counter = 0;
             Question = QuestionList.ElementAt(0);
             foreach (var x in QuestionList)
             {
-                QuizAnswers[counter++] = new bool[x.Question.Answers.Count()];
+                QuizAnswers[counter++] = new UserQuizQuestionAnswer[x.Question.Answers.Count()];
             }
+
             Answers = QuizAnswers[0];
             counter = 0;
             SetButtons();
@@ -69,12 +78,13 @@
         Console.WriteLine($"<**********> QuestionList size: {QLCount}");
 
     }
-    void NextQuestion()
+   async void NextQuestion()
     {
         Console.WriteLine("Tring to move to next question");
         if (QLCount > counter++)
         {
             Console.WriteLine($"QLCount({QLCount}) is more than the counter({counter - 1})");
+            await QService.AddUserQuizQuestionAnswer(Answers[counter  - 1]);
             SetProperties();
             SetButtons();
         }
@@ -84,14 +94,16 @@
             --counter;
             SetButtons();
         }
-        Console.WriteLine($"End of NextQuestion. Counter {counter}");
+        Console.WriteLine($"End of NextQuestion. Counter {counter}. Answers: {WriteAnswers()}");
+        
     }
-    void PreviousQuestion()
+    async void PreviousQuestion()
     {
         Console.WriteLine($"In PreviousQuestion counter({counter})");
         if (counter-- > 0)
         {
             Console.WriteLine($"Counter({counter + 1}) is greater than 0");
+            await QService.AddUserQuizQuestionAnswer(Answers[counter  + 1]);
             SetProperties();
             SetButtons();
         }
@@ -100,7 +112,13 @@
             ++counter;
             SetButtons();
         }
-        Console.WriteLine($"End of PrevQuestion. Counter {counter}");
+        Console.WriteLine($"End of PrevQuestion. Counter {counter}. Answers: {WriteAnswers()}");
+    }
+    private string WriteAnswers()
+    {
+        var sb = new StringBuilder();
+        foreach(var a in Answers){ sb.Append('-').Append(a); }
+        return sb.ToString();
     }
     void SetButtons()
     {
