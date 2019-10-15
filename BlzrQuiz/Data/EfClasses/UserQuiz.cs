@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlzrQuiz.Data.EfClasses
 {
@@ -14,7 +12,6 @@ namespace BlzrQuiz.Data.EfClasses
         [Range(0, 100)]
         public byte Score { get; set; }
         public Quiz Quiz { get; set; }
-
- 
+        public ICollection<UserQuizQuestionAnswer> UserQuizQuestionAnswers { get; set; }
     }
 }

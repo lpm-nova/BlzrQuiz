@@ -13,7 +13,7 @@ namespace BlzrQuiz.Data.EfClasses
         public virtual ICollection<Answer> Answers { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
-        public List<QuestionAnswer> QuestionAnswers { get; set; }
+        public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
     }
 
     public enum QResult

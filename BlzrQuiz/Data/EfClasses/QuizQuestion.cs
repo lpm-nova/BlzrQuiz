@@ -1,4 +1,6 @@
-﻿namespace BlzrQuiz.Data.EfClasses
+﻿using System.Collections.Generic;
+
+namespace BlzrQuiz.Data.EfClasses
 {
     public class QuizQuestion
     {
@@ -7,5 +9,6 @@
         public Question Question { get; set; }
         public Quiz Quiz { get; set; }
         public byte QuestionNumber { get; set; }
+        public ICollection<UserQuizQuestionAnswer> UserQuizQuestionAnswers { get; set; }
     }
 }
