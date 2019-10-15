@@ -44,9 +44,13 @@ namespace BlzrQuiz.Data
             modelBuilder.Entity<Explanation>().Property<int>("ExplanationId").ValueGeneratedOnAdd();
 
             modelBuilder.Entity<UserQuiz>().HasKey(x => x.UserQuizId);
+            modelBuilder.Entity<UserQuiz>().HasOne(x => x.Quiz);
+            //modelBuilder.Entity<UserQuiz>().HasOne(x => x.UserId);
             modelBuilder.Entity<UserQuiz>().Property(x => x.Score).HasDefaultValue(0);
 
-
+            modelBuilder.Entity<UserQuizQuestionAnswer>().HasKey(x => x.UserQuizQuestionAnswerId);
+            modelBuilder.Entity<UserQuizQuestionAnswer>().HasOne(x => x.UserQuiz);
+            modelBuilder.Entity<UserQuizQuestionAnswer>().HasOne(x => x.QuizQuestion);
             //// Configuring a one-to-many question -> answer relationship that is friendly for serialisation
             modelBuilder.Entity<QuizQuestion>().HasKey(qa => new { qa.QuizId, qa.QuestionId });
             modelBuilder.Entity<QuizQuestion>().HasOne(qz => qz.Quiz).WithMany(qe => qe.QuizQuestions).HasForeignKey(qz => qz.QuizId).OnDelete(DeleteBehavior.NoAction);

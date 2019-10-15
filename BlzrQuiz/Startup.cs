@@ -43,6 +43,9 @@ namespace BlzrQuiz
                  o.Password.RequireUppercase = false;
                  o.Password.RequiredLength = 20;
                  o.Password.RequireNonAlphanumeric = false;
+                 // User settings.
+                 o.User.AllowedUserNameCharacters =
+                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
              })
              .AddEntityFrameworkStores<BlzrQuizContext>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingAuthenticationStateProvider<IdentityUser>>();
