@@ -66,7 +66,7 @@ namespace BlzrQuiz.ServiceLayer
             _context.Questions.Update(question);
             _context.SaveChanges(); //#G
         }
-        public async Task<UserQuiz> CreateUserQuiz(int certId)
+        public async Task<UserQuiz> CreateUserQuiz(int certId, string userName)
         {
             UserQuiz userQuiz = null;
             var quiz = await _context.Quizes.Include(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.CertificationId == certId);
@@ -74,11 +74,28 @@ namespace BlzrQuiz.ServiceLayer
             if (quiz is null)
                 quiz = CreateQuiz();
 
-            userQuiz = new UserQuiz { Quiz = quiz, QuizId = quiz.QuizId };
+            userQuiz = new UserQuiz { Quiz = quiz, UserId = userName, QuizId = quiz.QuizId };
             _context.UserQuizes.Add(userQuiz);
             _context.SaveChanges();
 
             return userQuiz;
+        }
+
+        public async Task CreateAnswersForUser(UserQuiz userQuiz)
+        {
+            foreach(var q in userQuiz.Quiz.QuizQuestions)
+            {
+                foreach (var a in q.Question.Answers) {
+                    var uqqa = new UserQuizQuestionAnswer
+                    {
+                        UserQuiz= userQuiz,
+                        QuizQuestion = q,
+                        Answer = a
+                    };
+                   await _context.UserQuizQuestionAnswers.AddAsync(uqqa);
+                }
+            }
+            _context.SaveChanges();
         }
         public async Task AddUserQuizQuestionAnswer(UserQuizQuestionAnswer entry)
         {

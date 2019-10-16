@@ -3,8 +3,11 @@
 @using BlzrQuiz.ServiceLayer
 @using BlzrQuiz.Data.EfClasses
 @using System.Text
+@using Microsoft.AspNetCore.Identity
 @inject QuizService QService
-@inject IUriHelper urihelper;
+@inject IUriHelper urihelper
+@inject UserManager<IdentityUser> _UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="container">
     @if (QuestionList.Count() == 0)
@@ -15,7 +18,7 @@
     {
         <div class="row">
             <div class="col-3">
-                <h3>Question: @Question.QuestionNumber</h3>
+                <h3>Question: @Question.QuestionNumber  : @UserName</h3>
             </div>
             <div class="col-6"></div>
             <div style="vertical-align:top; margin-bottom: 10px;" class="col-3 align-content-right">
@@ -49,6 +52,7 @@
     public QuizQuestion Question { get; set; } = new QuizQuestion();
     public QuizQuestion ThisQuestion { get; set; }
     private BlzrQuiz.Data.EfClasses.UserQuiz ThisUserQuiz { get; set; }
+    public string UserName { get; set; } = "No One";
     protected override async Task OnInitializedAsync()
     {
         CertId = 3;
@@ -57,7 +61,19 @@
             ThisUserQuiz = await QService.GetUserQuizQuestions(Id);
             if (ThisUserQuiz is null)
             {
-                ThisUserQuiz = await QService.CreateUserQuiz(CertId);
+                var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+                UserName = user.Identity.Name ?? "Nada";
+                if (user.Identity.IsAuthenticated)
+                {
+
+                    ThisUserQuiz = await QService.CreateUserQuiz(CertId, user.Identity.Name);
+                    await QService.CreateAnswersForUser(ThisUserQuiz);
+                }
+                else
+                {
+                    ThisUserQuiz = await QService.CreateUserQuiz(CertId, "Nada");
+                }
             }
             QuestionList = ThisUserQuiz.Quiz.QuizQuestions;
             QLCount = QuestionList.Count() - 1;
