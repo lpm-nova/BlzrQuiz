@@ -1,0 +1,51 @@
+﻿@using BlzrQuiz.Data.EfClasses
+
+<div class="row">
+    <div style="height: 100px;" class="col-12">@ThisQuestion.Question.Text</div>
+</div>
+<div class="row">
+    @for (var i = 0; i < ThisQuestion.Question.Answers.Count(); i++)
+    {
+        var answer = ThisQuestion.Question.Answers.ElementAt(i);
+        <div class="col-12">
+            <button type="button" @onclick="@(e => UpdateAnswers(answer.AnswerId) )" name="@($"option-{ answer.AnswerId}")" id="@($"quiz-question-{ThisQuestion.QuestionNumber}-answer-{i}")" value="@answer.AnswerId" class="btn btn-primary btn-lg btn-block">@answer.Text</button>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public QuizQuestion ThisQuestion { get; set; }
+    [Parameter] public BlzrQuiz.Data.EfClasses.UserQuiz ThisUserQuiz { get; set; }
+    void UpdateAnswers(int answerId)
+    {
+        if (ThisQuestion.UserQuizQuestionAnswers is null)
+            ThisQuestion.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
+        if (ThisQuestion.Question.HasMultipleAnswers)
+        {
+            Console.WriteLine($"Toggling Answer Value for answerId {answerId}");
+
+            if(ThisQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
+            {
+                ThisQuestion.UserQuizQuestionAnswers = ThisQuestion.UserQuizQuestionAnswers.Where(x => x.AnswerId != answerId) as ICollection<UserQuizQuestionAnswer>;
+            }else
+            {
+                ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
+            }
+            Console.WriteLine($"Answers has {ThisQuestion.UserQuizQuestionAnswers.Count()} elements");
+        }
+        else
+        {
+            Console.WriteLine("Clearing Array");
+            ThisQuestion.UserQuizQuestionAnswers.Clear();
+             ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
+        }
+    }
+    void PrintAnswers()
+    {
+        foreach (var x in ThisQuestion.UserQuizQuestionAnswers)
+        {
+            Console.WriteLine($"Answer is now: {x.AnswerId}");
+        }
+    }
+
+}
