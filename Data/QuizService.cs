@@ -29,6 +29,10 @@ namespace BlzrQuiz.ServiceLayer
         {
             return await _context.UserQuizes.Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).FirstOrDefaultAsync(x => x.QuizId == quizId);
         }
+        public async Task<UserQuiz> GetUserQuizQuestions(int quizId, string userId)
+        {
+            return await _context.UserQuizes.Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).FirstOrDefaultAsync(x => x.QuizId == quizId && x.UserId == userId);
+        }
         public async Task<IEnumerable<Question>> GetQuestions()
         {
             return await _context.Questions.Include(a => a.Answers).ToListAsync();
@@ -97,7 +101,17 @@ namespace BlzrQuiz.ServiceLayer
             }
             _context.SaveChanges();
         }
-
+        public async Task AddOrUpdateAnswersForUserQuiz(QuizQuestion qQuestion, int userQuizId)
+        {
+            Console.WriteLine($"In CreateAnswersForUser UQQA Count: {qQuestion.UserQuizQuestionAnswers.Count()}");
+            var existing = _context.UserQuizQuestionAnswers.Where(x => x.UserQuizId == userQuizId && x.QuizQuestion == qQuestion);
+            
+            foreach (var a in qQuestion.UserQuizQuestionAnswers)
+            {
+                await _context.UserQuizQuestionAnswers.AddAsync(a);
+            }
+            _context.SaveChanges();
+        }
         public async Task CreateAnswersForUser(QuizQuestion qQuestion, int userQuizId)
         {
             Console.WriteLine($"In CreateAnswersForUser UQQA Count: {qQuestion.UserQuizQuestionAnswers.Count()}");

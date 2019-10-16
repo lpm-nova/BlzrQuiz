@@ -2,8 +2,8 @@
 @using BlzrQuiz.ServiceLayer
 @using BlzrQuiz.Data.EfClasses
 @using System.Diagnostics
-@inject QuizService QService
-@inject IUriHelper urihelper;
+@inject QuizService _QService
+@inject NavigationManager _Urihelper;
 
 <h1>Edit</h1>
 
@@ -48,12 +48,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Question = await QService.GetQuestion(QuestionId);
-        Certifications = await QService.GetCertifications();
+        Question = await _QService.GetQuestion(QuestionId);
+        Certifications = await _QService.GetCertifications();
     }
     void UpdateQuestion()
     {
-        QService.UpdateQuestion(Question);
-        urihelper.NavigateTo("/questions/overview");
+        _QService.UpdateQuestion(Question);
+        _Urihelper.NavigateTo("/questions/overview");
     }
 }

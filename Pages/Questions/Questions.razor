@@ -1,8 +1,7 @@
 ﻿@page "/questions/overview"
 @using BlzrQuiz.ServiceLayer
 @using BlzrQuiz.Data.EfClasses
-@inject QuizService QService
-@inject IUriHelper urihelper;
+@inject QuizService _QService
 
 <h3>Questions</h3>
 @if (QuestionList == null)
@@ -72,21 +71,21 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        QuestionList = await QService.GetQuestions();
-        Certifications = await QService.GetCertifications();
+        QuestionList = await _QService.GetQuestions();
+        Certifications = await _QService.GetCertifications();
     }
 
     async Task AddNewQuestion()
     {
-        QService.AddQuestion(Question);
+        _QService.AddQuestion(Question);
         Question = new Question();
-        QuestionList = await QService.GetQuestions();
+        QuestionList = await _QService.GetQuestions();
     }
 
     async Task DeleteQuestion(Question entity)
     {
-        QService.DeleteQuestion(entity);
-        QuestionList = await QService.GetQuestions();
+        _QService.DeleteQuestion(entity);
+        QuestionList = await _QService.GetQuestions();
     }
 }
 
