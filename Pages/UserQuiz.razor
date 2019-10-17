@@ -24,8 +24,8 @@
             <div style="vertical-align:top; margin-bottom: 10px;" class="col-3 align-content-right">
                 <div class="btn-group align-top" role="group" aria-label="Basic example">
                     <button id="btn-previous" @onclick="PreviousQuestion" type="button" class="@BtnPreviousClasses">Previous</button>
-                    <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="@BtnNextClasses">Next</button>
-                    <button id="btn-submit" @onclick="Submit" style="margin-left: 10px;" type="button" class="@BtnSubmitClasses">Submit</button>
+                    <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="@BtnNextClasses">&nbsp;&nbsp;Next&nbsp;&nbsp;</button>
+                    <button id="btn-submit" @onclick="Submit" style="margin-left: 10px;" type="button" class="@BtnSubmitClasses">&nbsp;Submit</button>
                 </div>
             </div>
         </div>
@@ -40,9 +40,9 @@
 @code {
     [Parameter] public int QuizId { get; set; }
     [Parameter] public int CertId { get; set; }
-    private static readonly string Enabled = "btn btn-secondary";
-    private static readonly string Disabled = "btn btn-secondary disabled";
-    private static readonly string Invisible = " invisible";
+    private static readonly string Enabled = "btn btn-outline-secondary";
+    private static readonly string Disabled = "btn btn-outline-secondary disabled";
+    private static readonly string Invisible = " d-none";
     private string BtnPreviousClasses { get; set; } = Disabled;
     private string BtnNextClasses { get; set; } = Enabled;
     private string BtnSubmitClasses { get; set; } = Disabled + Invisible;
