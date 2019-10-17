@@ -18,13 +18,14 @@
     {
         <div class="row">
             <div class="col-3">
-                <h3>Question: @UQuestion.QuestionNumber  : @UserName</h3>
+                <h3>Question: @UQuestion.QuestionNumber</h3>
             </div>
             <div class="col-6"></div>
             <div style="vertical-align:top; margin-bottom: 10px;" class="col-3 align-content-right">
                 <div class="btn-group align-top" role="group" aria-label="Basic example">
                     <button id="btn-previous" @onclick="PreviousQuestion" type="button" class="@BtnPreviousClasses">Previous</button>
                     <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="@BtnNextClasses">Next</button>
+                    <button id="btn-submit" @onclick="Submit" style="margin-left: 10px;" type="button" class="@BtnSubmitClasses">Submit</button>
                 </div>
             </div>
         </div>
@@ -41,14 +42,16 @@
     [Parameter] public int CertId { get; set; }
     private static readonly string Enabled = "btn btn-secondary";
     private static readonly string Disabled = "btn btn-secondary disabled";
+    private static readonly string Invisible = " invisible";
     private string BtnPreviousClasses { get; set; } = Disabled;
     private string BtnNextClasses { get; set; } = Enabled;
+    private string BtnSubmitClasses { get; set; } = Disabled + Invisible;
+
 
     IEnumerable<QuizQuestion> QuestionList { get; set; } = new List<QuizQuestion>();
     int QLCount = 0;
     int counter = 0;
     public QuizQuestion UQuestion { get; set; } = new QuizQuestion();
-    //public QuizQuestion ThisQuestion { get; set; }
     private BlzrQuiz.Data.EfClasses.UserQuiz ThisUserQuiz { get; set; }
     public string UserName { get; set; } = "No One";
     protected override async Task OnInitializedAsync()
@@ -91,36 +94,46 @@
             }
         }
     }
-    void NextQuestion()
+
+    void Submit()
     {
-        Console.WriteLine("Tring to move to next question");
         if (QLCount > counter++)
         {
             UpdateDB();
         }
         else
         {
-            Console.WriteLine($"QLCount({QLCount}) is less than the counter({counter - 1})");
             --counter;
         }
         SetProperties();
         SetButtons();
-        Console.WriteLine($"End of NextQuestion. Counter {counter}. Answers: {WriteAnswers()}");
+    }
+
+    void NextQuestion()
+    {
+        if (QLCount > counter++)
+        {
+            UpdateDB();
+        }
+        else
+        {
+            --counter;
+        }
+        SetProperties();
+        SetButtons();
 
     }
+
     void UpdateDB()
     {
         if (UQuestion.UserQuizQuestionAnswers is null)
             UQuestion.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
 
-        Console.WriteLine($"QLCount({QLCount}) is more than the counter({counter - 1})");
-
-        Console.WriteLine($"QuestionId: {UQuestion.QuestionId}. ThisUserQuizId: {ThisUserQuiz.UserQuizId}");
         QService.AddOrUpdateAnswersForUserQuiz(UQuestion, ThisUserQuiz.UserQuizId);
     }
+
     void PreviousQuestion()
     {
-        Console.WriteLine($"In PreviousQuestion counter({counter})");
         if (counter-- > 0)
         {
             UpdateDB();
@@ -129,15 +142,12 @@
         {
             ++counter;
         }
+        SetProperties();
         SetButtons();
-        Console.WriteLine($"End of PrevQuestion. Counter {counter}. Answers: {WriteAnswers()}");
     }
-    private string WriteAnswers()
-    {
-        var sb = new StringBuilder();
-        foreach (var a in UQuestion.UserQuizQuestionAnswers) { sb.Append('-').Append(a); }
-        return sb.ToString();
-    }
+
+
+
     void SetButtons()
     {
         if (counter > 0 && counter < QLCount)
@@ -149,13 +159,15 @@
             else if (counter == QLCount - 1)
             {
                 BtnNextClasses = Enabled;
+                BtnSubmitClasses = Disabled + Invisible;
             }
         }
         else
         {
             if (counter == QLCount)
             {
-                BtnNextClasses = Disabled;
+                BtnNextClasses = Disabled + Invisible;
+                BtnSubmitClasses = Enabled;
                 BtnPreviousClasses = Enabled;
             }
             else if (counter == 0)
@@ -168,7 +180,6 @@
     }
     void SetProperties()
     {
-        Console.WriteLine("Passed QLCount check");
         UQuestion = QuestionList.ElementAt(counter);
     }
 }

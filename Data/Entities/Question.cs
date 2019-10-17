@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 
 namespace BlzrQuiz.Data.EfClasses
 {
@@ -13,14 +14,10 @@ namespace BlzrQuiz.Data.EfClasses
         public virtual ICollection<Answer> Answers { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
-        //public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
-    }
-
-    public enum QResult
-    {
-        NoResult,
-        Correct,
-        PartiallyCorrect,
-        Incorrect
+        
+        public MarkupString ToMarkup()
+        {
+            return new MarkupString(Text);
+        }
     }
 }

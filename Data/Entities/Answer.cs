@@ -9,6 +9,5 @@ namespace BlzrQuiz.Data.EfClasses
         public bool IsCorrect { get; set; }
         public int QuestionId { get; set; }
         public Question Question { get; set; }
-        //public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
     }
 }
