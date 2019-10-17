@@ -7,15 +7,23 @@
     @for (var i = 0; i < ThisQuestion.Question.Answers.Count(); i++)
     {
         var answer = ThisQuestion.Question.Answers.ElementAt(i);
+        SetButtonClasses(answer.AnswerId);
         <div class="col-12">
-            <button type="button" @onclick="@(e => UpdateAnswers(answer.AnswerId) )" name="@($"option-{ answer.AnswerId}")" id="@($"quiz-question-{ThisQuestion.QuestionNumber}-answer-{i}")" value="@answer.AnswerId" class="btn btn-outline-dark btn-lg btn-block">@answer.Text</button>
+            <div class="checkbox">
+                <button type="button" @onclick="@(e => UpdateAnswers(answer.AnswerId) )" name="@($"option-{ answer.AnswerId}")" id="@($"quiz-question-{ThisQuestion.QuestionNumber}-answer-{i}")" value="@answer.AnswerId" class="@ButtonClasses[answer.AnswerId]">@answer.Text</button>
+</div>
         </div>
     }
 </div>
 
 @code {
     [Parameter] public QuizQuestion ThisQuestion { get; set; }
-    [Parameter] public  BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
+    [Parameter] public BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
+    private static readonly string ButtonBaseClass = "btn btn-outline-info btn-lg btn-block ";
+    private static readonly string ButtonActive = " active";
+    private Dictionary<int, string> ButtonClasses { get; set; } = new Dictionary<int, string>();
+    //probably going to be a parameter soon
+
     void UpdateAnswers(int answerId)
     {
         if (ThisQuestion.UserQuizQuestionAnswers is null)
@@ -25,20 +33,30 @@
         {
             Console.WriteLine($"Toggling Answer Value for answerId {answerId}");
 
-            if(ThisQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
+            if (ThisQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
             {
-                ThisQuestion.UserQuizQuestionAnswers = ThisQuestion.UserQuizQuestionAnswers.Where(x => x.AnswerId != answerId) as ICollection<UserQuizQuestionAnswer>;
-            }else
+                ThisQuestion.UserQuizQuestionAnswers.Except(ThisQuestion.UserQuizQuestionAnswers.Where(x => x.AnswerId == answerId));
+                ButtonClasses[answerId] = ButtonBaseClass;
+            }
+            else
             {
                 ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
+                ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
             }
             Console.WriteLine($"Answers has {ThisQuestion.UserQuizQuestionAnswers.Count()} elements");
         }
         else
         {
             Console.WriteLine("Clearing Array");
-            ThisQuestion.UserQuizQuestionAnswers.Clear();
-            ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
+            var answer = new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion };
+            while (ThisQuestion.UserQuizQuestionAnswers.Count > 0)
+            {
+                var id = ThisQuestion.UserQuizQuestionAnswers.ElementAt(0).AnswerId;
+                ButtonClasses[id] = ButtonBaseClass;
+                ThisQuestion.UserQuizQuestionAnswers.RemoveAt(0);
+            }
+            ThisQuestion.UserQuizQuestionAnswers.Add(answer);
+            ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
         }
     }
     void PrintAnswers()
@@ -48,5 +66,13 @@
             Console.WriteLine($"Answer is now: {x.AnswerId}");
         }
     }
-
+    void SetButtonClasses(int answerId)
+    {
+        if (!ButtonClasses.ContainsKey(answerId))
+        {
+            ButtonClasses.Add(answerId, ButtonBaseClass);
+            if (answerId == 10)
+                ButtonClasses[answerId] = ButtonClasses[answerId] + " active";
+        }
+    }
 }

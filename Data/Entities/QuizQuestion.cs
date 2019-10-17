@@ -9,6 +9,6 @@ namespace BlzrQuiz.Data.Entities
         public Question Question { get; set; }
         public Quiz Quiz { get; set; }
         public byte QuestionNumber { get; set; }
-        public ICollection<UserQuizQuestionAnswer> UserQuizQuestionAnswers { get; set; }
+        public List<UserQuizQuestionAnswer> UserQuizQuestionAnswers { get; set; }
     }
 }
