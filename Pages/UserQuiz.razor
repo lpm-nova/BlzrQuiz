@@ -33,7 +33,7 @@
             @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
             <UserQuizQuestion ThisQuestion="UQuestion" ThisUserQuiz="ThisUserQuiz"></UserQuizQuestion>
         </div>
-        <div class="@Alert">
+        <div id="results-div" style="margin-top: 15px;" class="@Alert">
             <strong>Score: </strong> @Score out of @QuestionList.Count()
         </div>
 
