@@ -1,4 +1,4 @@
-using BlzrQuiz.Data.EfClasses;
+using  BlzrQuiz.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using BlzrQuiz.Core;

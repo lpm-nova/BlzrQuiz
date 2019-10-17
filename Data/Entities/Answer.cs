@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-namespace BlzrQuiz.Data.EfClasses
+﻿
+namespace BlzrQuiz.Data.Entities
 {
     public class Answer
     {

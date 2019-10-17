@@ -1,7 +1,7 @@
 ﻿@page "/quizes/userquiz/{quizId:int}"
 @attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
-@using BlzrQuiz.Data.EfClasses
+@using  BlzrQuiz.Data.Entities
 @using System.Text
 @using Microsoft.AspNetCore.Identity
 @inject QuizService QService
@@ -33,6 +33,9 @@
             @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
             <UserQuizQuestion ThisQuestion="UQuestion" ThisUserQuiz="ThisUserQuiz"></UserQuizQuestion>
         </div>
+        <div class="@Alert">
+            <strong>Score: </strong> @Score out of @QuestionList.Count()
+        </div>
 
     }
 </div>
@@ -43,16 +46,19 @@
     private static readonly string Enabled = "btn btn-outline-secondary";
     private static readonly string Disabled = "btn btn-outline-secondary disabled";
     private static readonly string Invisible = " d-none";
+    private static readonly string AlertBase = "alert alert-success";
     private string BtnPreviousClasses { get; set; } = Disabled;
     private string BtnNextClasses { get; set; } = Enabled;
     private string BtnSubmitClasses { get; set; } = Disabled + Invisible;
+    private string Alert { get; set; } = AlertBase + Invisible;
+    private int Score { get; set; } = 0;
 
 
     IEnumerable<QuizQuestion> QuestionList { get; set; } = new List<QuizQuestion>();
     int QLCount = 0;
     int counter = 0;
     public QuizQuestion UQuestion { get; set; } = new QuizQuestion();
-    private BlzrQuiz.Data.EfClasses.UserQuiz ThisUserQuiz { get; set; }
+    private  BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
     public string UserName { get; set; } = "No One";
     protected override async Task OnInitializedAsync()
     {
@@ -65,7 +71,6 @@
             counter = 0;
             UQuestion = QuestionList.ElementAt(0);
             counter = 0;
-            SetProperties();
             SetButtons();
         }
         catch (InvalidOperationException)
@@ -95,18 +100,25 @@
         }
     }
 
-    void Submit()
+    async Task Submit()
     {
-        if (QLCount > counter++)
+        var userAnswers = await QService.GetUserQuizAnswers(ThisUserQuiz.UserQuizId);
+        userAnswers.OrderBy(x => x.QuizQuestion.QuestionNumber);
+        QuestionList.OrderBy(x => x.QuestionNumber);
+        var score = 0;
+        for (var i = 0; i < QuestionList.Count(); i++)
         {
-            UpdateDB();
+            var q = QuestionList.ElementAt(i);
+
+            var n = q.Question.Answers.Where(a => a.IsCorrect).Select(x => x.AnswerId);
+            var qAnswers = userAnswers.Where(x => x.QuizQuestion.QuestionNumber == q.QuestionNumber);
+            foreach(var qa in qAnswers)
+            {
+                if (n.Contains(qa.AnswerId))
+                    score++;
+            }
         }
-        else
-        {
-            --counter;
-        }
-        SetProperties();
-        SetButtons();
+        Alert = AlertBase;
     }
 
     void NextQuestion()
@@ -121,7 +133,6 @@
         }
         SetProperties();
         SetButtons();
-
     }
 
     void UpdateDB()
@@ -145,8 +156,6 @@
         SetProperties();
         SetButtons();
     }
-
-
 
     void SetButtons()
     {
@@ -178,6 +187,7 @@
         }
 
     }
+
     void SetProperties()
     {
         UQuestion = QuestionList.ElementAt(counter);

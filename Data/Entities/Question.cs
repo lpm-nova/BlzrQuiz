@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
-namespace BlzrQuiz.Data.EfClasses
+namespace BlzrQuiz.Data.Entities
 {
     public partial class Question
     {
@@ -10,11 +10,11 @@ namespace BlzrQuiz.Data.EfClasses
         public int CertificationId { get; set; }
         public string Text { get; set; }
         public bool HasMultipleAnswers { get; set; }
-        
+
         public virtual ICollection<Answer> Answers { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
-        
+
         public MarkupString ToMarkup()
         {
             return new MarkupString(Text);

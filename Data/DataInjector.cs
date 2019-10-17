@@ -1,4 +1,4 @@
-﻿using BlzrQuiz.Data.EfClasses;
+﻿using BlzrQuiz.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -1194,12 +1194,12 @@ namespace BlzrQuiz.Core
         public void AddCertifications()
         {
             modelBuilder.Entity<Certification>().HasData(
-                 new Certification
-                 {
-                     CertificationId = 1,
-                     Name = "WOPR",
-                     Description = "Machine Learning"
-                 },
+            new Certification
+            {
+                CertificationId = 1,
+                Name = "WOPR",
+                Description = "Machine Learning"
+            },
             new Certification
             {
                 CertificationId = 4,

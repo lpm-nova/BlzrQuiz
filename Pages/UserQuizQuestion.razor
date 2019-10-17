@@ -1,4 +1,4 @@
-﻿@using BlzrQuiz.Data.EfClasses
+﻿@using BlzrQuiz.Data.Entities
 
 <div class="row">
     <div style="height: 100px;" class="col-12">@ThisQuestion.Question.ToMarkup()</div>
@@ -15,7 +15,7 @@
 
 @code {
     [Parameter] public QuizQuestion ThisQuestion { get; set; }
-    [Parameter] public BlzrQuiz.Data.EfClasses.UserQuiz ThisUserQuiz { get; set; }
+    [Parameter] public  BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
     void UpdateAnswers(int answerId)
     {
         if (ThisQuestion.UserQuizQuestionAnswers is null)
@@ -38,7 +38,7 @@
         {
             Console.WriteLine("Clearing Array");
             ThisQuestion.UserQuizQuestionAnswers.Clear();
-             ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
+            ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
         }
     }
     void PrintAnswers()

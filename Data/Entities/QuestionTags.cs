@@ -1,4 +1,4 @@
-﻿namespace BlzrQuiz.Data.EfClasses
+﻿namespace BlzrQuiz.Data.Entities
 {
     public class QuestionTags
     {
