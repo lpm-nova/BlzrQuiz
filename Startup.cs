@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using BlzrQuiz.Areas.Identity;
 using BlzrQuiz.Data;
 using BlzrQuiz.ServiceLayer;
+using BlzrQuiz.Shared;
 
 namespace BlzrQuiz
 {
@@ -39,7 +40,7 @@ namespace BlzrQuiz
                  o.Password.RequireDigit = false;
                  o.Password.RequireLowercase = false;
                  o.Password.RequireUppercase = false;
-                 o.Password.RequiredLength = 2;
+                 o.Password.RequiredLength = 6;
                  o.Password.RequireNonAlphanumeric = false;
                  // User settings.
                  o.User.AllowedUserNameCharacters =
@@ -54,7 +55,7 @@ namespace BlzrQuiz
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public  void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -67,18 +68,7 @@ namespace BlzrQuiz
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                using var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>();
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-                context.Database.Migrate();
-                if (context.QuizQuestions.Count() == 0)
-                {
-                    var q = new QuizService(context);
-                    q.CreateQuiz();
-                }
-            }
+            ConfigureDB(app);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -93,6 +83,27 @@ namespace BlzrQuiz
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+        }
+
+        private void ConfigureDB(IApplicationBuilder app)
+        {
+            var dbSettings = new DBSettings();
+            Configuration.GetSection("Startup").Bind(dbSettings);
+            if (dbSettings.ReconstructDB)
+            {
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    using var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>();
+                    context.Database.EnsureDeleted();
+                    context.Database.EnsureCreated();
+                    context.Database.Migrate();
+                    if (context.QuizQuestions.Count() == 0)
+                    {
+                        var q = new QuizService(context);
+                        q.CreateQuiz();
+                    }
+                }
+            }
         }
     }
 }
