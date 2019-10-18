@@ -28,14 +28,19 @@ namespace BlzrQuiz.ServiceLayer
             return await _context.QuizQuestions.Where(x => x.QuizId == quizId).Include(a => a.Question.Answers).Take(50).ToListAsync().ConfigureAwait(false);
         }
 
+        public async Task<IEnumerable<UserQuiz>> GetUserQuizzesById(string userId)
+        {
+            return await _context.UserQuizzes.Where(x => x.UserId == userId).Include(a => a.Quiz).ThenInclude(a => a.Certification).ToListAsync().ConfigureAwait(false);
+        }
+
         public async Task<UserQuiz> GetUserQuizQuestions(int quizId)
         {
-            return await _context.UserQuizes.Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId).ConfigureAwait(false);
+            return await _context.UserQuizzes.Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId).ConfigureAwait(false);
         }
 
         public async Task<UserQuiz> GetUserQuizQuestions(int quizId, string userId)
         {
-            return await _context.UserQuizes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId && x.UserId == userId).ConfigureAwait(false);
+            return await _context.UserQuizzes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId && x.UserId == userId).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<UserQuizQuestionAnswer>> GetUserQuizAnswers(int userQuizId)
@@ -94,7 +99,7 @@ namespace BlzrQuiz.ServiceLayer
             var quiz = await _context.Quizes.Include(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.CertificationId == certId).ConfigureAwait(false) ?? CreateQuiz();
 
             userQuiz = new UserQuiz { Quiz = quiz, UserId = userName, QuizId = quiz.QuizId };
-            _context.UserQuizes.Add(userQuiz);
+            _context.UserQuizzes.Add(userQuiz);
             _context.SaveChanges();
 
             return userQuiz;
@@ -196,7 +201,7 @@ namespace BlzrQuiz.ServiceLayer
             if (questions.Count() == 0)
                 throw new Exception("No questions for quiz");
 
-            var quiz = new Quiz { CertificationId = certId, Name = "Test", Description = "Desc field is gonna go awaaaaay" };
+            var quiz = new Quiz { CertificationId = certId, Name = "Test", DateCreated = DateTime.UtcNow };
             _context.Quizes.Add(quiz);
             _context.SaveChanges();
             byte questionNumber = 1;

@@ -1,25 +1,49 @@
-﻿@attribute [Authorize]
+﻿@page "/quizpage"
+@attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
-@using  BlzrQuiz.Data.Entities
-@inject QuizService  QService
+@using EF = BlzrQuiz.Data.Entities
+@inject QuizService  _QService
+@inject AuthenticationStateProvider _Auth
 
 <h3>QuizPage</h3>
-@if (Quizzes == null)
+@if (UserQuizzes == null)
 {
     <p><em>Loading...</em></p>
 
 }
+else
+{
+    //QuizFragments
+    <div class="row">
+        @foreach (EF.UserQuiz userQuiz in UserQuizzes)
+        {
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">@userQuiz.Quiz.Certification.Name</div>
+                <div class="card-body">
+                    <h5 class="card-title">ID: #@userQuiz.UserQuizId</h5>
+                    <p class="card-text">Desc: @userQuiz.Quiz.Certification.Description</p>
+                    <p class="card-text">Created: @userQuiz.Quiz.DateCreated</p>
+                </div>
+                <div class="card-footer bg-transparent border-success">Score: @userQuiz.Score%</div>
+            </div>
+        </div>
+        }
+    </div>
+}
+
 
 @code {
-    List<Quiz> Quizzes;
-    List<UserQuiz> UserQuizes;
+    [Parameter] public RenderFragment QuizFragments { get; set; }
+    //List<EF.Quiz> Quizzes;
+    IEnumerable<EF.UserQuiz> UserQuizzes { get; set; }
     string UserName = string.Empty;
     protected override async Task OnInitializedAsync()
     {
         var authState = await _Auth.GetAuthenticationStateAsync();
         var user = authState.User;
         UserName = user.Identity.Name ?? "Nada";
-        Quizes = QService.GetUserQuizesById(UserName);
+        UserQuizzes = await _QService.GetUserQuizzesById(UserName);
     }
 
 }

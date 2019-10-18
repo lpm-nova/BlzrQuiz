@@ -13,7 +13,7 @@ namespace BlzrQuiz.Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<Quiz> Quizes { get; set; }
         public DbSet<QuizQuestion> QuizQuestions { get; set; }
-        public DbSet<UserQuiz> UserQuizes { get; set; }
+        public DbSet<UserQuiz> UserQuizzes { get; set; }
         public DbSet<UserQuizQuestionAnswer> UserQuizQuestionAnswers { get; set; }
 
         public BlzrQuizContext(DbContextOptions<BlzrQuizContext> options) : base(options) { }

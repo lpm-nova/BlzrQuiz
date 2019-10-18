@@ -1,7 +1,7 @@
 ﻿@page "/quizes/userquiz/{quizId:int}"
 @attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
-@using  BlzrQuiz.Data.Entities
+@using EF = BlzrQuiz.Data.Entities
 @using System.Text
 @using Microsoft.AspNetCore.Identity
 @inject QuizService QService
@@ -53,11 +53,11 @@
     private string Alert { get; set; } = AlertBase + Invisible;
     private int Score { get; set; } = 0;
 
-    IEnumerable<QuizQuestion> QuestionList { get; set; } = new List<QuizQuestion>();
+    IEnumerable<EF.QuizQuestion> QuestionList { get; set; } = new List<EF.QuizQuestion>();
     int QLCount = 0;
     int counter = 0;
-    public QuizQuestion UQuestion { get; set; } = new QuizQuestion();
-    private BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
+    public EF.QuizQuestion UQuestion { get; set; } = new EF.QuizQuestion();
+    private EF.UserQuiz ThisUserQuiz { get; set; }
     public string UserName { get; set; } = "No One";
     protected override async Task OnInitializedAsync()
     {
@@ -95,7 +95,7 @@
         }
 
         if (ThisUserQuiz.UserQuizQuestionAnswers is null)
-            ThisUserQuiz.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
+            ThisUserQuiz.UserQuizQuestionAnswers = new List<EF.UserQuizQuestionAnswer>();
     }
 
     async Task Submit()
@@ -136,7 +136,7 @@
     void UpdateDB()
     {
         if (UQuestion.UserQuizQuestionAnswers is null)
-            UQuestion.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
+            UQuestion.UserQuizQuestionAnswers = new List<EF.UserQuizQuestionAnswer>();
 
         QService.AddOrUpdateAnswersForUserQuiz(UQuestion, ThisUserQuiz.UserQuizId);
     }
