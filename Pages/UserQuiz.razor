@@ -24,7 +24,7 @@
             <div style="vertical-align:top; margin-bottom: 10px;" class="col-3 align-content-right">
                 <div class="btn-group align-top" role="group" aria-label="Basic example">
                     <button id="btn-previous" @onclick="PreviousQuestion" type="button" class="@BtnPreviousClasses">Previous</button>
-                    <button  id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="@BtnNextClasses">&nbsp;&nbsp;Next&nbsp;&nbsp;</button>
+                    <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="@BtnNextClasses">&nbsp;&nbsp;Next&nbsp;&nbsp;</button>
                     <button id="btn-submit" @onclick="Submit" style="margin-left: 10px;" type="button" class="@BtnSubmitClasses">&nbsp;Submit</button>
                 </div>
             </div>
@@ -53,12 +53,11 @@
     private string Alert { get; set; } = AlertBase + Invisible;
     private int Score { get; set; } = 0;
 
-
     IEnumerable<QuizQuestion> QuestionList { get; set; } = new List<QuizQuestion>();
     int QLCount = 0;
     int counter = 0;
     public QuizQuestion UQuestion { get; set; } = new QuizQuestion();
-    private  BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
+    private BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
     public string UserName { get; set; } = "No One";
     protected override async Task OnInitializedAsync()
     {
@@ -73,12 +72,7 @@
             counter = 0;
             SetButtons();
         }
-        catch (InvalidOperationException)
-        {
-            Console.WriteLine($"<**********> BAAAAAD");
-        }
-        Console.WriteLine($"<**********> QuestionList size: {QLCount}");
-
+        catch (InvalidOperationException) { }
     }
 
     protected async Task GetUserQuiz()
@@ -87,6 +81,7 @@
         var user = authState.User;
         UserName = user.Identity.Name ?? "Nada";
         ThisUserQuiz = await QService.GetUserQuizQuestions(QuizId, user.Identity.Name);
+
         if (ThisUserQuiz is null)
         {
             if (user.Identity.IsAuthenticated)
@@ -98,6 +93,9 @@
                 ThisUserQuiz = await QService.CreateUserQuiz(CertId, "Nada");
             }
         }
+
+        if (ThisUserQuiz.UserQuizQuestionAnswers is null)
+            ThisUserQuiz.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
     }
 
     async Task Submit()
@@ -112,7 +110,7 @@
 
             var n = q.Question.Answers.Where(a => a.IsCorrect).Select(x => x.AnswerId);
             var qAnswers = userAnswers.Where(x => x.QuizQuestion.QuestionNumber == q.QuestionNumber);
-            foreach(var qa in qAnswers)
+            foreach (var qa in qAnswers)
             {
                 if (n.Contains(qa.AnswerId))
                     score++;

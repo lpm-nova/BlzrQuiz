@@ -1,5 +1,5 @@
 ﻿using BlzrQuiz.Data;
-using  BlzrQuiz.Data.Entities;
+using BlzrQuiz.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace BlzrQuiz.ServiceLayer
 
         public async Task<UserQuiz> GetUserQuizQuestions(int quizId, string userId)
         {
-            return await _context.UserQuizes.Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId && x.UserId == userId).ConfigureAwait(false);
+            return await _context.UserQuizes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId && x.UserId == userId).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<UserQuizQuestionAnswer>> GetUserQuizAnswers(int userQuizId)
@@ -163,7 +163,8 @@ namespace BlzrQuiz.ServiceLayer
                     {
                         _context.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
                     }
-                }else
+                }
+                else
                 {
                     _context.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
                 }

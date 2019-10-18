@@ -1,9 +1,5 @@
 ﻿using BlzrQuiz.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlzrQuiz.Core
 {
@@ -1079,7 +1075,7 @@ namespace BlzrQuiz.Core
                     new Question { QuestionId = 83, CertificationId = 3, HasMultipleAnswers = false, Text = "Your design team is planning to design an application that will be hosted on the AWS Cloud. One of their main non-functional requirements is given below. Reduce inter-dependencies so failures do not impact other components. Which of the following concepts does this requirement relate to?" },
                     new Question { QuestionId = 84, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following can be used to increase the fault tolerance of an application?" },
                     new Question { QuestionId = 85, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following security requirements are managed by AWS?<br/>Select <strong>3</strong> answers from the options given below." },
-                    new Question { QuestionId = 86, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following terms relate to <i>'Creating systems that scale to the required capacity based on changes in demand'</i>?" },
+                    new Question { QuestionId = 86, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following terms relate to <em>'Creating systems that scale to the required capacity based on changes in demand'</em>?" },
                     new Question { QuestionId = 87, CertificationId = 3, HasMultipleAnswers = false, Text = "Your company is planning to offload some of the batch processing workloads on to AWS. These jobs can be interrupted and resumed at any time. Which of the following instance types would be the most cost effective to use for this purpose?" },
                     new Question { QuestionId = 88, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following needs a user name and password to access AWS resources?" },
                     new Question { QuestionId = 89, CertificationId = 3, HasMultipleAnswers = false, Text = "Your company is planning to use the AWS Cloud. But there is a management decision that resources need tosplit department wise. And the decision is tending towards managing multiple AWS accounts. Which of the following would help in effective management and also provide an efficient costing model." },
@@ -1112,8 +1108,8 @@ namespace BlzrQuiz.Core
                     new Question { QuestionId = 116, CertificationId = 3, HasMultipleAnswers = false, Text = "A company wants to have a database hosted on AWS. As much as possible they want to have control over the database itself. Which of the following would be an ideal option for this?" },
                     new Question { QuestionId = 117, CertificationId = 3, HasMultipleAnswers = false, Text = "A company currently has an application which consist of a .Net layer which connects to a MySQL database. They now want to move this application onto AWS. They want to make use of all AWS features such ashigh availability and automated backups. Which of the following would be an ideal database in AWS to migrate tofor this requirement." },
                     new Question { QuestionId = 118, CertificationId = 3, HasMultipleAnswers = true, Text = "Which of the following statements are FALSE when it comes to elasticity? <br/>Choose <strong>2</strong> answers from the options given below." },
-                    new Question { QuestionId = 119, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following services relates the concept of <i>'Distributing traffic to multiple EC2 Instances'</i>?" },
-                    new Question { QuestionId = 120, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following services relates the concept of <i>'Scaling up resources based on demand''</i>?" },
+                    new Question { QuestionId = 119, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following services relates the concept of <em>'Distributing traffic to multiple EC2 Instances'</em>?" },
+                    new Question { QuestionId = 120, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following services relates the concept of <em>'Scaling up resources based on demand''</em>?" },
                     new Question { QuestionId = 121, CertificationId = 3, HasMultipleAnswers = false, Text = "A company is planning to migrate their existing AWS Services to the Cloud. Which of the following would help them do a cost benefit analysis of moving to the AWS Cloud." },
                     new Question { QuestionId = 122, CertificationId = 3, HasMultipleAnswers = false, Text = "Which of the following does AWS perform on its behalf for EBS volumes to make it less probe to failure?" },
                     new Question { QuestionId = 123, CertificationId = 3, HasMultipleAnswers = false, Text = "You have a set of developers that need to use .Net to call AWS Services. Which of the following tools can beused to achieve this purpose." },

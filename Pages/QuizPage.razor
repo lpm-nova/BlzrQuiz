@@ -1,0 +1,25 @@
+﻿@attribute [Authorize]
+@using BlzrQuiz.ServiceLayer
+@using  BlzrQuiz.Data.Entities
+@inject QuizService  QService
+
+<h3>QuizPage</h3>
+@if (Quizzes == null)
+{
+    <p><em>Loading...</em></p>
+
+}
+
+@code {
+    List<Quiz> Quizzes;
+    List<UserQuiz> UserQuizes;
+    string UserName = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _Auth.GetAuthenticationStateAsync();
+        var user = authState.User;
+        UserName = user.Identity.Name ?? "Nada";
+        Quizes = QService.GetUserQuizesById(UserName);
+    }
+
+}
