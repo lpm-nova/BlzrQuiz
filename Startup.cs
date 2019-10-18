@@ -87,9 +87,10 @@ namespace BlzrQuiz
 
         private void ConfigureDB(IApplicationBuilder app)
         {
-            var dbSettings = new DBSettings();
-            Configuration.GetSection("Startup").Bind(dbSettings);
-            if (dbSettings.ReconstructDB)
+            //var dbSettings = new DBSettings();
+            //Configuration.GetSection("Startup").Bind(dbSettings);
+            var rebuild = Configuration.GetValue<bool>("rebuild");
+            if (rebuild)
             {
                 using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
                 {
@@ -101,6 +102,7 @@ namespace BlzrQuiz
                     {
                         var q = new QuizService(context);
                         q.CreateQuiz();
+                        q.CreateMultipleSelectionQuiz();
                     }
                 }
             }

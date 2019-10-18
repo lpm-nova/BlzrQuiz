@@ -88,10 +88,6 @@
             {
                 ThisUserQuiz = await QService.CreateUserQuiz(CertId, user.Identity.Name);
             }
-            else
-            {
-                ThisUserQuiz = await QService.CreateUserQuiz(CertId, "Nada");
-            }
         }
 
         if (ThisUserQuiz.UserQuizQuestionAnswers is null)

@@ -129,11 +129,11 @@ namespace BlzrQuiz.ServiceLayer
             var existing = _context.UserQuizQuestionAnswers.Where(x => x.UserQuizId == userQuizId && x.QuizQuestion == qQuestion);
             if (existing?.Count() > 0)
             {
-                if (qQuestion.Question.HasMultipleAnswers)
+                if (qQuestion.Question.NumberOfCorrectAnswers > 1)
                 {
                     foreach (var a in existing)
                     {
-                        if (qQuestion.UserQuizQuestionAnswers.Remove(qQuestion.UserQuizQuestionAnswers.Single(x => x.AnswerId == a.AnswerId)))
+                        if (qQuestion.UserQuizQuestionAnswers.Remove(qQuestion.UserQuizQuestionAnswers.First(x => x.AnswerId == a.AnswerId)))
                         {
                             _context.UserQuizQuestionAnswers.Remove(a);
                         }
@@ -161,7 +161,7 @@ namespace BlzrQuiz.ServiceLayer
                 {
                     _context.UserQuizQuestionAnswers.AddRange(qQuestion.UserQuizQuestionAnswers);
                 }
-                else if (qQuestion.Question.HasMultipleAnswers)
+                else if (qQuestion.Question.NumberOfCorrectAnswers > 1)
                 {
                     var correctAnswerCount = qQuestion.Question.Answers.Count(x => x.IsCorrect);
                     for (var i = 0; i < correctAnswerCount; i++)
@@ -202,6 +202,34 @@ namespace BlzrQuiz.ServiceLayer
                 throw new Exception("No questions for quiz");
 
             var quiz = new Quiz { CertificationId = certId, Name = "Test", DateCreated = DateTime.UtcNow };
+            _context.Quizes.Add(quiz);
+            _context.SaveChanges();
+            byte questionNumber = 1;
+            foreach (var q in questions)
+            {
+                _context.QuizQuestions.Add(
+                     new QuizQuestion
+                     {
+                         QuizId = quiz.QuizId,
+                         Question = q,
+                         QuestionId = q.QuestionId,
+                         QuestionNumber = questionNumber++
+                     }
+                 );
+            }
+            _context.SaveChanges();
+            return quiz;
+        }
+
+        public Quiz CreateMultipleSelectionQuiz()
+        {
+            var certId = _context.Certifications.First(x => x.Name == "CLF-C01").CertificationId;
+            var questions = _context.Questions.Where(x => x.CertificationId == certId && x.NumberOfCorrectAnswers > 1).Take(50);
+
+            if (questions.Count() == 0)
+                throw new Exception("No questions for quiz");
+
+            var quiz = new Quiz { CertificationId = certId, Name = "MultiAnswer", DateCreated = DateTime.UtcNow };
             _context.Quizes.Add(quiz);
             _context.SaveChanges();
             byte questionNumber = 1;

@@ -27,23 +27,33 @@
         if (ThisQuestion.UserQuizQuestionAnswers is null)
             ThisQuestion.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
 
-        if (ThisQuestion.Question.HasMultipleAnswers)
+        if (ThisQuestion.Question.NumberOfCorrectAnswers > 1)
         {
             if (ThisQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
             {
-                ThisQuestion.UserQuizQuestionAnswers.Except(ThisQuestion.UserQuizQuestionAnswers.Where(x => x.AnswerId == answerId));
+                ThisQuestion.UserQuizQuestionAnswers = ThisQuestion.UserQuizQuestionAnswers.Except(ThisQuestion.UserQuizQuestionAnswers.Where(x => x.AnswerId == answerId)).ToList();
                 ButtonClasses[answerId] = ButtonBaseClass;
             }
             else
             {
-                ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
-                ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
+                if (ThisQuestion.UserQuizQuestionAnswers.Count < ThisQuestion.Question.NumberOfCorrectAnswers)
+                {
+                    ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
+                    ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
+                }else
+                {
+                    var x = ThisQuestion.UserQuizQuestionAnswers.FirstOrDefault(a => a.AnswerId == 1);
+                    if(x != null)
+                    {
+                        x.AnswerId = answerId;
+                    }
+                }
             }
         }
         else
         {
 
-            if (ThisQuestion.UserQuizQuestionAnswers.Count == 1)
+            if (ThisQuestion.Question.NumberOfCorrectAnswers == 1)
             {
                 var existingAnswer = ThisQuestion.UserQuizQuestionAnswers.ElementAt(0);
                 if (answerId != existingAnswer.AnswerId)

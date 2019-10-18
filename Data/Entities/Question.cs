@@ -9,7 +9,7 @@ namespace BlzrQuiz.Data.Entities
         public Certification Certification { get; set; }
         public int CertificationId { get; set; }
         public string Text { get; set; }
-        public bool HasMultipleAnswers { get; set; }
+        public byte NumberOfCorrectAnswers { get; set; }
 
         public virtual ICollection<Answer> Answers { get; set; }
 
