@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace BlzrQuiz.Data.Entities
 {
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class Quiz
     {
         public int QuizId { get; set; }
@@ -11,5 +13,12 @@ namespace BlzrQuiz.Data.Entities
         public  int CertificationId { get; set; }
         public Certification Certification { get; set; }
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
+        private string DebuggerDisplay
+        {
+            get
+            {
+                return string.Format($"QuizId: {QuizId}, Name: {Name}, CertificationId: {CertificationId}");
+            }
+        }
     }
 }

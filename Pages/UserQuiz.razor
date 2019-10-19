@@ -5,9 +5,7 @@
 @using System.Text
 @using Microsoft.AspNetCore.Identity
 @inject QuizService QService
-@inject NavigationManager urihelper
-@inject UserManager<IdentityUser> _UserManager
-@inject AuthenticationStateProvider _Auth
+@inject AuthenticationStateProvider Auth
 
 <div class="container">
     @if (QuestionList.Count() == 0)
@@ -77,7 +75,7 @@
 
     protected async Task GetUserQuiz()
     {
-        var authState = await _Auth.GetAuthenticationStateAsync();
+        var authState = await Auth.GetAuthenticationStateAsync();
         var user = authState.User;
         UserName = user.Identity.Name ?? "Nada";
         ThisUserQuiz = await QService.GetUserQuizQuestions(QuizId, user.Identity.Name);

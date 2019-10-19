@@ -87,8 +87,6 @@ namespace BlzrQuiz
 
         private void ConfigureDB(IApplicationBuilder app)
         {
-            //var dbSettings = new DBSettings();
-            //Configuration.GetSection("Startup").Bind(dbSettings);
             var rebuild = Configuration.GetValue<bool>("rebuild");
             if (rebuild)
             {
