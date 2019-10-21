@@ -40,10 +40,11 @@
                 {
                     ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
                     ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
-                }else
+                }
+                else
                 {
                     var x = ThisQuestion.UserQuizQuestionAnswers.FirstOrDefault(a => a.AnswerId == 1);
-                    if(x != null)
+                    if (x != null)
                     {
                         x.AnswerId = answerId;
                     }
@@ -52,22 +53,28 @@
         }
         else
         {
-
-            if (ThisQuestion.Question.NumberOfCorrectAnswers == 1)
+            if (ThisQuestion.UserQuizQuestionAnswers.Count == 1)
             {
                 var existingAnswer = ThisQuestion.UserQuizQuestionAnswers.ElementAt(0);
                 if (answerId != existingAnswer.AnswerId)
                 {
                     ButtonClasses[existingAnswer.AnswerId] = ButtonBaseClass;
                     existingAnswer.AnswerId = answerId;
+                    ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
+                }
+                else
+                {
+                    ButtonClasses[answerId] = ButtonBaseClass;
                 }
             }
             else
             {
                 var answer = new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion };
                 ThisQuestion.UserQuizQuestionAnswers.Add(answer);
+                ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
             }
-            ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
+
+
         }
     }
 
