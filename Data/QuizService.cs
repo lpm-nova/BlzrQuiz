@@ -99,9 +99,35 @@ namespace BlzrQuiz.ServiceLayer
             var quiz = await _context.Quizes.Include(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.CertificationId == certId).ConfigureAwait(false) ?? CreateQuiz();
 
             userQuiz = new UserQuiz { Quiz = quiz, UserId = userName, QuizId = quiz.QuizId };
-            _context.UserQuizzes.Add(userQuiz);
-            _context.SaveChanges();
+            await _context.UserQuizzes.AddAsync(userQuiz);
 
+            await _context.SaveChangesAsync();
+            foreach (var q in userQuiz.Quiz.QuizQuestions)
+            {
+              await  CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId).ConfigureAwait(false);
+            }
+            await _context.SaveChangesAsync();
+            return userQuiz;
+        }
+
+        public async Task<UserQuiz> CreateMultipleSelectionUserQuiz(string userName)
+        {
+            var quiz = await CreateMultipleSelectionQuiz().ConfigureAwait(false);
+            //var cert = await _context.Certifications.FirstAsync(x => x.Name == "CLF-C01");
+
+            UserQuiz userQuiz = new UserQuiz { Quiz = quiz, UserId = userName, QuizId = quiz.QuizId };
+            await _context.UserQuizzes.AddAsync(userQuiz);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            if (userQuiz.UserQuizQuestionAnswers is null)
+                userQuiz.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
+
+            foreach (var q in userQuiz.Quiz.QuizQuestions)
+            {
+               await  CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId);
+            }
+
+            await _context.SaveChangesAsync();
             return userQuiz;
         }
 
@@ -123,37 +149,81 @@ namespace BlzrQuiz.ServiceLayer
             _context.SaveChanges();
         }
 
+        public async Task CreateDefaultAnswersForNewUserQuiz(QuizQuestion qQuestion, int userQuizId)
+        {
+            if (qQuestion.Question.NumberOfCorrectAnswers > 1)
+            {
+                Console.WriteLine($"QuestionId: {qQuestion.QuestionId}: Has Question: {qQuestion.Question != null}, Has Answers: {qQuestion?.Question.Answers != null}");
+                var correctAnswerCount = qQuestion.Question.Answers.Count(x => x.IsCorrect);
+                for (var i = 0; i < correctAnswerCount; i++)
+                {
+                    Console.WriteLine($"{i + 1} of {qQuestion.Question.NumberOfCorrectAnswers}: {qQuestion.Question.QuestionId}");
+                   await _context.UserQuizQuestionAnswers.AddAsync(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 }).ConfigureAwait(false);
+                }
+            }
+            else
+            {
+               await _context.UserQuizQuestionAnswers.AddAsync(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 }).ConfigureAwait(false);
+            }
+           await _context.SaveChangesAsync().ConfigureAwait(false);
+            Console.WriteLine("Leaving");
+        }
+
         public void AddOrUpdateAnswersForUserQuiz(QuizQuestion qQuestion, int userQuizId)
         {
             Console.WriteLine($"In CreateAnswersForUser UQQA Count: {qQuestion.UserQuizQuestionAnswers.Count}");
-            var existing = _context.UserQuizQuestionAnswers.Where(x => x.UserQuizId == userQuizId && x.QuizQuestion == qQuestion);
+            var existing = _context.UserQuizQuestionAnswers.Where(x => x.UserQuizId == userQuizId && x.QuizQuestion == qQuestion).OrderBy(x => x.AnswerId);
+            qQuestion.UserQuizQuestionAnswers.OrderBy(x => x.AnswerId);
             if (existing?.Count() > 0)
             {
-                if (qQuestion.Question.NumberOfCorrectAnswers > 1)
+                //if (qQuestion.Question.NumberOfCorrectAnswers > 1)
+                //{
+                //    var tempList = new List<UserQuizQuestionAnswer>();
+                //    foreach (var a in existing)
+                //    {
+
+                //        if (!qQuestion.UserQuizQuestionAnswers.Remove(qQuestion.UserQuizQuestionAnswers.First(x => x.AnswerId == a.AnswerId)))
+                //        {
+                //            tempList.Add(a);
+                //            //_context.UserQuizQuestionAnswers.Remove(a);
+                //        }
+                //    }
+                //    foreach(var e in tempList)
+                //    {
+                //        var n = qQuestion.UserQuizQuestionAnswers[0];
+
+                //        UpdateAnswer(e, n);
+                //        qQuestion.UserQuizQuestionAnswers.Remove(n);
+                //    }
+                //    //_context.UserQuizQuestionAnswers.AddRange(qQuestion.UserQuizQuestionAnswers);
+                //}
+                //else
+                //{
+                //    var e = existing.FirstOrDefault();
+                //    var n = qQuestion.UserQuizQuestionAnswers.FirstOrDefault();
+                var i = 0;
+
+                foreach (var e in existing)
                 {
-                    foreach (var a in existing)
+                    if ((qQuestion.UserQuizQuestionAnswers.Count) > i)
                     {
-                        if (qQuestion.UserQuizQuestionAnswers.Remove(qQuestion.UserQuizQuestionAnswers.First(x => x.AnswerId == a.AnswerId)))
-                        {
-                            _context.UserQuizQuestionAnswers.Remove(a);
-                        }
+                        var n = qQuestion.UserQuizQuestionAnswers[i];
+                        UpdateAnswer(e, n);
                     }
-                    _context.UserQuizQuestionAnswers.AddRange(qQuestion.UserQuizQuestionAnswers);
-                }
-                else
-                {
-                    var e = existing.FirstOrDefault();
-                    var n = qQuestion.UserQuizQuestionAnswers.FirstOrDefault();
-                    if (e != null && n != null)
+                    else
                     {
-                        if (e.AnswerId != n.AnswerId)
-                        {
-                            e.AnswerId = n.AnswerId;
-                            e.QuizQuestion = n.QuizQuestion;
-                            _context.Entry(e).State = EntityState.Modified;
-                        }
+                        UpdateAnswer(e, new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
                     }
+                    i++;
                 }
+                //if (existing.Count() < qQuestion.Question.NumberOfCorrectAnswers)
+                //{
+                //    var num = qQuestion.Question.NumberOfCorrectAnswers - existing.Count();
+                //    for (var j = 0; j < num; j++)
+                //    {
+                //        _context.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
+                //    }
+                //}
             }
             else
             {
@@ -177,6 +247,20 @@ namespace BlzrQuiz.ServiceLayer
             _context.SaveChanges();
         }
 
+        private void UpdateAnswer(UserQuizQuestionAnswer e, UserQuizQuestionAnswer n)
+        {
+            if (e != null && n != null)
+            {
+                //if (e.AnswerId != n.AnswerId)
+                //{
+                e.AnswerId = n.AnswerId;
+                e.QuizQuestion = n.QuizQuestion;
+                e.UserQuizId = n.UserQuizId;
+                _context.Entry(e).State = EntityState.Modified;
+                //}
+            }
+        }
+
         public async Task CreateAnswersForUser(QuizQuestion qQuestion)
         {
             Console.WriteLine($"In CreateAnswersForUser UQQA Count: {qQuestion.UserQuizQuestionAnswers.Count}");
@@ -196,7 +280,7 @@ namespace BlzrQuiz.ServiceLayer
         public Quiz CreateQuiz()
         {
             var certId = _context.Certifications.First(x => x.Name == "CLF-C01").CertificationId;
-            var questions = _context.Questions.Where(x => x.CertificationId == certId).Take(50);
+            var questions = _context.Questions.Where(x => x.CertificationId == certId).Include(x => x.Answers).Take(50);
 
             if (questions.Count() == 0)
                 throw new Exception("No questions for quiz");
@@ -216,26 +300,27 @@ namespace BlzrQuiz.ServiceLayer
                          QuestionNumber = questionNumber++
                      }
                  );
+
             }
             _context.SaveChanges();
             return quiz;
         }
 
-        public Quiz CreateMultipleSelectionQuiz()
+        public async Task<Quiz> CreateMultipleSelectionQuiz()
         {
-            var certId = _context.Certifications.First(x => x.Name == "CLF-C01").CertificationId;
-            var questions = _context.Questions.Where(x => x.CertificationId == certId && x.NumberOfCorrectAnswers > 1).Take(50);
+            var cert = await _context.Certifications.FirstAsync(x => x.Name == "CLF-C01");
+            var questions = _context.Questions.Where(x => x.CertificationId == cert.CertificationId && x.NumberOfCorrectAnswers > 1).Include(x => x.Answers).Take(50);
 
             if (questions.Count() == 0)
                 throw new Exception("No questions for quiz");
 
-            var quiz = new Quiz { CertificationId = certId, Name = "MultiAnswer", DateCreated = DateTime.UtcNow };
-            _context.Quizes.Add(quiz);
-            _context.SaveChanges();
+            var quiz = new Quiz { CertificationId = cert.CertificationId, Name = "MultiAnswer", DateCreated = DateTime.UtcNow };
+            await _context.Quizes.AddAsync(quiz);
+            await _context.SaveChangesAsync();
             byte questionNumber = 1;
             foreach (var q in questions)
             {
-                _context.QuizQuestions.Add(
+                await _context.QuizQuestions.AddAsync(
                      new QuizQuestion
                      {
                          QuizId = quiz.QuizId,
@@ -245,7 +330,7 @@ namespace BlzrQuiz.ServiceLayer
                      }
                  );
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return quiz;
         }
     }

@@ -2,8 +2,8 @@
 @attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
 @using EF = BlzrQuiz.Data.Entities
-@inject QuizService  _QService
-@inject AuthenticationStateProvider _Auth
+@inject QuizService  QService
+@inject AuthenticationStateProvider Auth
 
 <h3>QuizPage</h3>
 @if (UserQuizzes == null)
@@ -13,24 +13,24 @@
 }
 else
 {
-    //QuizFragments
     <div class="row">
         @foreach (EF.UserQuiz userQuiz in UserQuizzes)
         {
-        <div class="col-lg-3">
-            <div class="card" style="width: 18rem;">
-                <div class="card-header">@userQuiz.Quiz.Certification.Name</div>
-                <div class="card-body">
-                    <h5 class="card-title">ID: #@userQuiz.UserQuizId</h5>
-                    <p class="card-text">Cert: @userQuiz.Quiz.Certification.Description</p>
-                    <p class="card-text">Created: @userQuiz.Quiz.DateCreated</p>
-                    <a href="/quizes/userquiz/@userQuiz.UserQuizId" class="btn btn-primary">Go To Quiz</a>
+            <div class="col-lg-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">@userQuiz.Quiz.Certification.Name</div>
+                    <div class="card-body">
+                        <h5 class="card-title">ID: #@userQuiz.UserQuizId</h5>
+                        <p class="card-text">Cert: @userQuiz.Quiz.Certification.Description</p>
+                        <p class="card-text">Created: @userQuiz.Quiz.DateCreated</p>
+                        <a href="/quizes/userquiz/@userQuiz.UserQuizId" class="btn btn-primary">Go To Quiz</a>
+                    </div>
+                    <div class="card-footer bg-transparent border-success">Score: @userQuiz.Score%</div>
                 </div>
-                <div class="card-footer bg-transparent border-success">Score: @userQuiz.Score%</div>
             </div>
-        </div>
         }
     </div>
+   
 }
 
 
@@ -38,13 +38,19 @@ else
     [Parameter] public RenderFragment QuizFragments { get; set; }
     //List<EF.Quiz> Quizzes;
     IEnumerable<EF.UserQuiz> UserQuizzes { get; set; }
-    string UserName = string.Empty;
+    System.Security.Claims.ClaimsPrincipal User { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        var authState = await _Auth.GetAuthenticationStateAsync();
-        var user = authState.User;
-        UserName = user.Identity.Name ?? "Nada";
-        UserQuizzes = await _QService.GetUserQuizzesById(UserName);
+        var authState = await Auth.GetAuthenticationStateAsync();
+        User = authState.User;
+
+        UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name);
+        if(UserQuizzes.Count() == 0)
+        {
+             await QService.CreateMultipleSelectionUserQuiz(User.Identity.Name);
+             await QService.CreateUserQuiz(3, User.Identity.Name);
+        }
     }
+
 
 }
