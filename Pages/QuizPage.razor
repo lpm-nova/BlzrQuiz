@@ -2,8 +2,6 @@
 @attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
 @using EF = BlzrQuiz.Data.Entities
-@inject QuizService  QService
-@inject AuthenticationStateProvider Auth
 
 <h3>QuizPage</h3>
 @if (UserQuizzes == null)
@@ -30,27 +28,5 @@ else
             </div>
         }
     </div>
-   
-}
-
-
-@code {
-    [Parameter] public RenderFragment QuizFragments { get; set; }
-    //List<EF.Quiz> Quizzes;
-    IEnumerable<EF.UserQuiz> UserQuizzes { get; set; }
-    System.Security.Claims.ClaimsPrincipal User { get; set; }
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await Auth.GetAuthenticationStateAsync();
-        User = authState.User;
-
-        UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name);
-        if(UserQuizzes.Count() == 0)
-        {
-             await QService.CreateMultipleSelectionUserQuiz(User.Identity.Name);
-             await QService.CreateUserQuiz(3, User.Identity.Name);
-        }
-    }
-
 
 }
