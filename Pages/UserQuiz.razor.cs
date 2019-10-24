@@ -31,12 +31,12 @@ namespace BlzrQuiz.Pages
         private string BtnSubmitClasses { get; set; } = Disabled + Invisible;
         private string Alert { get; set; } = AlertBase + Invisible;
         private int Score { get; set; }
-
         private int QLCount;
         private int counter;
         private IEnumerable<EF.QuizQuestion> QuestionList { get; set; } = new List<EF.QuizQuestion>();
         public EF.QuizQuestion UQuestion { get; set; } = new EF.QuizQuestion();
         private EF.UserQuiz ThisUserQuiz { get; set; }
+        private Dictionary<int, string> ButtonClasses { get; set; } = new Dictionary<int, string>();
         public string UserName { get; set; } = "No One";
 
         protected override async Task OnInitializedAsync()
@@ -150,25 +150,36 @@ namespace BlzrQuiz.Pages
                     BtnSubmitClasses = Disabled + Invisible;
                 }
             }
-            else
+            else if (counter == QLCount)
             {
-                if (counter == QLCount)
-                {
-                    BtnNextClasses = Disabled + Invisible;
-                    BtnSubmitClasses = Enabled;
-                    BtnPreviousClasses = Enabled;
-                }
-                else if (counter == 0)
-                {
-                    BtnPreviousClasses = Disabled;
-                    BtnNextClasses = Enabled;
-                }
+                BtnNextClasses = Disabled + Invisible;
+                BtnSubmitClasses = Enabled;
+                BtnPreviousClasses = Enabled;
+            }
+            else if (counter == 0)
+            {
+                BtnPreviousClasses = Disabled;
+                BtnNextClasses = Enabled;
             }
         }
 
         private void SetProperties()
         {
             UQuestion = QuestionList.ElementAt(counter);
+            ButtonClasses.Clear();
+            foreach(var q in UQuestion.Question.Answers)
+            {
+                ButtonClasses.Add(q.AnswerId, ButtonClasses);
+            }
+        }
+        private void SetButtonClasses(int answerId)
+        {
+            if (!ButtonClasses.ContainsKey(answerId))
+            {
+                ButtonClasses.Add(answerId, ButtonBaseClass);
+                if (ThisUserQuiz.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
+                    ButtonClasses[answerId] += " active";
+            }
         }
     }
 }

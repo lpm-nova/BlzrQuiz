@@ -90,18 +90,16 @@ namespace BlzrQuiz
             var rebuild = Configuration.GetValue<bool>("rebuild");
             if (rebuild)
             {
-                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+                using var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>();
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                context.Database.Migrate();
+                if (context.QuizQuestions.Count() == 0)
                 {
-                    using var context = serviceScope.ServiceProvider.GetRequiredService<BlzrQuizContext>();
-                    context.Database.EnsureDeleted();
-                    context.Database.EnsureCreated();
-                    context.Database.Migrate();
-                    if (context.QuizQuestions.Count() == 0)
-                    {
-                        var q = new QuizService(context);
-                        q.CreateQuiz();
-                        q.CreateMultipleSelectionQuiz();
-                    }
+                    var q = new QuizService(context);
+                    q.CreateQuiz();
+                    q.CreateMultipleSelectionQuiz();
                 }
             }
         }

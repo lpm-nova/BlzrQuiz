@@ -1,5 +1,4 @@
-﻿@using BlzrQuiz.Data.Entities
-
+﻿
 <div class="row">
     <div style="height: 100px;" class="col-12">@ThisQuestion.Question.ToMarkup()</div>
 </div>
@@ -7,84 +6,9 @@
     @for (var i = 0; i < ThisQuestion.Question.Answers.Count(); i++)
     {
         var answer = ThisQuestion.Question.Answers.ElementAt(i);
-        SetButtonClasses(answer.AnswerId);
         <div class="col-12">
             <button type="button" @onclick="@(e => UpdateAnswers(answer.AnswerId) )" name="@($"option-{ answer.AnswerId}")" id="@($"quiz-question-{ThisQuestion.QuestionNumber}-answer-{i}")" value="@answer.AnswerId" class="@ButtonClasses[answer.AnswerId]">@answer.Text</button>
         </div>
     }
 </div>
 
-@code {
-    [Parameter] public QuizQuestion ThisQuestion { get; set; }
-    [Parameter] public BlzrQuiz.Data.Entities.UserQuiz ThisUserQuiz { get; set; }
-    private static readonly string ButtonBaseClass = "btn btn-outline-info btn-lg btn-block ";
-    private static readonly string ButtonActive = " active";
-    private Dictionary<int, string> ButtonClasses { get; set; } = new Dictionary<int, string>();
-    //probably going to be a parameter soon
-   
-    void UpdateAnswers(int answerId)
-    {
-        if (ThisQuestion.UserQuizQuestionAnswers is null)
-            ThisQuestion.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
-
-        if (ThisQuestion.Question.NumberOfCorrectAnswers > 1)
-        {
-            if (ThisQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
-            {
-                ThisQuestion.UserQuizQuestionAnswers = ThisQuestion.UserQuizQuestionAnswers.Except(ThisQuestion.UserQuizQuestionAnswers.Where(x => x.AnswerId == answerId)).ToList();
-                ButtonClasses[answerId] = ButtonBaseClass;
-            }
-            else
-            {
-                if (ThisQuestion.UserQuizQuestionAnswers.Count < ThisQuestion.Question.NumberOfCorrectAnswers)
-                {
-                    ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion });
-                    ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
-                }
-                else
-                {
-                    var x = ThisQuestion.UserQuizQuestionAnswers.FirstOrDefault(a => a.AnswerId == 1);
-                    if (x != null)
-                    {
-                        x.AnswerId = answerId;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (ThisQuestion.UserQuizQuestionAnswers.Count == 1)
-            {
-                var existingAnswer = ThisQuestion.UserQuizQuestionAnswers.ElementAt(0);
-                if (answerId != existingAnswer.AnswerId)
-                {
-                    ButtonClasses[existingAnswer.AnswerId] = ButtonBaseClass;
-                    existingAnswer.AnswerId = answerId;
-                    ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
-                }
-                else
-                {
-                    ButtonClasses[answerId] = ButtonBaseClass;
-                }
-            }
-            else
-            {
-                var answer = new UserQuizQuestionAnswer { UserQuiz = ThisUserQuiz, AnswerId = answerId, QuizQuestion = ThisQuestion };
-                ThisQuestion.UserQuizQuestionAnswers.Add(answer);
-                ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
-            }
-
-
-        }
-    }
-
-    void SetButtonClasses(int answerId)
-    {
-        if (!ButtonClasses.ContainsKey(answerId))
-        {
-            ButtonClasses.Add(answerId, ButtonBaseClass);
-            if (ThisUserQuiz.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
-                ButtonClasses[answerId] = ButtonClasses[answerId] + " active";
-        }
-    }
-}

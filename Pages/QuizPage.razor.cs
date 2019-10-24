@@ -16,7 +16,7 @@ namespace BlzrQuiz.Pages
         public  IEnumerable<EF.UserQuiz> UserQuizzes { get; set; } = new List<EF.UserQuiz>();
         private System.Security.Claims.ClaimsPrincipal User { get; set; }
 
-        protected async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
             User = authState.User;

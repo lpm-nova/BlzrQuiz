@@ -25,7 +25,7 @@
         </div>
         <div class="row col-12">
             @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
-            <UserQuizQuestion ThisQuestion="UQuestion" ThisUserQuiz="ThisUserQuiz"></UserQuizQuestion>
+            <UserQuizQuestion ThisQuestion="UQuestion" ThisUserQuiz="ThisUserQuiz" ButtonClasses="ButtonClasses" OnSomeEvent="SetButtonClasses"></UserQuizQuestion>
         </div>
         <div id="results-div" style="margin-top: 15px;" class="@Alert">
             <strong>Score: </strong> @Score out of @QuestionList.Count()
