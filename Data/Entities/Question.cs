@@ -8,6 +8,7 @@ namespace BlzrQuiz.Data.Entities
         public int QuestionId { get; set; }
         public Certification Certification { get; set; }
         public int CertificationId { get; set; }
+        public Explanation Explanation { get; set; }
         public string Text { get; set; }
         public byte NumberOfCorrectAnswers { get; set; }
 

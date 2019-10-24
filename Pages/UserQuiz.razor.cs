@@ -26,13 +26,19 @@ namespace BlzrQuiz.Pages
         private const string Disabled = "btn btn-outline-secondary disabled";
         private const string Invisible = " d-none";
         private const string AlertBase = "alert alert-success";
+        private const string ButtonBaseClass = "btn btn-outline-info btn-lg btn-block ";
+        private const string ButtonActive = " active";
+        private int questionListCount;
+        private int counter;
         private string BtnPreviousClasses { get; set; } = Disabled;
         private string BtnNextClasses { get; set; } = Enabled;
         private string BtnSubmitClasses { get; set; } = Disabled + Invisible;
         private string Alert { get; set; } = AlertBase + Invisible;
+        private string Explanation { get; set; } = string.Empty;
+        private string ExplanationClasses { get; set; } = Invisible;
+        private string ExplanationCol { get; set; } = "col-11";
         private int Score { get; set; }
-        private int QLCount;
-        private int counter;
+        private int CorrectAnswerCount { get; set; }
         private IEnumerable<EF.QuizQuestion> QuestionList { get; set; } = new List<EF.QuizQuestion>();
         public EF.QuizQuestion UQuestion { get; set; } = new EF.QuizQuestion();
         private EF.UserQuiz ThisUserQuiz { get; set; }
@@ -46,10 +52,9 @@ namespace BlzrQuiz.Pages
             {
                 await GetUserQuiz().ConfigureAwait(false);
                 QuestionList = ThisUserQuiz.Quiz.QuizQuestions;
-                QLCount = QuestionList.Count() - 1;
+                questionListCount = QuestionList.Count() - 1;
                 counter = 0;
-                UQuestion = QuestionList.ElementAt(0);
-                counter = 0;
+                SetProperties();
                 SetButtons();
             }
             catch (InvalidOperationException ex)
@@ -79,30 +84,35 @@ namespace BlzrQuiz.Pages
 
         private async Task Submit()
         {
-            var userAnswers = await QService.GetUserQuizAnswers(ThisUserQuiz.UserQuizId).ConfigureAwait(false);
-            userAnswers.OrderBy(x => x.QuizQuestion.QuestionNumber);
-            QuestionList.OrderBy(x => x.QuestionNumber);
-            var score = 0;
-            for (var i = 0; i < QuestionList.Count(); i++)
+            if (Alert != AlertBase)
             {
-                var q = QuestionList.ElementAt(i);
-
-                var n = q.Question.Answers.Where(a => a.IsCorrect).Select(x => x.AnswerId);
-                var qAnswers = userAnswers.Where(x => x.QuizQuestion.QuestionNumber == q.QuestionNumber);
-                foreach (var qa in qAnswers)
+                CorrectAnswerCount = 0;
+                Score = 0;
+                var userAnswers = await QService.GetUserQuizAnswers(ThisUserQuiz.UserQuizId).ConfigureAwait(false);
+                userAnswers.OrderBy(x => x.QuizQuestion.QuestionNumber);
+                QuestionList.OrderBy(x => x.QuestionNumber);
+                for (var i = 0; i < QuestionList.Count(); i++)
                 {
-                    if (n.Contains(qa.AnswerId))
-                        score++;
+                    var q = QuestionList.ElementAt(i);
+
+                    var n = q.Question.Answers.Where(a => a.IsCorrect).Select(x => x.AnswerId);
+                    CorrectAnswerCount += n.Count();
+                    var qAnswers = userAnswers.Where(x => x.QuizQuestion.QuestionNumber == q.QuestionNumber);
+                    foreach (var qa in qAnswers)
+                    {
+                        if (n.Contains(qa.AnswerId))
+                            Score++;
+                    }
                 }
+                Alert = AlertBase;
             }
-            Alert = AlertBase;
         }
 
-        private void NextQuestion()
+        private async Task NextQuestionAsync()
         {
-            if (QLCount > counter++)
+            if (questionListCount > counter++)
             {
-                UpdateDB();
+                await QService.Save();
             }
             else
             {
@@ -113,19 +123,19 @@ namespace BlzrQuiz.Pages
             this.StateHasChanged();
         }
 
-        private void UpdateDB()
-        {
-            if (UQuestion.UserQuizQuestionAnswers is null)
-                UQuestion.UserQuizQuestionAnswers = new List<EF.UserQuizQuestionAnswer>();
+        //private void UpdateDB()
+        //{
+        //    //if (UQuestion.UserQuizQuestionAnswers is null)
+        //    //    UQuestion.UserQuizQuestionAnswers = new List<EF.UserQuizQuestionAnswer>();
 
-            QService.AddOrUpdateAnswersForUserQuiz(UQuestion, ThisUserQuiz.UserQuizId);
-        }
+        //    QService.AddOrUpdateAnswersForUserQuiz(UQuestion, ThisUserQuiz.UserQuizId);
+        //}
 
-        private void PreviousQuestion()
+        private async Task PreviousQuestionAsync()
         {
             if (counter-- > 0)
             {
-                UpdateDB();
+                await QService.Save();
             }
             else
             {
@@ -133,24 +143,27 @@ namespace BlzrQuiz.Pages
             }
             SetProperties();
             SetButtons();
+            if (Alert == AlertBase)
+                Alert = AlertBase + Invisible;
+
             this.StateHasChanged();
         }
 
         private void SetButtons()
         {
-            if (counter > 0 && counter < QLCount)
+            if (counter > 0 && counter < questionListCount)
             {
                 if (counter == 1)
                 {
                     BtnPreviousClasses = Enabled;
                 }
-                else if (counter == QLCount - 1)
+                else if (counter == questionListCount - 1)
                 {
                     BtnNextClasses = Enabled;
                     BtnSubmitClasses = Disabled + Invisible;
                 }
             }
-            else if (counter == QLCount)
+            else if (counter == questionListCount)
             {
                 BtnNextClasses = Disabled + Invisible;
                 BtnSubmitClasses = Enabled;
@@ -166,20 +179,28 @@ namespace BlzrQuiz.Pages
         private void SetProperties()
         {
             UQuestion = QuestionList.ElementAt(counter);
+            Explanation = UQuestion.Question.Explanation.Text;
+            SetButtonClasses();
+        }
+
+        private void SetButtonClasses()
+        {
             ButtonClasses.Clear();
-            foreach(var q in UQuestion.Question.Answers)
+            foreach (var q in UQuestion.Question.Answers)
             {
-                ButtonClasses.Add(q.AnswerId, ButtonClasses);
+                if (UQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == q.AnswerId))
+                {
+                    ButtonClasses.Add(q.AnswerId, $"{ButtonBaseClass}{ButtonActive}");
+                }
+                else
+                {
+                    ButtonClasses.Add(q.AnswerId, ButtonBaseClass);
+                }
             }
         }
-        private void SetButtonClasses(int answerId)
+       private void ToggleExplanation()
         {
-            if (!ButtonClasses.ContainsKey(answerId))
-            {
-                ButtonClasses.Add(answerId, ButtonBaseClass);
-                if (ThisUserQuiz.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
-                    ButtonClasses[answerId] += " active";
-            }
+            ExplanationClasses = 
         }
     }
 }

@@ -20,13 +20,42 @@ namespace BlzrQuiz.Pages
         {
             var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
             User = authState.User;
+            await AddQuizzes();
+        }
 
+        private async Task AddQuizzes()
+        {
             UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false);
-            if (!UserQuizzes.Any())
+
+            var quizzesAdded = false;
+            quizzesAdded = await CreateMutlChoiceQuiz(quizzesAdded);
+
+            quizzesAdded = await CreateMultiSelectQuiz(quizzesAdded);
+
+            if (quizzesAdded)
+                UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false);
+        }
+
+        private async Task<bool> CreateMultiSelectQuiz(bool quizzesAdded)
+        {
+            if (!UserQuizzes.Any(x => x.UserId == User.Identity.Name && x.Quiz.Name == "MultiAnswer"))
             {
                 await QService.CreateMultipleSelectionUserQuiz(User.Identity.Name).ConfigureAwait(false);
-                await QService.CreateUserQuiz(3, User.Identity.Name).ConfigureAwait(false);
+                quizzesAdded = true;
             }
+
+            return quizzesAdded;
+        }
+
+        private async Task<bool> CreateMutlChoiceQuiz(bool quizzesAdded)
+        {
+            if (!UserQuizzes.Any(x => x.UserId == User.Identity.Name && x.Quiz.Name == "Test"))
+            {
+                await QService.CreateUserQuiz(3, User.Identity.Name).ConfigureAwait(false);
+                quizzesAdded = true;
+            }
+
+            return quizzesAdded;
         }
     }
 }

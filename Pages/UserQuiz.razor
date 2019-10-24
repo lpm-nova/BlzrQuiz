@@ -10,16 +10,18 @@
     }
     else
     {
-        <div class="row">
-            <div class="col-3">
+        <div class="row col-lg-12">
+            <div class="col-lg-3">
                 <h3>Question: @UQuestion.QuestionNumber</h3>
             </div>
-            <div class="col-6"></div>
-            <div style="vertical-align:top; margin-bottom: 10px;" class="col-3 align-content-right">
-                <div class="btn-group align-top" role="group" aria-label="Basic example">
-                    <button id="btn-previous" @onclick="PreviousQuestion" type="button" class="@BtnPreviousClasses">Previous</button>
-                    <button id="btn-next" @onclick="NextQuestion" style="margin-left: 10px;" type="button" class="@BtnNextClasses">&nbsp;&nbsp;Next&nbsp;&nbsp;</button>
-                    <button id="btn-submit" @onclick="Submit" style="margin-left: 10px;" type="button" class="@BtnSubmitClasses">&nbsp;Submit</button>
+            <div class="col-lg-6"></div>
+            <div class="col-lg-3">
+                <div style="vertical-align:top; margin-bottom: 10px;" class="align-content-right">
+                    <div class="btn-group align-top" role="group" aria-label="Basic example">
+                        <button id="btn-previous" @onclick="PreviousQuestionAsync" type="button" class="@BtnPreviousClasses">Previous</button>
+                        <button id="btn-next" @onclick="NextQuestionAsync" style="margin-left: 10px;" type="button" class="@BtnNextClasses">&nbsp;&nbsp;Next&nbsp;&nbsp;</button>
+                        <button id="btn-submit" @onclick="Submit" style="margin-left: 10px;" type="button" class="@BtnSubmitClasses">&nbsp;Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -27,8 +29,16 @@
             @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
             <UserQuizQuestion ThisQuestion="UQuestion" ThisUserQuiz="ThisUserQuiz" ButtonClasses="ButtonClasses" OnSomeEvent="SetButtonClasses"></UserQuizQuestion>
         </div>
+        <div class="row col-12">
+            <button type="button" @onclick="@(e => ToggleExplanation() )" name="explanationButton")" id="explanationButton"  class="btn btn-light">+</button>
+            <span class="input-group-text" id="basic-addon1">+</span>
+        </div>
+            <div id="explanation" style="margin-top: 15px;" class="@ExplanationCol @ExplanationHidden">
+                @Explanation
+            </div>
+        </div>
         <div id="results-div" style="margin-top: 15px;" class="@Alert">
-            <strong>Score: </strong> @Score out of @QuestionList.Count()
+            <strong>Score: </strong> @Score out of @CorrectAnswerCount
         </div>
 
     }

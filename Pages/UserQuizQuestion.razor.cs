@@ -14,7 +14,7 @@ namespace BlzrQuiz.Pages
         [Parameter] public EF.UserQuiz ThisUserQuiz { get; set; }
         [Parameter] public int UserQuizId { get; set; }
         [Parameter] public Dictionary<int, string> ButtonClasses { get; set; }
-        public Action OnSomeEvent { get; set; }
+        [Parameter] public Action OnSomeEvent { get; set; }
         private const string ButtonBaseClass = "btn btn-outline-info btn-lg btn-block ";
         private const string ButtonActive = " active";
         //probably going to be a parameter soon
@@ -24,29 +24,22 @@ namespace BlzrQuiz.Pages
             if (ThisQuestion.UserQuizQuestionAnswers is null)
                 ThisQuestion.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
 
-            if (ThisQuestion.Question.NumberOfCorrectAnswers > 1)
+            if (ThisQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
             {
-                if (ThisQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == answerId))
-                {
-                    ThisQuestion.UserQuizQuestionAnswers = ThisQuestion.UserQuizQuestionAnswers.Except(ThisQuestion.UserQuizQuestionAnswers.Where(x => x.AnswerId == answerId)).ToList();
-                    ButtonClasses[answerId] = ButtonBaseClass;
-                }
-                else
-                {
-                    if (ThisQuestion.UserQuizQuestionAnswers.Count < ThisQuestion.Question.NumberOfCorrectAnswers)
-                    {
-                        ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = UserQuizId, AnswerId = answerId, QuizQuestion = ThisQuestion });
-                        ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
-                    }
-                    else
-                    {
-                        var x = ThisQuestion.UserQuizQuestionAnswers.Find(a => a.AnswerId == 1);
-                        if (x != null)
-                        {
-                            x.AnswerId = answerId;
-                        }
-                    }
-                }
+                UpdateObject(answerId, 1);
+                ButtonClasses[answerId] = ButtonBaseClass;
+            }
+            else if (ThisQuestion.Question.NumberOfCorrectAnswers > 1)
+            {
+                //if (ThisQuestion.UserQuizQuestionAnswers.Count < ThisQuestion.Question.NumberOfCorrectAnswers)
+                //{
+                //    ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = UserQuizId, AnswerId = answerId, QuizQuestion = ThisQuestion });
+                //    ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
+                //}
+                //else
+                //{
+                UpdateObject(1, answerId);
+                //}
             }
             else if (ThisQuestion.UserQuizQuestionAnswers.Count == 1)
             {
@@ -68,9 +61,27 @@ namespace BlzrQuiz.Pages
                 ThisQuestion.UserQuizQuestionAnswers.Add(answer);
                 ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
             }
-            OnSomeEvent?.Invoke();
+            //OnSomeEvent?.Invoke();
         }
 
-
+        private void UpdateObject(int existingId, int newId)
+        {
+            var keepLooping = true;
+            while (keepLooping)
+            {
+                var x = ThisQuestion.UserQuizQuestionAnswers.Find(a => a.AnswerId == existingId);
+                if (x != null)
+                {
+                    ButtonClasses[newId] = ButtonBaseClass;
+                    x.AnswerId = newId;
+                    ButtonClasses[newId] = ButtonBaseClass + ButtonActive;
+                    if (existingId == 1)
+                        keepLooping = false;
+                }else
+                {
+                    keepLooping = false;
+                }
+            }
+        }
     }
 }

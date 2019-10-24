@@ -20,12 +20,12 @@ namespace BlzrQuiz.ServiceLayer
 
         public async Task<IEnumerable<QuizQuestion>> GetQuizQuestions()
         {
-            return await _context.QuizQuestions.Include(a => a.Question.Answers).ToListAsync().ConfigureAwait(false);
+            return await _context.QuizQuestions.Include(a => a.Question.Answers).Include(a => a.Question.Explanation).ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<QuizQuestion>> GetQuizQuestions(int quizId)
         {
-            return await _context.QuizQuestions.Where(x => x.QuizId == quizId).Include(a => a.Question.Answers).Take(50).ToListAsync().ConfigureAwait(false);
+            return await _context.QuizQuestions.Where(x => x.QuizId == quizId).Include(a => a.Question.Answers).Include(a => a.Question.Explanation).Take(50).ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<UserQuiz>> GetUserQuizzesById(string userId)
@@ -35,12 +35,13 @@ namespace BlzrQuiz.ServiceLayer
 
         public async Task<UserQuiz> GetUserQuizQuestions(int quizId)
         {
-            return await _context.UserQuizzes.Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId).ConfigureAwait(false);
+            return await _context.UserQuizzes.Include(a => a.Quiz).Include(a => a.Quiz.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId).ConfigureAwait(false);
         }
 
         public async Task<UserQuiz> GetUserQuizQuestions(int userQuizId, string userId)
         {
-            return await _context.UserQuizzes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz).ThenInclude(a => a.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
+            return await  _context.UserQuizzes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz.QuizQuestions).ThenInclude(a => a.Question.Explanation).ThenInclude(a => a.Question.Answers).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
+            //return await _context.UserQuizzes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz).Include(a => a.Quiz.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<UserQuizQuestionAnswer>> GetUserQuizAnswers(int userQuizId)
@@ -50,17 +51,22 @@ namespace BlzrQuiz.ServiceLayer
 
         public async Task<IEnumerable<Question>> GetQuestions()
         {
-            return await _context.Questions.Include(a => a.Answers).ToListAsync().ConfigureAwait(false);
+            return await _context.Questions.Include(a => a.Answers).Include(a => a.Explanation).ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<Question> GetQuestion()
         {
-            return await _context.Questions.Include(a => a.Answers).FirstAsync().ConfigureAwait(false);
+            return await _context.Questions.Include(a => a.Answers).Include(a => a.Explanation).FirstAsync().ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<Quiz>> GetQuizes()
         {
             return await _context.Quizes.ToListAsync().ConfigureAwait(false);
+        }
+
+        public async Task Save()
+        {
+           await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public void AddQuestion(Question question)
@@ -87,10 +93,10 @@ namespace BlzrQuiz.ServiceLayer
             _context.SaveChangesAsync();
         }
 
-        public void UpdateQuestion(Question question)//#D
+        public void UpdateQuestion(Question question)
         {
             _context.Questions.Update(question);
-            _context.SaveChanges(); //#G
+            _context.SaveChanges();
         }
 
         public async Task<UserQuiz> CreateUserQuiz(int certId, string userName)
@@ -119,11 +125,9 @@ namespace BlzrQuiz.ServiceLayer
             await _context.UserQuizzes.AddAsync(userQuiz);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            if (userQuiz.UserQuizQuestionAnswers is null)
-                userQuiz.UserQuizQuestionAnswers = new List<UserQuizQuestionAnswer>();
-
             foreach (var q in userQuiz.Quiz.QuizQuestions)
             {
+
                await  CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId);
             }
 
@@ -163,7 +167,7 @@ namespace BlzrQuiz.ServiceLayer
             }
             else
             {
-               await _context.UserQuizQuestionAnswers.AddAsync(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 }).ConfigureAwait(false);
+                await _context.UserQuizQuestionAnswers.AddAsync(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 }).ConfigureAwait(false);
             }
            await _context.SaveChangesAsync().ConfigureAwait(false);
             Console.WriteLine("Leaving");
@@ -174,76 +178,51 @@ namespace BlzrQuiz.ServiceLayer
             Console.WriteLine($"In CreateAnswersForUser UQQA Count: {qQuestion.UserQuizQuestionAnswers.Count}");
             var existing = _context.UserQuizQuestionAnswers.Where(x => x.UserQuizId == userQuizId && x.QuizQuestion == qQuestion).OrderBy(x => x.AnswerId);
             qQuestion.UserQuizQuestionAnswers.OrderBy(x => x.AnswerId);
-            if (existing?.Count() > 0)
-            {
-                //if (qQuestion.Question.NumberOfCorrectAnswers > 1)
-                //{
-                //    var tempList = new List<UserQuizQuestionAnswer>();
-                //    foreach (var a in existing)
-                //    {
-
-                //        if (!qQuestion.UserQuizQuestionAnswers.Remove(qQuestion.UserQuizQuestionAnswers.First(x => x.AnswerId == a.AnswerId)))
-                //        {
-                //            tempList.Add(a);
-                //            //_context.UserQuizQuestionAnswers.Remove(a);
-                //        }
-                //    }
-                //    foreach(var e in tempList)
-                //    {
-                //        var n = qQuestion.UserQuizQuestionAnswers[0];
-
-                //        UpdateAnswer(e, n);
-                //        qQuestion.UserQuizQuestionAnswers.Remove(n);
-                //    }
-                //    //_context.UserQuizQuestionAnswers.AddRange(qQuestion.UserQuizQuestionAnswers);
-                //}
-                //else
-                //{
-                //    var e = existing.FirstOrDefault();
-                //    var n = qQuestion.UserQuizQuestionAnswers.FirstOrDefault();
-                var i = 0;
-
-                foreach (var e in existing)
-                {
-                    if ((qQuestion.UserQuizQuestionAnswers.Count) > i)
-                    {
-                        var n = qQuestion.UserQuizQuestionAnswers[i];
-                        UpdateAnswer(e, n);
-                    }
-                    else
-                    {
-                        UpdateAnswer(e, new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
-                    }
-                    i++;
-                }
-                //if (existing.Count() < qQuestion.Question.NumberOfCorrectAnswers)
-                //{
-                //    var num = qQuestion.Question.NumberOfCorrectAnswers - existing.Count();
-                //    for (var j = 0; j < num; j++)
-                //    {
-                //        _context.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
-                //    }
-                //}
-            }
-            else
-            {
-                if (qQuestion.UserQuizQuestionAnswers.Count > 0)
-                {
-                    _context.UserQuizQuestionAnswers.AddRange(qQuestion.UserQuizQuestionAnswers);
-                }
-                else if (qQuestion.Question.NumberOfCorrectAnswers > 1)
-                {
-                    var correctAnswerCount = qQuestion.Question.Answers.Count(x => x.IsCorrect);
-                    for (var i = 0; i < correctAnswerCount; i++)
-                    {
-                        _context.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
-                    }
-                }
-                else
-                {
-                    _context.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
-                }
-            }
+            //if (existing?.Count() > 0)
+            //{
+            //    var stack = new UserQuizQuestionAnswer[qQuestion.Question.NumberOfCorrectAnswers];
+            //    byte counter = 0;
+            //    foreach (var e in existing)
+            //    {
+            //        var n = qQuestion.UserQuizQuestionAnswers[counter++];
+            //        if(e.AnswerId != n.AnswerId)
+            //        {
+            //            UpdateAnswer(e, n);
+            //        }
+            //        //if(!qQuestion.UserQuizQuestionAnswers.Any(x => x.AnswerId == e.AnswerId))
+            //        //{
+            //        //    stack[counter++] = e;
+            //        //}else
+            //        //{
+            //        //    qQuestion.UserQuizQuestionAnswers.Remove(qQuestion.UserQuizQuestionAnswers.First(x => x.AnswerId == e.AnswerId));
+            //        //}
+            //        //if(qQuestion.UserQuizQuestionAnswers.Count == stack.Count())
+            //        //{
+            //        //    for(var i = 0; i < stack.Count(); i++)
+            //        //    {
+            //        //        UpdateAnswer(stack[i], qQuestion.UserQuizQuestionAnswers[i]);
+            //        //    }
+            //        //}
+            //    }
+            //}
+            //else
+            //{
+            //    if (qQuestion.UserQuizQuestionAnswers.Count > 0)
+            //    {
+            //        _context.UserQuizQuestionAnswers.AddRange(qQuestion.UserQuizQuestionAnswers);
+            //    }
+            //    else if (qQuestion.Question.NumberOfCorrectAnswers > 1)
+            //    {
+            //        var correctAnswerCount = qQuestion.Question.Answers.Count(x => x.IsCorrect);
+            //        for (var i = 0; i < correctAnswerCount; i++)
+            //        {
+            //        }
+            //    }
+            //    else
+            //    {
+            //        _context.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 });
+            //    }
+            //}
             _context.SaveChanges();
         }
 
@@ -251,13 +230,10 @@ namespace BlzrQuiz.ServiceLayer
         {
             if (e != null && n != null)
             {
-                //if (e.AnswerId != n.AnswerId)
-                //{
                 e.AnswerId = n.AnswerId;
                 e.QuizQuestion = n.QuizQuestion;
                 e.UserQuizId = n.UserQuizId;
                 _context.Entry(e).State = EntityState.Modified;
-                //}
             }
         }
 
