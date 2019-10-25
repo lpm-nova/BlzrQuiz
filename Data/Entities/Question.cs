@@ -15,6 +15,7 @@ namespace BlzrQuiz.Data.Entities
         public virtual ICollection<Answer> Answers { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
+        public ICollection<QuestionTag> QuestionTags { get; set; }
 
         public MarkupString ToMarkup()
         {

@@ -15,6 +15,8 @@ namespace BlzrQuiz.Data
         public DbSet<QuizQuestion> QuizQuestions { get; set; }
         public DbSet<UserQuiz> UserQuizzes { get; set; }
         public DbSet<UserQuizQuestionAnswer> UserQuizQuestionAnswers { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<QuestionTag> QuestionTags { get; set; }
 
         public BlzrQuizContext(DbContextOptions<BlzrQuizContext> options) : base(options) { }
 
@@ -26,8 +28,7 @@ namespace BlzrQuiz.Data
             //modelBuilder.Entity<QuestionAnswer>().HasOne<Question>().WithMany(q => q.Answers);
 
             // Configuring a many-to-many question -> tag relationship that is friendly for serialisation
-            modelBuilder.Entity<QuestionTags>().HasKey(qt => new { qt.QuestionId, qt.TagId });
-            modelBuilder.Entity<QuestionTags>().HasOne(t => t.Tag).WithMany();
+            modelBuilder.Entity<QuestionTag>().HasKey(qt => new { qt.QuestionId, qt.TagId });
 
             modelBuilder.Entity<Question>().HasKey(q => q.QuestionId);
             modelBuilder.Entity<Question>().HasOne(q => q.Certification);

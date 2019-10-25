@@ -86,6 +86,11 @@ namespace BlzrQuiz.ServiceLayer
             return await _context.Certifications.ToListAsync().ConfigureAwait(false);
         }
 
+        public async Task<IEnumerable<Tag>> GetTags()
+        {
+            return await _context.Tags.ToListAsync().ConfigureAwait(false);
+        }
+
         public void DeleteQuestion(Question question)
         {
             Debug.WriteLine($"Question: Id: {question.QuestionId}, Text: {question.Text}");

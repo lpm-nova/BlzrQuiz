@@ -19,6 +19,8 @@ namespace BlzrQuiz.Core
             di.AddQuestions();
             di.AddAnswers();
             di.AddExplanations();
+            di.AddTags();
+            di.AddQuestionTags();
         }
 
         private void AddAnswers()
@@ -842,27 +844,27 @@ namespace BlzrQuiz.Core
                 new Explanation { ExplanationId = 43, Text = "Amazon S3 is the perfect storage option. It also provides the facility of assigning a URL to each object which can be used to download the object.", QuestionId = 43 },
                 new Explanation { ExplanationId = 44, Text = "If the database is going to be used for a minimum of one year at least, then it is better to get Reserved Instances. You can save on costs, and if you use a partial upfront option, you can get a better discount.", QuestionId = 44 },
                 new Explanation { ExplanationId = 45, Text = "Since the requirement is just for 3 months, then the best cost effective option is to use On-Demand Instances.", QuestionId = 45 },
-                new Explanation { ExplanationId = 46, Text = "When you define security rules for EC 2 Instances, you give a name, description and write the rules for the security group.", QuestionId = 46 },
-                new Explanation { ExplanationId = 47, Text = "The Physical infrastructure is a responsibility of AWS and not with the customer. Hence it is not an advantage of moving to the AWS Cloud. And AWS provides security mechanisms, but even the responsibility of security lies with the customer.", QuestionId = 47 },
-                new Explanation { ExplanationId = 48, Text = "Using CloudWatch trail, one can monitor all the API activity conducted on all AWS services. The AWS Documentation additionally mentions the following:<br/> AWS CloudTrail is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity relatedto actions across your AWS infrastructure. CloudTrailprovides event history of your AWS account activity, including actions taken through the AWS ManagementConsole, AWS SDKs, command line tools, and other AWS services. This event history simplifies security analysis, resource change tracking, and troubleshooting.", QuestionId = 48 },
+                new Explanation { ExplanationId = 46, Text = "When you define security rules for EC 2 Instances, you give a name, description, and write the rules for the security group.", QuestionId = 46 },
+                new Explanation { ExplanationId = 47, Text = "The physical infrastructure is a responsibility of AWS and not with the customer. Hence it is <em>not</em> an advantage of moving to the AWS Cloud.<br/>AWS provides security mechanisms, but the responsibility of <em>security lies with the customer</em>.", QuestionId = 47 },
+                new Explanation { ExplanationId = 48, Text = "Using CloudWatch trail, one can monitor all the API activity conducted on all AWS services. The AWS Documentation additionally mentions the following:<br/>AWS CloudTrail is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity relatedto actions across your AWS infrastructure. CloudTrailprovides event history of your AWS account activity, including actions taken through the AWS ManagementConsole, AWS SDKs, command line tools, and other AWS services. This event history simplifies security analysis, resource change tracking, and troubleshooting.", QuestionId = 48 },
                 new Explanation { ExplanationId = 49, Text = "One can use the Read Replica feature of the database to ensure the data is replicated to another region.", QuestionId = 49 },
                 new Explanation { ExplanationId = 50, Text = "Regions correspond to different geographic locations in AWS.", QuestionId = 50 },
                 new Explanation { ExplanationId = 51, Text = "If you want a self-managed database, that means you want complete control over the database engine and the underlying infrastructure. In such a case you need to host the database on an EC2 Instance.", QuestionId = 51 },
-                new Explanation { ExplanationId = 52, Text = "The AWS Documentation mentions the following:<br/>Amazon Aurora (Aurora) is a fully managed, MySQL- and PostgreSQL-compatible, relational database engine. It combines the speed and reliability of high-end commercial databases with the simplicity and cost-effectiveness of open-source databases. It delivers up to five times the throughput of MySQL and up to three timesthe throughput of PostgreSQL without requiring changes tomost of your existing applications.", QuestionId = 52 },
-                new Explanation { ExplanationId = 53, Text = "The concept of Elasticity is the means of an application having the ability to scale up and scale down based on demand. An exalee of such a service is the Auto Scaling service.", QuestionId = 53 },
+                new Explanation { ExplanationId = 52, Text = "The AWS Documentation mentions the following:<br/>Amazon Aurora (Aurora) is a fully managed, MySQL and PostgreSQL-compatible, relational database engine. It combines the speed and reliability of high-end commercial databases with the simplicity and cost-effectiveness of open-source databases. It delivers up to five times the throughput of MySQL and up to three timesthe throughput of PostgreSQL without requiring changes tomost of your existing applications.", QuestionId = 52 },
+                new Explanation { ExplanationId = 53, Text = "The concept of Elasticity is the means of an application having the ability to scale up and scale down based on demand.<br/>An example of such a service is the Auto Scaling service.", QuestionId = 53 },
                 new Explanation { ExplanationId = 54, Text = "The AWS Documentation mentions the following:<br/> Aload balancer distributes incoming application traffic across multiple EC2 instances in multiple Availability Zones. This increases the fault tolerance of your applications. Elastic Load Balancing detects unhealthy instances and routes traffic only to healthy instances.", QuestionId = 54 },
                 new Explanation { ExplanationId = 55, Text = "The AWS Documentation mentions the following:<br/>AWS Auto Scaling monitors your applications and automatically adjusts capacity to maintain steady, predictable performance at the lowest possible cost.Using AWS Auto Scaling, it's easy to setup application scaling for multiple resources across multiple services inminutes.", QuestionId = 55 },
                 new Explanation { ExplanationId = 57, Text = "Creating snapshots of EBS Volumes can help ensure that you have a backup of your EBS volume in place.", QuestionId = 57 },
                 new Explanation { ExplanationId = 58, Text = "The AWS SDK can be plugged in for various programming languages. Using the SDK you can then callthe required AWS services.", QuestionId = 58 },
-                new Explanation { ExplanationId = 59, Text = "The AWS Documentation mentions the following:<br/>An IAM role is similar to a user, in that it is an AWS identity with permission policies that determine what the identitycan and cannot do in AWS. However, instead of being uniquely associated with one person, a role is intended tobe assumable by anyone who needs it. Also, a role doesnot have stand ard long-term credentials (password oraccess keys) associated with it. Instead, if a user assumesa role, temporary security credentials are createddynamically and provided to the user.", QuestionId = 59 },
+                new Explanation { ExplanationId = 59, Text = "The AWS Documentation mentions the following:<br/>An IAM role is similar to a user, in that it is an AWS identity with permission policies that determine what the identity can and cannot do in AWS. However, instead of being uniquely associated with one person, a role is intended tobe assumable by anyone who needs it. Also, a role doesnot have stand ard long-term credentials (password oraccess keys) associated with it. Instead, if a user assumesa role, temporary security credentials are createddynamically and provided to the user.", QuestionId = 59 },
                 new Explanation { ExplanationId = 60, Text = "The AWS Documentation mentions the following:<br/>You can use the consolidated billing feature in AWS Organizations to consolidate payment for multiple AWS accounts or multiple AISPL accounts. With consolidated billing, you can see a combined view of AWS charges incurred by all of your accounts. You also can get a cost report for each member account that is associated withyour master account. Consolidated billing is offered at noadditional charge.", QuestionId = 60 },
                 new Explanation { ExplanationId = 61, Text = "The AWS Documentation mentions the following:<br/>DDoS attacks One of the first techniques to mitigate DDoS attacks is to minimize the surface area that can beattacked thereby limiting the options for attackers and allowing you to build protections in a single place. We want to ensure that we do not expose our application orresources to ports, protocols or applications from wherethey do not expect any communication. Thus, minimizingthe possible points of attack and letting us concentrateour mitigation efforts. In some cases, you can do this byplacing your computation resources behind ContentDistribution Networks (CDNs) or Load Balancers and restricting direct Internet traffic to certain parts of your infrastructure like your database servers. In other cases, you can use firewalls or Access Control Lists (ACLs) tocontrol what traffic reaches your applications.", QuestionId = 61 },
-                new Explanation { ExplanationId = 62, Text = "The AWS Documentation mentions the following:<br/>AWS WAF is a web application firewall that lets you monitor the HTTP and HTTPS requests that areforwarded to Amazon CloudFront or an Application Load Balancer. AWS WAF also lets you control access to your content.", QuestionId = 62 },
+                new Explanation { ExplanationId = 62, Text = "The AWS Documentation mentions the following:<br/>AWS WAF is a web application firewall that lets you monitor the HTTP and HTTPS requests that are forwarded to Amazon CloudFront or an Application Load Balancer. AWS WAF also lets you control access to your content.", QuestionId = 62 },
                 new Explanation { ExplanationId = 63, Text = "The AWS Documentation mentions the following:<br/>AWS Multi-Factor Authentication (MFA) is a simple best practice that adds an extra layer of protection on top of your user name and password. With MFA enabled, whena user signs in to an AWS website, they will be promptedfor their user name and password (the first factor-whatthey know), as well as for an authentication code fromtheir AWS MFA device (the second factor-what theyhave). Taken together, these multiple factors provideincreased security for your AWS account settings and resources.", QuestionId = 63 },
                 new Explanation { ExplanationId = 64, Text = "The snapshot from the AWS Documentation shows the spectrum of the Disaster recovery methods. If you go to the further end of the spectrum you have the least time for downtime for the users.", QuestionId = 64 },
                 new Explanation { ExplanationId = 65, Text = "The AWS Documentation mentions the following:<br/>Amazon S3 is object storage built to store and retrieve any amount of data from anywhere - web sites and mobile apps, corporate applications, and data from IoTsensors or devices. It is designed to deliver99.999999999% durability, and stores data for millionsof applications used by market leaders in every industry.", QuestionId = 65 },
-                new Explanation { ExplanationId = 66, Text = "The AWS Documentation mentions the following:<br/>EBS Volumes An Amazon EBS volume is a durable, block-level storage device that you can attach to a singleEC2 instance. You can use EBS volumes as primarystorage for data that requires frequent updates, such asthe system drive for an instance or storage for a databaseapplication", QuestionId = 66 },
-                new Explanation { ExplanationId = 67, Text = "The AWS Documentation mentions the following:<br/>Amazon VPC Amazon V irtual Private Cloud (AmazonVPC) enables you to launch AWS resources into a virtual network that you've defined. This virtual network closelyresembles a traditional network that you'd operate inyour own data center, with the benefits of using thescalable infrastructure of AWS.", QuestionId = 67 },
+                new Explanation { ExplanationId = 66, Text = "The AWS Documentation mentions the following:<br/>EBS Volumes An Amazon EBS volume is a durable, block-level storage device that you can attach to a single EC2 instance. You can use EBS volumes as primarystorage for data that requires frequent updates, such asthe system drive for an instance or storage for a databaseapplication", QuestionId = 66 },
+                new Explanation { ExplanationId = 67, Text = "The AWS Documentation mentions the following:<br/>Amazon VPC Amazon V irtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that you've defined. This virtual network closelyresembles a traditional network that you'd operate inyour own data center, with the benefits of using thescalable infrastructure of AWS.", QuestionId = 67 },
                 new Explanation { ExplanationId = 68, Text = "The AWS Documentation mentions the following:<br/>The Simple Queue Service Amazon Simple Queue Service(Amazon SQS) offers a reliable, highly-scalable hosted queue for storing messages as they travel between applications or microservices. It moves data between distributed application components and helps youdecouple these components.", QuestionId = 68 },
                 new Explanation { ExplanationId = 69, Text = "The AWS documentation mentions the following:<br/>Amazon CloudFront is a web service that speeds up distribution of your static and dynamic web content, suchas .html, .css, .js, and image files, to your users.CloudFront delivers your content through a worldwide network of data centers called edge locations.", QuestionId = 69 },
                 new Explanation { ExplanationId = 70, Text = "One of the advantages of EC2 Instances is per secondbilling concept. This is given in the AWS documentation also, With per-second billing, you pay for only what youuse. It takes cost of unused minutes and seconds in anhour off of the bill, so you can focus on improving your applications instead of maximizing usage to the hour.Especially, if you manage instances running for irregularperiods of time, such as dev/testing, data processing, analytics, batch processing and gaming applications, canbenefit.", QuestionId = 70 },
@@ -871,9 +873,9 @@ namespace BlzrQuiz.Core
                 new Explanation { ExplanationId = 73, Text = "Using CloudWatch trail, one can monitor all the API activity conducted on all AWS services. The AWS Documentation additionally mentions the following:<br/> AWS CloudTrail is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity related toactions across your AWS infrastructure. CloudTrailprovides event history of your AWS account activity, including actions taken through the AWS ManagementConsole, AWS SDKs, command line tools, and other AWS services. This event history simplifies security analysis, resource change tracking, and troubleshooting.", QuestionId = 73 },
                 new Explanation { ExplanationId = 74, Text = "Route53 is a domain name system service by AWS. When a Disaster does occur, it can be easy to switch to secondary sites using the Route53 service. The AWS Documentation additionally mentions the following:<br/>Amazon Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service. It isdesigned to give developers and businesses an extremelyreliable and cost effective way to route end users toInternet applications by translating names likewww.example.com into the numeric IP addresses like192.0.2.1 that computers use to connect to each other.Amazon Route 53 is fully compliant with IPv6 as well.", QuestionId = 74 },
                 new Explanation { ExplanationId = 75, Text = "It allows developers to easily work with the various AWS resources programmatically", QuestionId = 75 },
-                new Explanation { ExplanationId = 76, Text = "Each AZ is a set of one or more data centers. By deploying  your AWS resources to multiple Availability Zones, you are designing with failure with mind. So if oneAZ were to go down, the other NDS, would still be up and running and hence your application would be more fault tolerant. For disaster recovery scenarios, one can move ormake resources run in other regions And finally one canuse the Elastic Load Balancer to distribute load tomultiple backend instances within a particular region.", QuestionId = 76 },
+                new Explanation { ExplanationId = 76, Text = "Each AZ is a set of one or more data centers. By deploying  your AWS resources to multiple Availability Zones, you are designing with failure with mind. So if one AZ were to go down, the other NDS, would still be up and running and hence your application would be more fault tolerant. For disaster recovery scenarios, one can move ormake resources run in other regions And finally one canuse the Elastic Load Balancer to distribute load tomultiple backend instances within a particular region.", QuestionId = 76 },
                 new Explanation { ExplanationId = 77, Text = "The AWS documentation mentions the following:<br/>AWS Identity and Access Management (IAM) is a webservice that helps you securely control access to AWS resources. You use IAM to control who is authenticated(signed in) and authorized (has permissions) to use resources.", QuestionId = 77 },
-                new Explanation { ExplanationId = 78, Text = "The AWS documentation mentions the following:<br/>AWS CloudFormation is a service that helps you modeland set up your Amazon Web Services resources so thatyou can spend less time managing those resources and more time focusing on your applications that run in AWS.You create a template that describes all the AWS resources that you want (like Amazon EC2 instances orAmazon RDS DB instances), and AWS CloudFormationtakes care of provisioning and configuring thoseresources for you. You don't need to individually createand configure AWS resources and figure out what'sdependent on what; AWS CloudFormation hand les all ofthat", QuestionId = 78 },
+                new Explanation { ExplanationId = 78, Text = "The AWS documentation mentions the following:<br/>AWS CloudFormation is a service that helps you model and set up your Amazon Web Services resources so thatyou can spend less time managing those resources and more time focusing on your applications that run in AWS.You create a template that describes all the AWS resources that you want (like Amazon EC2 instances orAmazon RDS DB instances), and AWS CloudFormationtakes care of provisioning and configuring thoseresources for you. You don't need to individually createand configure AWS resources and figure out what'sdependent on what; AWS CloudFormation hand les all ofthat", QuestionId = 78 },
                 new Explanation { ExplanationId = 79, Text = "The AWS documentation mentions the following:<br/>Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the cloud. You can start with just afew hundred gigabytes of data and scale to a petabyte or more. This enables you to use your data to acquire newinsights for your business and customers.", QuestionId = 79 },
                 new Explanation { ExplanationId = 80, Text = "The responsibility of AWS includes the following<br/>1) Securing edge locations<br/>2) Monitoring physical device security<br/>3) Implementing service organization Control (SOC) standards", QuestionId = 80 },
                 new Explanation { ExplanationId = 81, Text = "The AWS documentation mentions the following:<br/> on AWS Cost Reports Cost Explorer is a free tool that you can use to view your costs. You can view data up to thelast 13 months, forecast how much you are likely to spend for the next three months, and get recommendations for what Reserved Instances to purchase", QuestionId = 81 },
@@ -884,20 +886,20 @@ namespace BlzrQuiz.Core
                 new Explanation { ExplanationId = 86, Text = "The concept of Elasticity is the means of an application having the ability to scale up and scale downbased on demand. An example of such a service is the Auto Scaling service.", QuestionId = 86 },
                 new Explanation { ExplanationId = 87, Text = "The AWS documentation mentions the following:<br/>Spot Instances are a cost-effective choice if you can be flexible about when your applications run and if your applications can be interrupted. For example, SpotInstances are well-suited for data analysis, batch jobs, background processing, and optional tasks", QuestionId = 87 },
                 new Explanation { ExplanationId = 88, Text = "The AWS Management console allows you to accessand manage Amazon Web Services through a simple and intuitive web-based user interface", QuestionId = 88 },
-                new Explanation { ExplanationId = 89, Text = "The AWS Documentation mentions the following:<br/>AWS Organizations offers policy-based management For multiple AWS accounts. With Organizations, you cancreate groups of accounts and then apply policies to thosegroups. Organizations enables you to centrally manage policies across multiple accounts, without requiringcustom scripts and manual processes.", QuestionId = 89 },
+                new Explanation { ExplanationId = 89, Text = "The AWS Documentation mentions the following:<br/>AWS Organizations offers policy-based management For multiple AWS accounts. With Organizations, you can create groups of accounts and then apply policies to thosegroups. Organizations enables you to centrally manage policies across multiple accounts, without requiringcustom scripts and manual processes.", QuestionId = 89 },
                 new Explanation { ExplanationId = 90, Text = "The AWS Documentation mentions the following:<br/>AWS Multi-Factor Authentication (MFA) is a simple best practice that adds an extra layer of protection on top of your user name and password.", QuestionId = 90 },
-                new Explanation { ExplanationId = 91, Text = "The AWS Documentation mentions the following:<br/>AWS Elastic Beanstalk is an easy-to-use service For deploying and scaling web applications and servicesdeveloped with Java, .NET, PHP, Node.js, Python, Ruby, Go. and Docker on familiar servers such as ADache.Nginx, Passenger, and IIS.", QuestionId = 91 },
-                new Explanation { ExplanationId = 92, Text = "The AWS Documentation mentions the following:<br/>Businesses are using the AWS cloud to enable fasterdisaster recovery of their critical IT systems withoutincurring the infrastructure expense of a second physicalIsite. The AWS cloud supports many popular disaster recovery (DR) architectures from 'pilot light' environments that may be suitable for small customerworkload data center failures to 'hot stand by' environments that enable rapid failover at scale.With data centers in Regions all around the world, AWS provides a set of cloud-based disaster recovery services that enable rapid recovery of your IT infrastructure and data.", QuestionId = 92 },
-                new Explanation { ExplanationId = 93, Text = "The AWS Documentation mentions the following:<br/>AWS continues to lower the cost of cloud computing For its customers. In 2014, AWS has reduced the cost ofcompute by an average of 30%, storage by an average of51% and relational databases by an average of 28%. AWS continues to drive down the cost of your IT infrastructure.", QuestionId = 93 },
-                new Explanation { ExplanationId = 94, Text = "The AWS Documentation mentions the following:<br/>Amazon CloudFront is a web service that gives businesses and web application developers an easy and cost effectiveway to distribute content with low latency and high datatransfer speeds. Like other AWS services, AmazonCloudFront is a self-service, pay-per-use offering, requiring no long term commitments or minimum fees.With CloudFront, your files are delivered to end-usersusing a global network of edge locations.", QuestionId = 94 },
-                new Explanation { ExplanationId = 95, Text = "The AWS Documentation mentions the following:<br/>Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit millisecond latency at any scale. It is a fullymanaged cloud database and supports both documentand key-value store models. Its flexible data model, reliable performance, and automatic scaling of throughput capacity, makes it a great fit for mobile, web, gaming, ad tech, IoT, and many other applications.", QuestionId = 95 },
-                new Explanation { ExplanationId = 96, Text = "The AWS Documentation mentions the following:<br/>Amazon Glacier is a secure, durable, and extremely low-cost cloud storage service for data archiving and long-term backup. It is designed to deliver 99.999999999%durability, and provides comprehensive security and compliance capabilities that can help meet even the moststringent regulatory requirements.", QuestionId = 96 },
-                new Explanation { ExplanationId = 97, Text = "When you have instances that will be used continuously and throughout the year, the best option is tobuy reserved instances. By buying reserved instances, you are actually allocated an instance for the entire yearor the duration you specify with a reduced cost.", QuestionId = 97 },
-                new Explanation { ExplanationId = 98, Text = "The AWS Documentation mentions the following:<br/>AWS Direct Connect makes it easy to establish a dedicated network connection from your premises to AWS. Using AWS Direct Connect, you can establishprivate connectivity between AWS and your datacenter, office, or colocation environment, which in many casescan reduce your network costs, increase band widththroughput, and provide a more consistent networkexperience than Internet-based connections.", QuestionId = 98 },
+                new Explanation { ExplanationId = 91, Text = "The AWS Documentation mentions the following:<br/>AWS Elastic Beanstalk is an easy-to-use service For deploying and scaling web applications and services developed with Java, .NET, PHP, Node.js, Python, Ruby, Go. and Docker on familiar servers such as ADache.Nginx, Passenger, and IIS.", QuestionId = 91 },
+                new Explanation { ExplanationId = 92, Text = "The AWS Documentation mentions the following:<br/>Businesses are using the AWS cloud to enable faster disaster recovery of their critical IT systems without incurring the infrastructure expense of a second physicalIsite. The AWS cloud supports many popular disaster recovery (DR) architectures from 'pilot light' environments that may be suitable for small customerworkload data center failures to 'hot stand by' environments that enable rapid failover at scale.With data centers in Regions all around the world, AWS provides a set of cloud-based disaster recovery services that enable rapid recovery of your IT infrastructure and data.", QuestionId = 92 },
+                new Explanation { ExplanationId = 93, Text = "The AWS Documentation mentions the following:<br/>AWS continues to lower the cost of cloud computing For its customers. In 2014, AWS has reduced the cost of compute by an average of 30%, storage by an average of51% and relational databases by an average of 28%. AWS continues to drive down the cost of your IT infrastructure.", QuestionId = 93 },
+                new Explanation { ExplanationId = 94, Text = "The AWS Documentation mentions the following:<br/>Amazon CloudFront is a web service that gives businesses and web application developers an easy and cost effective way to distribute content with low latency and high data transfer speeds. Like other AWS services, Amazon CloudFront is a self-service, pay-per-use offering, requiring no long term commitments or minimum fees. With CloudFront, your files are delivered to end-usersusing a global network of edge locations.", QuestionId = 94 },
+                new Explanation { ExplanationId = 95, Text = "The AWS Documentation mentions the following:<br/>Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit millisecond latency at any scale. It is a fully managed cloud database and supports both documentand key-value store models. Its flexible data model, reliable performance, and automatic scaling of throughput capacity, makes it a great fit for mobile, web, gaming, ad tech, IoT, and many other applications.", QuestionId = 95 },
+                new Explanation { ExplanationId = 96, Text = "The AWS Documentation mentions the following:<br/>Amazon Glacier is a secure, durable, and extremely low-cost cloud storage service for data archiving and long-term backup. It is designed to deliver 99.999999999% durability, and provides comprehensive security and compliance capabilities that can help meet even the most stringent regulatory requirements.", QuestionId = 96 },
+                new Explanation { ExplanationId = 97, Text = "When you have instances that will be used continuously and throughout the year, the best option is to buy reserved instances. By buying reserved instances, you are actually allocated an instance for the entire year or the duration you specify with a reduced cost.", QuestionId = 97 },
+                new Explanation { ExplanationId = 98, Text = "The AWS Documentation mentions the following:<br/>AWS Direct Connect makes it easy to establish a dedicated network connection from your premises to AWS. Using AWS Direct Connect, you can establish private connectivity between AWS and your datacenter, office, or colocation environment, which in many cases can reduce your network costs, increase bandwidth throughput, and provide a more consistent network experience than Internet-based connections.", QuestionId = 98 },
                 new Explanation { ExplanationId = 99, Text = "Screenshot in AWS Doc shows what services the Trusted Advisor Dashboard offers.", QuestionId = 99 },
                 new Explanation { ExplanationId = 100, Text = "Amazon S3 is the default storage service that should be considered for companies. If provides durable storage for all static content.", QuestionId = 100 },
-                new Explanation { ExplanationId = 101, Text = "The principle means giving a user account only those privileges which are essential to perform its intended function. For example, a user account for the sole purpose of creating backups does not need to installsoftware: hence, it has rights only to run backup and backup-related applications.", QuestionId = 101 },
-                new Explanation { ExplanationId = 102, Text = "The AWS Documentation mentions the following:<br/>Amazon Elastic Compute Cloud (Amazon EC2) is a webservice that provides secure, resizable compute capacity in the cloud. It is designed to make web-scale cloudcomputing easier for developers.", QuestionId = 102 },
+                new Explanation { ExplanationId = 101, Text = "The principle means giving a user account only those privileges which are essential to perform its intended function. For example, a user account for the sole purpose of creating backups does not need to install software: hence, it has rights only to run backup and backup-related applications.", QuestionId = 101 },
+                new Explanation { ExplanationId = 102, Text = "The AWS Documentation mentions the following:<br/>Amazon Elastic Compute Cloud (Amazon EC2) is a webservice that provides secure, resizable compute capacity in the cloud. It is designed to make web-scale cloud computing easier for developers.", QuestionId = 102 },
                 new Explanation { ExplanationId = 103, Text = "The AWS Documentation mentions the following:<br/>A security group acts as a virtual firewall for your instance to control inbound and outbound trafficA network access control list (ACL) is an optional layer ofsecurity for your VPC that acts as a firewall for controllingtraffic in and out of one or more subnets.", QuestionId = 103 },
                 new Explanation { ExplanationId = 104, Text = "The AWS Documentation mentions the following:<br/> An Amazon Machine Image (AMI) provides the informationrequired to launch an instance, which is a virtual server in the cloud. You specify an AMI when you launch aninstance, and you can launch as many instances from theAMI as vou need. You can also launch instances from asmany different AMIs as you need.", QuestionId = 104 },
                 new Explanation { ExplanationId = 105, Text = "Note that the AWS Console cannot be used to upload data onto Glacier. The console can only be used to createa Glacier vault which can be used to upload the data.", QuestionId = 105 },
@@ -941,7 +943,7 @@ namespace BlzrQuiz.Core
                 new Explanation { ExplanationId = 143, Text = "Regions represent different geographic locations and is bets to host your application across multiple regions For disaster recovery", QuestionId = 143 },
                 new Explanation { ExplanationId = 144, Text = "The AWS Documentation mentions the following:<br/> AWS Shield - All AWS customers benefit from the automatic protections of AWS Shield Stand ard, at noadditional charge. AWS Shield Stand ard defends against most common, frequently occurring network and transport layer DDoS attacks that target your web site orapplications AWS Shield Advanced - For higher levels ofprotection against attacks targeting your web applications running on Amazon EC2, Elastic Load Balancing (ELB), CloudFront, and Route 53 resources, you can subscribe to AWS Shield Advanced. AWS Shield Advanced provides expanded DDoS attack protection for these resources.", QuestionId = 144 },
                 new Explanation { ExplanationId = 145, Text = "The AWS Documentation mentions the following:<br/> AWS Lambda is a compute service that lets you run codewithout provisioning or managing servers. AWS Lambdaexecutes your code only when needed and scales automatically, from a few requests per day to thousand sper second.", QuestionId = 145 },
-                new Explanation { ExplanationId = 146, Text = "The AWS Documentation mentions the following:<br/> Amazon Virtual Private Cloud (Amazon VPC) enables you tolaunch AWS resources into a virtual network thatyou've defined. This virtual network closely resembles a traditional network that you'd operate in your own datacenter, with the benefits of using the scalable infrastructure of AWS.", QuestionId = 146 },
+                new Explanation { ExplanationId = 146, Text = "The AWS Documentation mentions the following:<br/> Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network thatyou've defined. This virtual network closely resembles a traditional network that you'd operate in your own datacenter, with the benefits of using the scalable infrastructure of AWS.", QuestionId = 146 },
                 new Explanation { ExplanationId = 147, Text = "The AWS Documentation mentions the following:<br/> the AWS TCO calculator makes it easy to estimate your savings when comparing the cloud to an on-premises orcolocation environment. Use the TCO calculator to getdetailed reports and insights into the cost componentsthat make AWS a viable alternative to lower your costs.", QuestionId = 147 },
                 new Explanation { ExplanationId = 148, Text = "A region is a geographical area divided into Availability Zones. Each region contains at least two Availability Zones.", QuestionId = 148 },
                 new Explanation { ExplanationId = 149, Text = "AWS Doc shows the snapshot of the AWS Shared Responsibility Model.", QuestionId = 149 },
@@ -951,14 +953,14 @@ namespace BlzrQuiz.Core
                 new Explanation { ExplanationId = 153, Text = "If you see the snapshot from the EC2 on-demand should be considered for companies. If provides durable storage for all static content.", QuestionId = 158 },
                 new Explanation { ExplanationId = 159, Text = "The AWS Documentation mentions the following:<br/>Elastic Load Balancing distributes incoming application traffic across multiple EC2 instances, in multipleAvailability Zones. This increases the fault tolerance of your applications.", QuestionId = 159 },
                 new Explanation { ExplanationId = 160, Text = "The AWS Documentation mentions the following:<br/>AWS Auto Scaling enables you to configure automatic scaling for the scalable AWS resources for your application in a matter of minutes. AWS AutoScaling uses the Auto Scaling and Application Auto Scaling services to configure scaling policies for your scalable AWS resources.", QuestionId = 160 },
-                new Explanation { ExplanationId = 161, Text = "The AWS Documentation mentions the following:<br/>Amazon Aurora (Aurora) is a fully managed, MySQL- and PostgreSQL-compatible, relational database engine. Itcombines the speed and reliability of high-end commercial databases with the simplicity and cost-effectiveness of open-source databases. It delivers up to five times the throughput of MySQL and up to three timesthe throughput of PostgreSQL without requiring changes tomost of your existing applications.", QuestionId = 161 },
+                new Explanation { ExplanationId = 161, Text = "The AWS Documentation mentions the following:<br/>Amazon Aurora (Aurora) is a fully managed, MySQL and PostgreSQL-compatible, relational database engine. Itcombines the speed and reliability of high-end commercial databases with the simplicity and cost-effectiveness of open-source databases. It delivers up to five times the throughput of MySQL and up to three timesthe throughput of PostgreSQL without requiring changes tomost of your existing applications.", QuestionId = 161 },
                 new Explanation { ExplanationId = 162, Text = "The AWS Documentation mentions the following:<br/>Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the cloud. You can start with just afew hundred gigabytes of data and scale to a petabyte or more. This enables you to use your data to acquire newinsights for your business and customers.", QuestionId = 162 },
                 new Explanation { ExplanationId = 163, Text = "The AWS Documentation mentions the following:<br/>AWS CloudTrail is a service that enables governance, compliance, operational auditing, and risk auditing of your AWS account. With CloudTrail, you can log, continuously monitor, and retain account activity related toactions across your AWS infrastructure. CloudTrail provides event history of your AWS account activity, including actions taken through the AWS ManagementConsole, AWS SDKs, command line tools, and other AWSservices. This event history simplifies security analysis, resource change tracking, and troubleshooting.", QuestionId = 163 },
-                new Explanation { ExplanationId = 164, Text = "You don't need to pay any termination fees when itcomes to Ec2 Instances", QuestionId = 164 },
-                new Explanation { ExplanationId = 165, Text = "Amazon Glacier is an extremely low-cost storage service that provides secure, durable, and flexible storagefor data backup and archival. So Amazon glacier is usedfor infrequently accessed data and Data archives.", QuestionId = 165 },
+                new Explanation { ExplanationId = 164, Text = "You don't need to pay any termination fees when itcomes to EC2 Instances", QuestionId = 164 },
+                new Explanation { ExplanationId = 165, Text = "Amazon Glacier is an extremely low-cost storage service that provides secure, durable, and flexible storage for data backup and archival. So Amazon glacier is usedfor infrequently accessed data and Data archives.", QuestionId = 165 },
                 new Explanation { ExplanationId = 166, Text = "The AWS Documentation mentions the following:<br/>Amazon RDS is available on several database instancetypes - optimized for memory, performance or I/O - and provides you with six familiar database engines to choosefrom. including Amazon Aurora, PostgreSQL, MySQL, MariaDB, Oracle, and Microsoft SQL Server.", QuestionId = 166 },
-                new Explanation { ExplanationId = 167, Text = "The AWS Documentation mentions the following:<br/>AWS Snowball is a service that accelerates transferringlarge amounts of data into and out of AWS using physical storage appliances, bypassing the Internet. Each AWS Snowball appliance type can transport data at faster-thaninternet speeds. This transport is done by shipping theIdata in the appliances through a regional carrier. Theappliances are rugged shipping containers, complete withE Ink shipping labels.", QuestionId = 167 },
-                new Explanation { ExplanationId = 168, Text = "In AWS, there are regions with each region separated in a separate geographic area. Each region hasmultiple, isolated locations known as Availability Zones. An availability zone is used to host resources in a specificregion.", QuestionId = 168 },
+                new Explanation { ExplanationId = 167, Text = "The AWS Documentation mentions the following:<br/>AWS Snowball is a service that accelerates transferring large amounts of data into and out of AWS using physical storage appliances, bypassing the Internet. Each AWS Snowball appliance type can transport data at faster-thaninternet speeds. This transport is done by shipping theIdata in the appliances through a regional carrier. Theappliances are rugged shipping containers, complete withE Ink shipping labels.", QuestionId = 167 },
+                new Explanation { ExplanationId = 168, Text = "In AWS, there are regions with each region separated in a separate geographic area. Each region has multiple, isolated locations known as Availability Zones. An availability zone is used to host resources in a specificregion.", QuestionId = 168 },
                 new Explanation { ExplanationId = 169, Text = "The AWS Documentation mentions the following:<br/>A network access control list (ACL) is an optional layer ofsecurity for your VPC that acts as a firewall for controlling traffic in and out of one or more subnets. You might setup network ACLs with rules similar to your securitygroups in order to add an additional layer of security to your VPC.", QuestionId = 169 },
                 new Explanation { ExplanationId = 170, Text = "You can use the Consolidated Billing feature to consolidate payment for multiple Amazon Web Services(AWS) accounts or multiple Amazon International Services Pvt. Ltd (AISPL) accounts within your organization by designating one of them to be the payeraccount. With Consolidated Billing, you can see acombined view of AWS charges incurred by all accounts, as well as get a cost report for each individual account associated with your payer account.", QuestionId = 170 },
                 new Explanation { ExplanationId = 171, Text = "The AWS Documentation mentions the following:<br/>Amazon Simple Notification Service (Amazon SNS) is aweb service that enables applications, end-users, and devices to instantly send and receive notifications from the cloud.", QuestionId = 171 },
@@ -972,19 +974,19 @@ namespace BlzrQuiz.Core
                 new Explanation { ExplanationId = 179, Text = "AWS Elastic Beanstalk makes it even easier for developers to quickly deploy and manage applications in the AWS Cloud. Developers simply upload their application, and Elastic Beanstalk automatically hand lesthe deployment details of capacity provisioning, load balancing, auto-scaling, and application health monitoring.", QuestionId = 179 },
                 new Explanation { ExplanationId = 180, Text = "Amazon ElastiCache is a web service that makes iteasy to deploy, operate, and scale an in-memory datastore or cache in the cloud. The service improves theperformance of web applications by allowing you toretrieve information from fast, managed, in-memory datastores, instead of relying entirely on slower disk-based databases.", QuestionId = 180 },
                 new Explanation { ExplanationId = 181, Text = "The AWS Documentation mentions the following:<br/>You can back up the data on your Amazon EBS volumes toAmazon S3 by taking point-in-time snapshots.", QuestionId = 181 },
-                new Explanation { ExplanationId = 182, Text = "Amazon Elastic Compute Cloud (Amazon EC2) is aweb service that provides resizable compute capacity in the cloud. It is designed to make web-scale cloud computing easier for developers. Amazon ECis simpleweb service interface allows you to obtain and configure capacity with minimal friction. It provides you with complete control of your computing resources and letsyou run on Amazon's proven computing environment. Amazon EC2 reduces the time required to obtain and boot new server instances to minutes, allowing you toquickly scale capacity, both up and down, as your computing requirements change.", QuestionId = 182 },
+                new Explanation { ExplanationId = 182, Text = "Amazon Elastic Compute Cloud (Amazon EC2) is a web service that provides resizable compute capacity in the cloud. It is designed to make web-scale cloud computing easier for developers. Amazon ECis simpleweb service interface allows you to obtain and configure capacity with minimal friction. It provides you with complete control of your computing resources and letsyou run on Amazon's proven computing environment. Amazon EC2 reduces the time required to obtain and boot new server instances to minutes, allowing you toquickly scale capacity, both up and down, as your computing requirements change.", QuestionId = 182 },
                 new Explanation { ExplanationId = 183, Text = "The AWS Documentation mentions the following:<br/>Amazon RDS Multi-AZ deployments provide enhanced availability and durability for Database (DB) Instances, making them a natural fit for production database workloads. When you provision a Multi-AZ DB Instance, Amazon RDS automatically creates a primary DB Instance and synchronously replicates the data to astand by instance in a different Availability Zone (AZ). Each AZ runs on its own physically distinct, independent infrastructure, and is engineered to be highly reliable. Incase of an infrastructure failure, Amazon RDS performsan automatic failover to the stand by (or to a read replicain the case of Amazon Aurora), so that you can resume database operations as soon as the failover is complete.", QuestionId = 183 },
-                new Explanation { ExplanationId = 184, Text = "The AWS Documentation mentions the following:<br/>Cost Explorer is a free tool that you can use to view your costs. You can view your costs as either a cash-based view(costs are recorded when cash is received or paid) withunblended costs or as an accrual-based view (costs are recorded when income is earned or costs are incurred). You can view data for up to the last 13 months, forecasthow much you are likely to spend for the next threemonths, and get recommendations for what Reserved Instances to purchase", QuestionId = 184 },
+                new Explanation { ExplanationId = 184, Text = "The AWS Documentation mentions the following:<br/>Cost Explorer is a free tool that you can use to view your costs. You can view your costs as either a cash-based view(costs are recorded when cash is received or paid) withunblended costs or as an accrual-based view (costs are recorded when income is earned or costs are incurred). You can view data for up to the last 13 months, forecasthow much you are likely to spend for the next three months, and get recommendations for what Reserved Instances to purchase", QuestionId = 184 },
                 new Explanation { ExplanationId = 185, Text = "You can use Amazon CloudWatch Logs to monitor, store, and access your log files from Amazon Elastic Compute Cloud (Amazon EC2) instances, AWS CloudTrail, and other sources. You can then retrieve theassociated log data from CloudWatch Log", QuestionId = 185 },
-                new Explanation { ExplanationId = 186, Text = "The AWS Documentation mentions the following:<br/>  role is similar to a user, in that it is an AWS identity with permission policies that determine what the identitycan and cannot do in AWS. However, instead of beinguniquely associated with one person, a role is intended tobe assumable by anyone who needs it. ", QuestionId = 186 },
+                new Explanation { ExplanationId = 186, Text = "The AWS Documentation mentions the following:<br/> role is similar to a user, in that it is an AWS identity with permission policies that determine what the identitycan and cannot do in AWS. However, instead of beinguniquely associated with one person, a role is intended tobe assumable by anyone who needs it. ", QuestionId = 186 },
                 new Explanation { ExplanationId = 187, Text = "AWS Doc shows different support levels available", QuestionId = 187 },
                 new Explanation { ExplanationId = 188, Text = "DynamoDB is a fully managed NoSQL offering provided by AWS. It is now available in most regions For users to consume.", QuestionId = 188 },
-                new Explanation { ExplanationId = 189, Text = "AWS Doc shows a snapshot of the costing calculator for AWS S3 For the link to costing for AWS S3, pleasevisit the below http://calculator.s3.anmzon AWS.com/index.html", QuestionId = 189 },
+                new Explanation { ExplanationId = 189, Text = "AWS Doc shows a snapshot of the costing calculator for AWS S3 For the link to costing for AWS S3", QuestionId = 189 },
                 new Explanation { ExplanationId = 190, Text = "The AWS Doc Shows an array of Software development kits are available for AWS.", QuestionId = 190 },
-                new Explanation { ExplanationId = 191, Text = "The AWS Documentation mentions the following:<br/>AWS Direct Connect makes it easy to establish adedicated network connection from your premises to AWS. Using AWS Direct Connect, you can establishprivate connectivity between AWS and your datacenter, office, or colocation environment, which in many cases can reduce vour network costs. increase band width throughput, and provide a more consistent network experience than Internet-based connections. You can connect your VPC to remote networks byusing a VPN connection.", QuestionId = 191 },
-                new Explanation { ExplanationId = 192, Text = "The AWS Documentation mentions the following:<br/> An Amazon Machine Image (AMI) provides the informationrequired to launch an instance, which is a virtual server in the cloud. You specify an AMI when you launch aninstance, and you can launch as many instances from theAMI as you need. You can also launch instances from asmany different AMIs as you need.", QuestionId = 192 },
+                new Explanation { ExplanationId = 191, Text = "The AWS Documentation mentions the following:<br/>AWS Direct Connect makes it easy to establish a dedicated network connection from your premises to AWS. Using AWS Direct Connect, you can establish private connectivity between AWS and your datacenter, office, or colocation environment, which in many cases can reduce vour network costs. increase band width throughput, and provide a more consistent network experience than Internet-based connections. You can connect your VPC to remote networks byusing a VPN connection.", QuestionId = 191 },
+                new Explanation { ExplanationId = 192, Text = "The AWS Documentation mentions the following:<br/> An Amazon Machine Image (AMI) provides the information required to launch an instance, which is a virtual server in the cloud. You specify an AMI when you launch an instance, and you can launch as many instances from theAMI as you need. You can also launch instances from asmany different AMIs as you need.", QuestionId = 192 },
                 new Explanation { ExplanationId = 193, Text = "Since the requirement is just for 3 months, then the best cost effective option is to use On-Demand Instances.", QuestionId = 193 },
-                new Explanation { ExplanationId = 194, Text = "The AWS Documentation mentions the following:<br/>You can use the consolidated billing feature in AWS Organizations to consolidate payment for multiple AWS accounts or multiple AISPL accounts. With consolidatedbilling, you can see a combined view of AWS chargesincurred by all of your accounts. You also can get a cost report for each member account that is associated with your master account. Consolidated billing is offered at no additional charge.", QuestionId = 194 }
+                new Explanation { ExplanationId = 194, Text = "The AWS Documentation mentions the following:<br/>You can use the consolidated billing feature in AWS Organizations to consolidate payment for multiple AWS accounts or multiple AISPL accounts. With consolidatedbilling, you can see a combined view of AWS charges incurred by all of your accounts. You also can get a cost report for each member account that is associated with your master account. Consolidated billing is offered at no additional charge.", QuestionId = 194 }
 
                 );
         }
@@ -1175,16 +1177,16 @@ namespace BlzrQuiz.Core
                     new Question { QuestionId = 80, CertificationId = 3, NumberOfCorrectAnswers = 3, Text = "Which of the following is the responsibility of AWS according to the Shared Security Model?<br/>Choose <strong>3</strong> answers from the options given below" },
                     new Question { QuestionId = 107, CertificationId = 3, NumberOfCorrectAnswers = 3, Text = "Which of the following are features of an edge location?<br/>Choose <strong>3</strong> answers from the options given below." },
                     new Question { QuestionId = 109, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following features of Amazon RDS allows for better availability of databases?<br/>Choose <strong>2</strong> answers from the options given below." },
-                    new Question { QuestionId = 112, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "When working with the AWS Cloud which of the following are headaches you don't need to worry about.<br/>Choose <strong>2</strong> answers from the options given below." },
-                    new Question { QuestionId = 118, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "Which of the following statements are FALSE when it comes to elasticity? <br/>Choose <strong>2</strong> answers from the options given below." },
-                    new Question { QuestionId = 128, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "Which of the following are services where you don't need to manage the underlyng Infrastructure?<br/>Choose <strong>2</strong>  answers from the options given below." },
-                    new Question { QuestionId = 135, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "Which of the following options would entice acompany to use AWS over an on-premises data center?<br/>Choose <strong>2</strong> answers from the options given below?" },
-                    new Question { QuestionId = 138, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "Which of the following are right principles when designing cloud based systems.<br/>Choose <strong>2</strong> answers fromt he options below?" },
-                    new Question { QuestionId = 144, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "Which of the following can be used to protect against DDos attacks?<br/>Choose <strong>2</strong> answers from the options given below." },
-                    new Question { QuestionId = 149, CertificationId = 3, NumberOfCorrectAnswers =  4, Text = "In AWS, which security aspects are the customer's responsibility?<br/>Choose <strong>4</strong> answers from the options given below." },
-                    new Question { QuestionId = 155, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "What are characteristics of Amazon S3?<br/>Choose <strong>2</strong> answers from the options given below." },
-                    new Question { QuestionId = 174, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "Which of the following are benefits of the AWS's Relational Database Service (RDS)?<br/>Choose <strong>2</strong> answers from the options below." },
-                    new Question { QuestionId = 189, CertificationId = 3, NumberOfCorrectAnswers =  2, Text = "Which of the following are attributes to the costing for using the Simple Storage Service?<br/>Choose <strong>2</strong> answers from the options given below." }
+                    new Question { QuestionId = 112, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "When working with the AWS Cloud which of the following are headaches you don't need to worry about.<br/>Choose <strong>2</strong> answers from the options given below." },
+                    new Question { QuestionId = 118, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following statements are FALSE when it comes to elasticity? <br/>Choose <strong>2</strong> answers from the options given below." },
+                    new Question { QuestionId = 128, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following are services where you don't need to manage the underlyng Infrastructure?<br/>Choose <strong>2</strong>  answers from the options given below." },
+                    new Question { QuestionId = 135, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following options would entice acompany to use AWS over an on-premises data center?<br/>Choose <strong>2</strong> answers from the options given below?" },
+                    new Question { QuestionId = 138, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following are right principles when designing cloud based systems.<br/>Choose <strong>2</strong> answers fromt he options below?" },
+                    new Question { QuestionId = 144, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following can be used to protect against DDos attacks?<br/>Choose <strong>2</strong> answers from the options given below." },
+                    new Question { QuestionId = 149, CertificationId = 3, NumberOfCorrectAnswers = 4, Text = "In AWS, which security aspects are the customer's responsibility?<br/>Choose <strong>4</strong> answers from the options given below." },
+                    new Question { QuestionId = 155, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "What are characteristics of Amazon S3?<br/>Choose <strong>2</strong> answers from the options given below." },
+                    new Question { QuestionId = 174, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following are benefits of the AWS's Relational Database Service (RDS)?<br/>Choose <strong>2</strong> answers from the options below." },
+                    new Question { QuestionId = 189, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following are attributes to the costing for using the Simple Storage Service?<br/>Choose <strong>2</strong> answers from the options given below." }
                     );
         }
 
@@ -1215,6 +1217,340 @@ namespace BlzrQuiz.Core
                 Name = "CLF-C01",
                 Description = "AWS Cloud Practitioner"
             });
+        }
+
+        private void AddTags()
+        {
+            modelBuilder.Entity<Tag>().HasData(
+
+                    new Tag
+                    {
+                        TagId = 1,
+                        Name = "Cloud Concepts"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 2,
+                        Name = "Security"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 3,
+                        Name = "Technology"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 4,
+                        Name = "Billing and Pricing"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 5,
+                        Name = "Analytics"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 6,
+                        Name = "Application Integration"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 7,
+                        Name = "AR & VR"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 8,
+                        Name = "AWS Cost Management"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 9,
+                        Name = "Blockchain"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 10,
+                        Name = "Business Applications"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 11,
+                        Name = "Management & Governance"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 12,
+                        Name = "IoT"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 13,
+                        Name = "Machine Learning"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 14,
+                        Name = "Compute"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 15,
+                        Name = "Migration and Transfer"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 16,
+                        Name = "Networking"
+                    },
+                        new Tag
+                        {
+                            TagId = 17,
+                            Name = "Media Services"
+                        },
+
+                    new Tag
+                    {
+                        TagId = 18,
+                        Name = "Database"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 19,
+                        Name = "Amazon CloudTrail"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 20,
+                        Name = "Glacier"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 21,
+                        Name = "VPC"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 22,
+                        Name = "subnet"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 23,
+                        Name = "AWS Lambda"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 24,
+                        Name = "AWS Trusted Advisor"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 25,
+                        Name = "Amazon EC2"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 26,
+                        Name = "AWS Cost Explorer"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 27,
+                        Name = "AWS Config"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 28,
+                        Name = "Amazon Inspector"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 29,
+                        Name = "AWS Region"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 30,
+                        Name = "AWS Edge Location"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 31,
+                        Name = "Amazon CloudFront"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 32,
+                        Name = "Amazon S3"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 33,
+                        Name = "Amazon DynamoDB"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 34,
+                        Name = "Amazon ElastiCache"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 35,
+                        Name = "AWS Database Migration Service"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 36,
+                        Name = "Amazon Aurora"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 37,
+                        Name = "Amazon RDS"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 38,
+                        Name = "VMware"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 39,
+                        Name = "Amazon Redshift"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 40,
+                        Name = "Amazon Neptune"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 41,
+                        Name = "AWS MongoDB"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 42,
+                        Name = "Amazon Storage Gateway"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 43,
+                        Name = "Amazon EBS"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 44,
+                        Name = "Reserved instances"
+                    },
+
+                    new Tag
+                    {
+                        TagId = 45,
+                        Name = "AWS Edge Location"
+                    }
+                );
+        }
+        private void AddQuestionTags()
+        {
+            modelBuilder.Entity<QuestionTag>().HasData(
+                new QuestionTag
+                {
+                    QuestionTagId = 1,
+                    QuestionId = 3,
+                    TagId = 1
+                },
+                new QuestionTag
+                {
+                    QuestionTagId = 2,
+                    QuestionId = 4,
+                    TagId = 2
+                },
+                new QuestionTag
+                {
+                    QuestionTagId = 3,
+                    QuestionId = 5,
+                    TagId = 3
+                },
+                new QuestionTag
+                {
+                    QuestionTagId = 4,
+                    QuestionId = 6,
+                    TagId = 3
+                },
+                new QuestionTag
+                {
+                    QuestionTagId = 5,
+                    QuestionId = 6,
+                    TagId = 2
+                },
+                new QuestionTag
+                {
+                    QuestionTagId = 6,
+                    QuestionId = 7,
+                    TagId = 3
+                },
+                new QuestionTag
+                {
+                    QuestionTagId = 7,
+                    QuestionId = 8,
+                    TagId = 1
+                },
+                 new QuestionTag
+                 {
+                     QuestionTagId = 8,
+                     QuestionId = 23,
+                     TagId = 2
+                 },
+                  new QuestionTag
+                  {
+                      QuestionTagId = 7,
+                      QuestionId = 24,
+                      TagId = 3
+                  }
+            );
         }
     }
 }

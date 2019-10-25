@@ -1,7 +1,8 @@
 ﻿@page "/questions/overview"
 @using BlzrQuiz.ServiceLayer
 @using  BlzrQuiz.Data.Entities
-@inject QuizService _QService
+@inject QuizService QService
+@inject NavigationManager NavManager
 
 <h3>Questions</h3>
 @if (QuestionList == null)
@@ -25,11 +26,11 @@ else
                 <tr>
                     <td>@question.QuestionId</td>
                     <td>@question.Text</td>
-                    @*<td>@question.Certification.Name</td>*@
-                    @*<td>
-                            <button class="btn btn-primary" @onclick="@(e => urihelper.NavigateTo("/questions/"+question.QuestionId))">Edit</button>
-                            <button class="btn btn-primary" @onclick="@(e=> DeleteQuestion(question))">Delete</button>
-                        </td>*@
+                    <td>@question.Certification.Name</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="@(e => NavManager.NavigateTo("/questions/"+question.QuestionId))">Edit</button>
+                        <button class="btn btn-primary" @onclick="@(e=> DeleteQuestion(question))">Delete</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -68,20 +69,20 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        QuestionList = await _QService.GetQuestions();
-        Certifications = await _QService.GetCertifications();
+        QuestionList = await QService.GetQuestions();
+        Certifications = await QService.GetCertifications();
     }
 
     async Task AddNewQuestion()
     {
-        _QService.AddQuestion(Question);
+        QService.AddQuestion(Question);
         Question = new Question();
-        QuestionList = await _QService.GetQuestions();
+        QuestionList = await QService.GetQuestions();
     }
 
     async Task DeleteQuestion(Question entity)
     {
-        _QService.DeleteQuestion(entity);
-        QuestionList = await _QService.GetQuestions();
+        QService.DeleteQuestion(entity);
+        QuestionList = await QService.GetQuestions();
     }
 }

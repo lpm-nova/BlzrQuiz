@@ -1,4 +1,6 @@
-﻿namespace BlzrQuiz.Data.Entities
+﻿using System.Collections.Generic;
+
+namespace BlzrQuiz.Data.Entities
 {
     public class Tag
     {

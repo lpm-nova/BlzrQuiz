@@ -181,6 +181,8 @@ namespace BlzrQuiz.Pages
             UQuestion = QuestionList.ElementAt(counter);
             Explanation = UQuestion.Question.Explanation.ToMarkup();
             SetButtonClasses();
+            if (ExplanationWindig == "-")
+                ToggleExplanation();
         }
 
         private void SetButtonClasses()
