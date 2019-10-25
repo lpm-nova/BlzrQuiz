@@ -34,9 +34,9 @@ namespace BlzrQuiz.Pages
         private string BtnNextClasses { get; set; } = Enabled;
         private string BtnSubmitClasses { get; set; } = Disabled + Invisible;
         private string Alert { get; set; } = AlertBase + Invisible;
-        private string Explanation { get; set; } = string.Empty;
-        private string ExplanationClasses { get; set; } = Invisible;
-        private string ExplanationCol { get; set; } = "col-11";
+        private MarkupString Explanation { get; set; }
+        private List<string> ExplanationClasses { get; set; } = new List<string> { Invisible, "col-11" };
+        private string ExplanationWindig { get; set; } = "+";
         private int Score { get; set; }
         private int CorrectAnswerCount { get; set; }
         private IEnumerable<EF.QuizQuestion> QuestionList { get; set; } = new List<EF.QuizQuestion>();
@@ -179,7 +179,7 @@ namespace BlzrQuiz.Pages
         private void SetProperties()
         {
             UQuestion = QuestionList.ElementAt(counter);
-            Explanation = UQuestion.Question.Explanation.Text;
+            Explanation = UQuestion.Question.Explanation.ToMarkup();
             SetButtonClasses();
         }
 
@@ -198,9 +198,18 @@ namespace BlzrQuiz.Pages
                 }
             }
         }
-       private void ToggleExplanation()
+        private void ToggleExplanation()
         {
-            ExplanationClasses = 
+            if (ExplanationClasses.Contains(Invisible))
+            {
+                ExplanationClasses.Remove(Invisible);
+                ExplanationWindig = "-";
+            }
+            else
+            {
+                ExplanationClasses.Add(Invisible);
+                ExplanationWindig = "+";
+            }
         }
     }
 }

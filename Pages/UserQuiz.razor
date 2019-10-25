@@ -3,7 +3,7 @@
 @using BlzrQuiz.ServiceLayer
 
 
-<div class="container">
+<div class="container-fluid">
     @if (QuestionList.Count() == 0)
     {
         <p><em>Loading...</em></p>
@@ -25,19 +25,17 @@
                 </div>
             </div>
         </div>
-        <div class="row col-12">
+        @*<div class="row col-12">*@
             @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
             <UserQuizQuestion ThisQuestion="UQuestion" ThisUserQuiz="ThisUserQuiz" ButtonClasses="ButtonClasses" OnSomeEvent="SetButtonClasses"></UserQuizQuestion>
-        </div>
-        <div class="row col-12">
-            <button type="button" @onclick="@(e => ToggleExplanation() )" name="explanationButton")" id="explanationButton"  class="btn btn-light">+</button>
-            <span class="input-group-text" id="basic-addon1">+</span>
-        </div>
-            <div id="explanation" style="margin-top: 15px;" class="@ExplanationCol @ExplanationHidden">
+        @*</div>*@
+        <div  style="margin-left: 5px; margin-top: 15px;" class="row col-12">
+            <button type="button" @onclick="@(e => ToggleExplanation() )" name="explanationButton" id="explanationButton"  class="btn btn-light">@ExplanationWindig</button>
+            <div id="explanation" style="margin-top: 15px;" class="@String.Join(" ", ExplanationClasses)">
                 @Explanation
             </div>
         </div>
-        <div id="results-div" style="margin-top: 15px;" class="@Alert">
+        <div id="results-div" style="margin-left: 15px; margin-top: 15px;" class="@Alert">
             <strong>Score: </strong> @Score out of @CorrectAnswerCount
         </div>
 
