@@ -11,32 +11,35 @@
 <hr />
 <div class="container">
     <div class="row">
-        <div class="col-lg-12">
-            <EditForm Model="@Question" OnValidSubmit="@UpdateQuestion">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <label class="col-lg-2" for="classification">Text: </label>
+        <EditForm class="col-lg-12" Model="@Question" OnValidSubmit="@UpdateQuestion">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="row">
+                <label class="col-lg-1" for="classification">Text: </label>
                 <InputTextArea id="name" class="col-lg-10" @bind-Value="@Question.Text" />
-                <button type="submit">Submit</button>
-            </EditForm>
-        </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10">
+                </div>
+                <div class="col-lg-2">
+                    <button type="submit">Submit</button>
+                </div>
+            </div>
+        </EditForm>
     </div>
     <div class="row">
-        @for (var i = 0; i < Question.QuestionTags.Count(); i++)
+        @if (Question.QuestionTags != null)
         {
-            <div class="col-2"><button>@qt.Tag.Name</button></div>
+            foreach (var t in Question?.QuestionTags)
+            {
+                <div class="col-2"><button type="button" class="btn-secondary">@t.Tag.Name</button></div>
+            }
         }
     </div>
-    <div class="row">
-        @foreach (var qt in Question.QuestionTags)
+    <div style="margin-top:5px;" class="row">
+        @foreach (var t in Tags)
         {
-            <div class="col-2"><button>@qt.Tag.Name</button></div>
-        }
-    </div>
-    <div class="row">
-        @foreach (var qt in Question.QuestionTags)
-        {
-            <div class="col-2"><button>@qt.Tag.Name</button></div>
+            <div class="col-2"><button type="button" class="btn btn-info">@t.Name</button></div>
         }
     </div>
 </div>

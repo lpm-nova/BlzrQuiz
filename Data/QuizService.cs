@@ -78,7 +78,7 @@ namespace BlzrQuiz.ServiceLayer
 
         public Task<Question> GetQuestion(int id)
         {
-            return _context.Questions.SingleAsync<Question>(e => e.QuestionId == id);
+            return _context.Questions.Include(x => x.QuestionTags).ThenInclude(x => x.Tag).FirstOrDefaultAsync(x => x.QuestionId == id);
         }
 
         public async Task<IEnumerable<Certification>> GetCertifications()
@@ -231,16 +231,16 @@ namespace BlzrQuiz.ServiceLayer
             _context.SaveChanges();
         }
 
-        private void UpdateAnswer(UserQuizQuestionAnswer e, UserQuizQuestionAnswer n)
-        {
-            if (e != null && n != null)
-            {
-                e.AnswerId = n.AnswerId;
-                e.QuizQuestion = n.QuizQuestion;
-                e.UserQuizId = n.UserQuizId;
-                _context.Entry(e).State = EntityState.Modified;
-            }
-        }
+        //private void UpdateAnswer(UserQuizQuestionAnswer e, UserQuizQuestionAnswer n)
+        //{
+        //    if (e != null && n != null)
+        //    {
+        //        e.AnswerId = n.AnswerId;
+        //        e.QuizQuestion = n.QuizQuestion;
+        //        e.UserQuizId = n.UserQuizId;
+        //        _context.Entry(e).State = EntityState.Modified;
+        //    }
+        //}
 
         public async Task CreateAnswersForUser(QuizQuestion qQuestion)
         {

@@ -16,7 +16,13 @@ namespace BlzrQuiz.Data.Entities
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
         public ICollection<QuestionTag> QuestionTags { get; set; }
-
+        public MarkupString Markup
+        {
+            get
+            {
+                return new MarkupString(Text);
+            }
+        }
         public MarkupString ToMarkup()
         {
             return new MarkupString(Text);
