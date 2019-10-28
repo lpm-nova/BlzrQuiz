@@ -3,7 +3,7 @@
 @using  BlzrQuiz.Data.Entities
 @using System.Diagnostics
 @inject QuizService QService
-@inject NavigationManager Urihelper;
+@inject NavigationManager NavManager;
 
 <h1>Edit</h1>
 
@@ -64,7 +64,7 @@
     void UpdateQuestion()
     {
         QService.UpdateQuestion(Question);
-        Urihelper.NavigateTo("/questions/overview");
+        NavManager.NavigateTo("/questions/overview");
     }
 
     async Task Add(int tagId, int questionId)

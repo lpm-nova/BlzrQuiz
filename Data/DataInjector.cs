@@ -905,7 +905,7 @@ namespace BlzrQuiz.Core
                 new Explanation { ExplanationId = 104, Text = "The AWS Documentation mentions the following:<br/> An Amazon Machine Image (AMI) provides the informationrequired to launch an instance, which is a virtual server in the cloud. You specify an AMI when you launch aninstance, and you can launch as many instances from theAMI as vou need. You can also launch instances from asmany different AMIs as you need.", QuestionId = 104 },
                 new Explanation { ExplanationId = 105, Text = "Note that the AWS Console cannot be used to upload data onto Glacier. The console can only be used to createa Glacier vault which can be used to upload the data.", QuestionId = 105 },
                 new Explanation { ExplanationId = 106, Text = "The Enterprise support plan has support time less than 15 minutes for Business-critical system down.", QuestionId = 106 },
-                new Explanation { ExplanationId = 107, Text = "The AWS Documentation mentions the following:<br/>Amazon CloudFront employs a global network of edge locations and regional edge caches that cache copies of your content close to your viewers. Amazon CloudFrontensures that end-user requests are served by the closestedge location. As a result, viewer requests travel a shortdistance, improving performance for your viewers. For files not cached at the edge locations and the regionaledge caches, Amazon CloudFront keeps persistent connections with your origin servers so that those filescan be fetched from the origin servers as quickly aspossible.", QuestionId = 107 },
+                new Explanation { ExplanationId = 107, Text = "The AWS Documentation mentions the following:<br/>Amazon CloudFront employs a global network of edge locations and regional edge caches that cache copies of your content close to your viewers. Amazon CloudFrontensures that end-user requests are served by the closest edge location. As a result, viewer requests travel a short distance, improving performance for your viewers. For files not cached at the edge locations and the regional edge caches, Amazon CloudFront keeps persistent connections with your origin servers so that those filescan be fetched from the origin servers as quickly aspossible.", QuestionId = 107 },
                 new Explanation { ExplanationId = 108, Text = "The AWS Documentation mentions the following:<br/>Lifecycle configuration enables you to specify the life cycle management of objects in a bucket. The configuration is a set of one or more rules, where eachrule defines an action for Amazon Sp to amolv to a EI‘OUDof objects. These actions can be classified as follows: Transition actions - In which you define when objects transition to another storage class. For example, you may choose to transition obj ects to thestandard _IA (IA, for infrequent access) storage class 30 days after creation, or archive objects to the GLACIER storage class one year after creation. Expiration actions - In which you specifywhen the objects expire. Then Amazon S3 deletes theexpired objects on your behalf.", QuestionId = 108 },
                 new Explanation { ExplanationId = 109, Text = "The AWS Documentation mentions the following:<br/> If you are looking to use replication to increase database availability while protecting your latest database updates against unplanned outages, consider running your DBinstance as a Multi-AZ deployment. You can use Multi-AZ deployments and Read Replicas in conjunction toenjoy the complementary benefits of each. You cansimply specify that a given Multi-AZ deployment is thesource DB instance for your Read Replica(s). That wayyou gain both the data durability and availability benefits of Multi-AZ deployments and the read scaling benefits of Read Replicas.", QuestionId = 109 },
                 new Explanation { ExplanationId = 110, Text = "Since the requirement is just for 3 months, then the best cost effective option is to use On-Demand Instances.", QuestionId = 110 },
@@ -1339,13 +1339,13 @@ namespace BlzrQuiz.Core
                     new Tag
                     {
                         TagId = 20,
-                        Name = "Glacier"
+                        Name = "Amazon Glacier"
                     },
 
                     new Tag
                     {
                         TagId = 21,
-                        Name = "VPC"
+                        Name = "Amazon VPC"
                     },
 
                     new Tag
@@ -1490,7 +1490,13 @@ namespace BlzrQuiz.Core
                     {
                         TagId = 45,
                         Name = "AWS Edge Location"
+                    },
+                    new Tag
+                    {
+                        TagId = 46,
+                        Name = "Amazon CloudWatch"
                     }
+
                 );
         }
         private void AddQuestionTags()
@@ -1546,64 +1552,154 @@ namespace BlzrQuiz.Core
         public void AddCertificationTags()
         {
             modelBuilder.Entity<CertificationTag>().HasData(
+                //Cloud Concepts
                 new CertificationTag
                 {
                     TagId = 1,
                     CertificationId = 3
                 },
+                //Security
                 new CertificationTag
                 {
                     TagId = 2,
                     CertificationId = 3
                 },
+                //Technology
                 new CertificationTag
                 {
                     TagId = 3,
                     CertificationId = 3
                 },
+                //Billing and Pricing
                 new CertificationTag
                 {
                     TagId = 4,
                     CertificationId = 3
                 },
+                //Analytics
                 new CertificationTag
                 {
                     TagId = 5,
                     CertificationId = 3
                 },
+                //Cost Management
+                new CertificationTag
+                {
+                    TagId = 8,
+                    CertificationId = 3
+                },
+                //Compute
                 new CertificationTag
                 {
                     TagId = 14,
                     CertificationId = 3
                 },
+                //Database
                 new CertificationTag
                 {
                     TagId = 18,
                     CertificationId = 3
                 },
+                //Amazon CloudTrail
                 new CertificationTag
                 {
                     TagId = 19,
                     CertificationId = 3
                 },
+                //Amazon Glacier
                 new CertificationTag
                 {
                     TagId = 20,
                     CertificationId = 3
                 },
+                //Amazon VPC
+                 new CertificationTag
+                 {
+                     TagId = 21,
+                     CertificationId = 3
+                 },
+                //AWS Lambda
                 new CertificationTag
                 {
                     TagId = 23,
                     CertificationId = 3
                 },
+                //AWS Trusted Advisor
+                new CertificationTag
+                {
+                    TagId = 24,
+                    CertificationId = 3
+                },
+                //Amazon EC2
                 new CertificationTag
                 {
                     TagId = 25,
                     CertificationId = 3
                 },
+                //AWS Cost Explorer
                 new CertificationTag
                 {
-                    TagId = 8,
+                    TagId = 26,
+                    CertificationId = 3
+                },
+                //Amazon Inspector
+                new CertificationTag
+                {
+                    TagId = 28,
+                    CertificationId = 3
+                },
+                //AWS Region
+                new CertificationTag
+                {
+                    TagId = 29,
+                    CertificationId = 3
+                },
+                //AWS Edge Location
+                new CertificationTag
+                {
+                    TagId = 30,
+                    CertificationId = 3
+                },
+                //Amazon CloudFront
+                new CertificationTag
+                {
+                    TagId = 31,
+                    CertificationId = 3
+                },
+                //Amazon S3
+                new CertificationTag
+                {
+                    TagId = 32,
+                    CertificationId = 3
+                },
+                //Amazon RDS
+                new CertificationTag
+                {
+                    TagId = 37,
+                    CertificationId = 3
+                },
+                //Amazon EBS
+                new CertificationTag
+                {
+                    TagId = 43,
+                    CertificationId = 3
+                },
+                //Reserved Instances
+                new CertificationTag
+                {
+                    TagId = 44,
+                    CertificationId = 3
+                },
+                //Edge Location
+                new CertificationTag
+                {
+                    TagId = 45,
+                    CertificationId = 3
+                },
+                //Amazon CloudWatch
+                new CertificationTag
+                {
+                    TagId = 46,
                     CertificationId = 3
                 }
                 );

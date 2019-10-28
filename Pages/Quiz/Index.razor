@@ -1,13 +1,8 @@
-﻿@page "/questions/overview"
+﻿@page "/quiz/list"
 @using BlzrQuiz.ServiceLayer
 @using  BlzrQuiz.Data.Entities
 @inject QuizService QService
 @inject NavigationManager NavManager
-<style>
-    #qtable tr td:nth-child(3) {
-        width: 10%;
-    }
-</style>
 
 <h3>Questions</h3>
 @if (QuestionList == null)
@@ -16,23 +11,25 @@
 }
 else
 {
-    <table class="table table-striped" id="qtable">
+    <table class="table">
         <thead>
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Text</th>
-                <th scope="col">Quiz</th>
+                <th>Id</th>
+                <th>Text</th>
+                <th>Quiz</th>
+                @*<th>Actions</th>*@
             </tr>
         </thead>
         <tbody>
             @foreach (var question in QuestionList)
             {
                 <tr>
-                    <th scope="row">@question.QuestionId</th>
+                    <td>@question.QuestionId</td>
                     <td>@question.Text</td>
                     <td>@question.Certification.Name</td>
                     <td>
                         <button class="btn btn-primary" @onclick="@(e => NavManager.NavigateTo("/questions/"+question.QuestionId))">Edit</button>
+                        <button class="btn btn-primary" @onclick="@(e=> DeleteQuestion(question))">Delete</button>
                     </td>
                 </tr>
             }
