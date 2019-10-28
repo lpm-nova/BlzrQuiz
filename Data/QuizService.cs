@@ -40,7 +40,7 @@ namespace BlzrQuiz.ServiceLayer
 
         public async Task<UserQuiz> GetUserQuizQuestions(int userQuizId, string userId)
         {
-            return await  _context.UserQuizzes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz.QuizQuestions).ThenInclude(a => a.Question.Explanation).ThenInclude(a => a.Question.Answers).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
+            return await _context.UserQuizzes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz.QuizQuestions).ThenInclude(a => a.Question.Explanation).ThenInclude(a => a.Question.Answers).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
             //return await _context.UserQuizzes.Include(a => a.UserQuizQuestionAnswers).Include(a => a.Quiz).Include(a => a.Quiz.QuizQuestions).ThenInclude(a => a.Question).ThenInclude(a => a.Answers).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
         }
 
@@ -66,7 +66,7 @@ namespace BlzrQuiz.ServiceLayer
 
         public async Task Save()
         {
-           await _context.SaveChangesAsync().ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public void AddQuestion(Question question)
@@ -86,11 +86,36 @@ namespace BlzrQuiz.ServiceLayer
             return await _context.Certifications.ToListAsync().ConfigureAwait(false);
         }
 
+        public async Task<IEnumerable<CertificationTag>> GetCertificationTagsById(int certId)
+        {
+            return await _context.CertificationTags.Include(x => x.Tag).Where(x => x.CertificationId == certId).ToListAsync();
+        }
+
         public async Task<IEnumerable<Tag>> GetTags()
         {
             return await _context.Tags.ToListAsync().ConfigureAwait(false);
         }
 
+        public async Task<QuestionTag> AddQuestionTagAsync(int tagId, int questionId)
+        {
+
+            QuestionTag questionTag = new QuestionTag { TagId = tagId, QuestionId = questionId };
+            var result = await _context.QuestionTags.FirstOrDefaultAsync(x => x.TagId == tagId && x.QuestionId == questionId);
+            if(result == null) { 
+                await _context.QuestionTags.AddAsync(questionTag);
+                await _context.SaveChangesAsync();
+            }else
+            {
+                questionTag.QuestionTagId = result.QuestionTagId;
+            }
+            return questionTag;
+        }
+
+        public async Task RemoveQuestionTagAsync(QuestionTag questionTag)
+        {
+            _context.QuestionTags.Remove(questionTag);
+            await _context.SaveChangesAsync();
+        }
         public void DeleteQuestion(Question question)
         {
             Debug.WriteLine($"Question: Id: {question.QuestionId}, Text: {question.Text}");
@@ -115,7 +140,7 @@ namespace BlzrQuiz.ServiceLayer
             await _context.SaveChangesAsync();
             foreach (var q in userQuiz.Quiz.QuizQuestions)
             {
-              await  CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId).ConfigureAwait(false);
+                await CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId).ConfigureAwait(false);
             }
             await _context.SaveChangesAsync();
             return userQuiz;
@@ -133,7 +158,7 @@ namespace BlzrQuiz.ServiceLayer
             foreach (var q in userQuiz.Quiz.QuizQuestions)
             {
 
-               await  CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId);
+                await CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId);
             }
 
             await _context.SaveChangesAsync();
@@ -167,14 +192,14 @@ namespace BlzrQuiz.ServiceLayer
                 for (var i = 0; i < correctAnswerCount; i++)
                 {
                     Console.WriteLine($"{i + 1} of {qQuestion.Question.NumberOfCorrectAnswers}: {qQuestion.Question.QuestionId}");
-                   await _context.UserQuizQuestionAnswers.AddAsync(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 }).ConfigureAwait(false);
+                    await _context.UserQuizQuestionAnswers.AddAsync(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 }).ConfigureAwait(false);
                 }
             }
             else
             {
                 await _context.UserQuizQuestionAnswers.AddAsync(new UserQuizQuestionAnswer { UserQuizId = userQuizId, QuizQuestion = qQuestion, AnswerId = 1 }).ConfigureAwait(false);
             }
-           await _context.SaveChangesAsync().ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             Console.WriteLine("Leaving");
         }
 

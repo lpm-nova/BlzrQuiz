@@ -1,4 +1,4 @@
-using  BlzrQuiz.Data.Entities;
+using BlzrQuiz.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using BlzrQuiz.Core;
@@ -10,6 +10,7 @@ namespace BlzrQuiz.Data
     {
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Certification> Certifications { get; set; }
+        public DbSet<CertificationTag> CertificationTags { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Quiz> Quizes { get; set; }
         public DbSet<QuizQuestion> QuizQuestions { get; set; }
@@ -23,12 +24,11 @@ namespace BlzrQuiz.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Configuring a one-to-many question -> answer relationship that is friendly for serialisation
-            //modelBuilder.Entity<QuestionAnswer>().HasKey(qa => new { qa.QuestionId, qa.AnswerId });
-            //modelBuilder.Entity<QuestionAnswer>().HasOne<Question>().WithMany(q => q.Answers);
 
             // Configuring a many-to-many question -> tag relationship that is friendly for serialisation
             modelBuilder.Entity<QuestionTag>().HasKey(qt => new { qt.QuestionId, qt.TagId });
+
+            modelBuilder.Entity<CertificationTag>().HasKey(ct => new { ct.CertificationId, ct.TagId });
 
             modelBuilder.Entity<Question>().HasKey(q => q.QuestionId);
             modelBuilder.Entity<Question>().HasOne(q => q.Certification);

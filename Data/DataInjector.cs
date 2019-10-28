@@ -21,6 +21,7 @@ namespace BlzrQuiz.Core
             di.AddExplanations();
             di.AddTags();
             di.AddQuestionTags();
+            di.AddCertificationTags();
         }
 
         private void AddAnswers()
@@ -1268,7 +1269,7 @@ namespace BlzrQuiz.Core
                     new Tag
                     {
                         TagId = 8,
-                        Name = "AWS Cost Management"
+                        Name = "Cost Management"
                     },
 
                     new Tag
@@ -1318,12 +1319,11 @@ namespace BlzrQuiz.Core
                         TagId = 16,
                         Name = "Networking"
                     },
-                        new Tag
-                        {
-                            TagId = 17,
-                            Name = "Media Services"
-                        },
-
+                    new Tag
+                    {
+                        TagId = 17,
+                        Name = "Media Services"
+                    },
                     new Tag
                     {
                         TagId = 18,
@@ -1498,59 +1498,116 @@ namespace BlzrQuiz.Core
             modelBuilder.Entity<QuestionTag>().HasData(
                 new QuestionTag
                 {
-                    QuestionTagId = 1,
                     QuestionId = 3,
                     TagId = 1
                 },
                 new QuestionTag
                 {
-                    QuestionTagId = 2,
                     QuestionId = 4,
                     TagId = 2
                 },
                 new QuestionTag
                 {
-                    QuestionTagId = 3,
                     QuestionId = 5,
                     TagId = 3
                 },
                 new QuestionTag
                 {
-                    QuestionTagId = 4,
                     QuestionId = 6,
                     TagId = 3
                 },
                 new QuestionTag
                 {
-                    QuestionTagId = 5,
                     QuestionId = 6,
                     TagId = 2
                 },
                 new QuestionTag
                 {
-                    QuestionTagId = 6,
                     QuestionId = 7,
                     TagId = 3
                 },
                 new QuestionTag
                 {
-                    QuestionTagId = 7,
                     QuestionId = 8,
                     TagId = 1
                 },
                  new QuestionTag
                  {
-                     QuestionTagId = 8,
                      QuestionId = 23,
                      TagId = 2
                  },
                   new QuestionTag
                   {
-                      QuestionTagId = 7,
                       QuestionId = 24,
                       TagId = 3
                   }
             );
+        }
+        public void AddCertificationTags()
+        {
+            modelBuilder.Entity<CertificationTag>().HasData(
+                new CertificationTag
+                {
+                    TagId = 1,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 2,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 3,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 4,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 5,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 14,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 18,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 19,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 20,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 23,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 25,
+                    CertificationId = 3
+                },
+                new CertificationTag
+                {
+                    TagId = 8,
+                    CertificationId = 3
+                }
+                );
+
         }
     }
 }

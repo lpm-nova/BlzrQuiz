@@ -32,14 +32,14 @@
         {
             foreach (var t in Question?.QuestionTags)
             {
-                <div class="col-2"><button type="button" class="btn-secondary">@t.Tag.Name</button></div>
+                <div class="col-2"><button type="button" id="@t.Tag.Name" @onclick="@(() => Remove(t.TagId, t.QuestionId))" class="btn btn-lg btn-secondary btn-block h-100">@t.Tag.Name</button></div>
             }
         }
     </div>
     <div style="margin-top:5px;" class="row">
-        @foreach (var t in Tags)
+        @foreach (var t in CertTags)
         {
-            <div class="col-2"><button type="button" class="btn btn-info">@t.Name</button></div>
+            <div class="col-2"><button type="button" id="@t.Tag.Name" @onclick="@(() => Add(t.TagId, Question.QuestionId))" class="btn btn-lg btn-info btn-block h-100">@t.Tag.Name</button></div>
         }
     </div>
 </div>
@@ -53,17 +53,31 @@
     public int QuestionId { get; set; }
     private IEnumerable<Certification> Certifications { get; set; } = new List<Certification>();
     private Question Question { get; set; } = new Question();
-    private IEnumerable<Tag> Tags { get; set; } = new List<Tag>();
+    private IEnumerable<CertificationTag> CertTags { get; set; } = new List<CertificationTag>();
 
     protected override async Task OnInitializedAsync()
     {
         Question = await QService.GetQuestion(QuestionId);
         Certifications = await QService.GetCertifications();
-        Tags = await QService.GetTags();
+        CertTags = await QService.GetCertificationTagsById(Question.CertificationId);
     }
     void UpdateQuestion()
     {
         QService.UpdateQuestion(Question);
         Urihelper.NavigateTo("/questions/overview");
+    }
+
+    async Task Add(int tagId, int questionId)
+    {
+        if (!Question.QuestionTags.Any(x => x.TagId == tagId && x.QuestionId == questionId))
+        {
+            var newQt = await QService.AddQuestionTagAsync(tagId, questionId);
+            Question.QuestionTags.Add(newQt);
+        }
+    }
+
+    async Task Remove(int tagId, int questionId)
+    {
+        await QService.RemoveQuestionTagAsync(Question.QuestionTags.First(x => x.TagId == tagId && x.QuestionId == questionId));
     }
 }
