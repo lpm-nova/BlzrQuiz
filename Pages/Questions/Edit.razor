@@ -53,14 +53,27 @@
     public int QuestionId { get; set; }
     private IEnumerable<Certification> Certifications { get; set; } = new List<Certification>();
     private Question Question { get; set; } = new Question();
-    private IEnumerable<CertificationTag> CertTags { get; set; } = new List<CertificationTag>();
+    private ICollection<CertificationTag> CertTags { get; set; } = new List<CertificationTag>();
 
     protected override async Task OnInitializedAsync()
     {
-        Question = await QService.GetQuestion(QuestionId);
+        await PopulateQuestions();
         Certifications = await QService.GetCertifications();
-        CertTags = await QService.GetCertificationTagsById(Question.CertificationId);
+        await PopulateCertTags();
     }
+
+    async Task PopulateQuestions()
+    {
+        Question = await QService.GetQuestion(QuestionId);
+        Question.QuestionTags = Question.QuestionTags.OrderBy(x => x.Tag.Name).ToList();
+    }
+
+    async Task PopulateCertTags()
+    {
+        var certs = await QService.GetCertificationTagsById(Question.CertificationId);
+        CertTags = certs.OrderBy(x => x.Tag.Name).ToList();
+    }
+
     void UpdateQuestion()
     {
         QService.UpdateQuestion(Question);
@@ -71,8 +84,7 @@
     {
         if (!Question.QuestionTags.Any(x => x.TagId == tagId && x.QuestionId == questionId))
         {
-            var newQt = await QService.AddQuestionTagAsync(tagId, questionId);
-            Question.QuestionTags.Add(newQt);
+           await QService.AddQuestionTagAsync(tagId, questionId);
         }
     }
 

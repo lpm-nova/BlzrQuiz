@@ -51,13 +51,6 @@ else
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label for="classification">Primary Classification: </label>
-            @*<InputSelectOfType TValue="int" id="certification-id" @bind-Value="@Certifications.CertificationId">
-                <option value="0">Select Certification ...</option>
-                @foreach (var certification in Certifications)
-                {
-                    <option value="@certification.CertificationId">@certification.Name</option>
-                }
-                </InputSelectOfType>*@
             <InputText id="name" @bind-Value="@Question.Text" />
 
             <button type="submit">Submit</button>

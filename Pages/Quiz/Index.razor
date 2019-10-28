@@ -1,88 +1,35 @@
-﻿@page "/quiz/list"
+﻿@page "/quiz/index"
+@attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
-@using  BlzrQuiz.Data.Entities
+@using  EF = BlzrQuiz.Data.Entities
 @inject QuizService QService
 @inject NavigationManager NavManager
+<style>
+    #qtable tr td:nth-child(3) {
+        width: 10%;
+    }
+</style>
 
-<h3>Questions</h3>
-@if (QuestionList == null)
+<h3>Quizzes</h3>
+@if (Quizzes == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Text</th>
-                <th>Quiz</th>
-                @*<th>Actions</th>*@
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var question in QuestionList)
-            {
-                <tr>
-                    <td>@question.QuestionId</td>
-                    <td>@question.Text</td>
-                    <td>@question.Certification.Name</td>
-                    <td>
-                        <button class="btn btn-primary" @onclick="@(e => NavManager.NavigateTo("/questions/"+question.QuestionId))">Edit</button>
-                        <button class="btn btn-primary" @onclick="@(e=> DeleteQuestion(question))">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-<h3>Create</h3>
-
-<h4>Question</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-
-        <EditForm Model="@Question" OnValidSubmit="@AddNewQuestion">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <label for="classification">Primary Classification: </label>
-            @*<InputSelectOfType TValue="int" id="certification-id" @bind-Value="@Certifications.CertificationId">
-                <option value="0">Select Certification ...</option>
-                @foreach (var certification in Certifications)
-                {
-                    <option value="@certification.CertificationId">@certification.Name</option>
-                }
-                </InputSelectOfType>*@
-            <InputText id="name" @bind-Value="@Question.Text" />
-
-            <button type="submit">Submit</button>
-        </EditForm>
+    <div class="row">
+        @foreach (EF.Quiz quiz in Quizzes)
+        {
+            <div class="col-lg-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">@quiz.Certification.Name</div>
+                    <div class="card-body">
+                        <h5 class="card-title">ID: #@quiz.QuizId</h5>
+                        <p class="card-text">Cert: @quiz.Certification.Description</p>
+                        <p class="card-text">Created: @quiz.DateCreated</p>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</div>
-
-@code {
-    IEnumerable<Question> QuestionList;
-    IEnumerable<Certification> Certifications;
-    public Question Question { get; set; } = new Question();
-
-    protected override async Task OnInitializedAsync()
-    {
-        QuestionList = await QService.GetQuestions();
-        Certifications = await QService.GetCertifications();
-    }
-
-    async Task AddNewQuestion()
-    {
-        QService.AddQuestion(Question);
-        Question = new Question();
-        QuestionList = await QService.GetQuestions();
-    }
-
-    async Task DeleteQuestion(Question entity)
-    {
-        QService.DeleteQuestion(entity);
-        QuestionList = await QService.GetQuestions();
-    }
 }
