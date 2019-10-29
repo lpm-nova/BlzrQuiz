@@ -13,7 +13,7 @@ namespace BlzrQuiz.Data.Entities
         public string UserId { get; set; }
 
         [Range(0, 100)]
-        public byte Score { get; set; }
+        public double Score { get; set; }
 
         public Quiz Quiz { get; set; }
 

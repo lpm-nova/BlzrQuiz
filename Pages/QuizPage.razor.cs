@@ -13,7 +13,7 @@ namespace BlzrQuiz.Pages
         [Parameter] public RenderFragment QuizFragments { get; set; }
         [Inject] protected QuizService QService { get; set; }
         [Inject] protected AuthenticationStateProvider Auth { get; set; }
-        public  IList<EF.UserQuiz> UserQuizzes { get; set; } = new List<EF.UserQuiz>();
+        public IList<EF.UserQuiz> UserQuizzes { get; set; } = new List<EF.UserQuiz>();
         private System.Security.Claims.ClaimsPrincipal User { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -26,12 +26,14 @@ namespace BlzrQuiz.Pages
 
         private async Task AddQuizzes()
         {
-           
-
             if (await CreateQuizes())
                 UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
         }
 
+        private double CalculateScore(EF.UserQuiz userQuiz)
+        {
+            return userQuiz.Score * 100;
+        }
         private async Task<bool> CreateQuizes()
         {
             var quizzesAdded = await CreateDefaultMultipleChoiceQuiz();
@@ -56,7 +58,7 @@ namespace BlzrQuiz.Pages
             EF.UserQuiz quiz = null;
             if (!UserQuizzes.Any(x => x.UserId == User.Identity.Name && x.Quiz.Name == "Test"))
             {
-                 quiz = await QService.CreateUserQuiz(3, User.Identity.Name).ConfigureAwait(false);
+                quiz = await QService.CreateUserQuiz(3, User.Identity.Name).ConfigureAwait(false);
             }
 
             return quiz != null ? true : false;

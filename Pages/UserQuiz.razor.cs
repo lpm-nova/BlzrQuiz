@@ -38,7 +38,7 @@ namespace BlzrQuiz.Pages
         private MarkupString Explanation { get; set; }
         private List<string> ExplanationClasses { get; set; } = new List<string> { Invisible, "col-11" };
         private string ExplanationWindig { get; set; } = "+";
-        private int Score { get; set; }
+        private double Score { get; set; }
         private int CorrectAnswerCount { get; set; }
         private IEnumerable<EF.QuizQuestion> QuestionList { get; set; } = new List<EF.QuizQuestion>();
         public EF.QuizQuestion UQuestion { get; set; } = new EF.QuizQuestion();
@@ -105,6 +105,9 @@ namespace BlzrQuiz.Pages
                             Score++;
                     }
                 }
+                double truncatedScore = Math.Round((Score / (double)CorrectAnswerCount), 2);
+                ThisUserQuiz.Score = truncatedScore;
+                await QService.Save();
                 Alert = AlertBase;
             }
         }
@@ -123,14 +126,6 @@ namespace BlzrQuiz.Pages
             SetButtons();
             this.StateHasChanged();
         }
-
-        //private void UpdateDB()
-        //{
-        //    //if (UQuestion.UserQuizQuestionAnswers is null)
-        //    //    UQuestion.UserQuizQuestionAnswers = new List<EF.UserQuizQuestionAnswer>();
-
-        //    QService.AddOrUpdateAnswersForUserQuiz(UQuestion, ThisUserQuiz.UserQuizId);
-        //}
 
         private async Task PreviousQuestionAsync()
         {
@@ -201,6 +196,7 @@ namespace BlzrQuiz.Pages
                 }
             }
         }
+
         private void ToggleExplanation()
         {
             if (ExplanationClasses.Contains(Invisible))

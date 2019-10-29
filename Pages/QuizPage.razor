@@ -22,7 +22,7 @@ else
                         <p class="card-text">Created: @userQuiz.Quiz.DateCreated</p>
                         <a href="/quizes/userquiz/@userQuiz.UserQuizId" class="btn btn-primary">Go To Quiz</a>
                     </div>
-                    <div class="card-footer bg-transparent border-success">Score: @userQuiz.Score%</div>
+                    <div class="card-footer bg-transparent border-success">Score: @CalculateScore(userQuiz)%</div>
                 </div>
             </div>
         }

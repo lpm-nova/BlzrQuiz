@@ -13,7 +13,6 @@ namespace BlzrQuiz.Pages
         [Parameter] public EF.UserQuiz ThisUserQuiz { get; set; }
         [Parameter] public int UserQuizId { get; set; }
         [Parameter] public Dictionary<int, string> ButtonClasses { get; set; }
-        [Parameter] public Action OnSomeEvent { get; set; }
         private const string ButtonBaseClass = "btn btn-outline-info btn-lg btn-block ";
         private const string ButtonActive = " active";
         //probably going to be a parameter soon
@@ -30,15 +29,7 @@ namespace BlzrQuiz.Pages
             }
             else if (ThisQuestion.Question.NumberOfCorrectAnswers > 1)
             {
-                //if (ThisQuestion.UserQuizQuestionAnswers.Count < ThisQuestion.Question.NumberOfCorrectAnswers)
-                //{
-                //    ThisQuestion.UserQuizQuestionAnswers.Add(new UserQuizQuestionAnswer { UserQuizId = UserQuizId, AnswerId = answerId, QuizQuestion = ThisQuestion });
-                //    ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
-                //}
-                //else
-                //{
                 UpdateObject(1, answerId);
-                //}
             }
             else if (ThisQuestion.UserQuizQuestionAnswers.Count == 1)
             {
@@ -60,7 +51,6 @@ namespace BlzrQuiz.Pages
                 ThisQuestion.UserQuizQuestionAnswers.Add(answer);
                 ButtonClasses[answerId] = ButtonBaseClass + ButtonActive;
             }
-            //OnSomeEvent?.Invoke();
         }
 
         private void UpdateObject(int existingId, int newId)
