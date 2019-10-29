@@ -1,4 +1,5 @@
-﻿using BlzrQuiz.ServiceLayer;
+﻿using BlzrQuiz.Data.Entities;
+using BlzrQuiz.ServiceLayer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -179,7 +180,7 @@ namespace BlzrQuiz.Pages
         private void SetProperties()
         {
             UQuestion = QuestionList.ElementAt(counter);
-            Explanation = UQuestion.Question.Explanation.ToMarkup();
+            Explanation = UQuestion.Question.Explanation != null ? UQuestion.Question.Explanation.ToMarkup() : new MarkupString("No explanation available");
             SetButtonClasses();
             if (ExplanationWindig == "-")
                 ToggleExplanation();

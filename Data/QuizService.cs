@@ -40,7 +40,7 @@ namespace BlzrQuiz.ServiceLayer
 
         public async Task<UserQuiz> GetUserQuizQuestions(int userQuizId, string userId)
         {
-            return await _context.UserQuizzes.Include(x => x.UserQuizQuestionAnswers).Include(x => x.Quiz.QuizQuestions).ThenInclude(x => x.Question.Explanation).ThenInclude(x => x.Question.Answers).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
+            return await _context.UserQuizzes.Include(x => x.UserQuizQuestionAnswers).Include(x => x.Quiz.QuizQuestions).ThenInclude(x => x.Question.Answers).ThenInclude(x => x.Question.Explanation).FirstOrDefaultAsync(x => x.UserQuizId == userQuizId && x.UserId == userId).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<UserQuizQuestionAnswer>> GetUserQuizAnswers(int userQuizId)
@@ -238,12 +238,39 @@ namespace BlzrQuiz.ServiceLayer
                          QuestionNumber = questionNumber++
                      }
                  );
-
             }
             _context.SaveChanges();
             return quiz;
         }
 
+        public Quiz CreateQuizForCertification(string certName)
+        {
+            var certId = _context.Certifications.First(x => x.Name == certName).CertificationId;
+            var questions = _context.Questions.Where(x => x.CertificationId == certId).Include(x => x.Answers).OrderBy(x => Guid.NewGuid()).Take(50);
+
+            if (questions.Count() == 0)
+                throw new Exception("No questions for quiz");
+
+            var quiz = new Quiz { CertificationId = certId, Name = "Test", DateCreated = DateTime.UtcNow };
+            _context.Quizes.Add(quiz);
+            _context.SaveChanges();
+            byte questionNumber = 1;
+            foreach (var q in questions)
+            {
+                _context.QuizQuestions.Add(
+                     new QuizQuestion
+                     {
+                         QuizId = quiz.QuizId,
+                         Question = q,
+                         QuestionId = q.QuestionId,
+                         QuestionNumber = questionNumber++
+                     }
+                 );
+
+            }
+            _context.SaveChanges();
+            return quiz;
+        }
         public async Task<Quiz> CreateMultipleSelectionQuiz()
         {
             var cert = await _context.Certifications.FirstAsync(x => x.Name == "CLF-C01");

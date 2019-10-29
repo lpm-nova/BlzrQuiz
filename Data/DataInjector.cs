@@ -1010,7 +1010,6 @@ namespace BlzrQuiz.Core
                     new Question { QuestionId = 14, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "Who has control of the data in an AWS account?" },
                     new Question { QuestionId = 15, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "The main benefit of decoupling an application is to:" },
                     new Question { QuestionId = 16, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "Which of the following is a benefit of running an application across two Availability Zones?" },
-                    new Question { QuestionId = 17, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "Which of the following security requirements are managed by AWS customers? <br/>Select <strong>2</strong> answers from the options given below." },
                     new Question { QuestionId = 18, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "Systems applying the cloud architecture principle of elasticity will" },
                     new Question { QuestionId = 19, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "Amazon Elastic Compute Cloud (Amazon EC2) Spot instances are appropriate for which of the following workloads?" },
                     new Question { QuestionId = 20, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "What AWS feature enables a user to manage services through a web-based user interface?" },
@@ -1169,6 +1168,7 @@ namespace BlzrQuiz.Core
                     new Question { QuestionId = 193, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "There is a requirement hosting a set of servers in the Cloud for a short period of 3 months. Which of the following types of instances should be chosen to be cost effective?" },
                     new Question { QuestionId = 194, CertificationId = 3, NumberOfCorrectAnswers = 1, Text = "Which of the following concepts is used when you want to manage the bills for multiple accounts under one master account?" },
                     //Questions with Multiple Answers
+                    new Question { QuestionId = 17, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following security requirements are managed by AWS customers? <br/>Select <strong>2</strong> answers from the options given below." },
                     new Question { QuestionId = 36, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "Which of the following can be used to protect EC2 Instances hosted in AWS<br/>Choose <strong>2</strong> answers from the options given below:" },
                     new Question { QuestionId = 39, CertificationId = 3, NumberOfCorrectAnswers = 3, Text = "Which of the below can be used to get data onto Amazon Glacier?<br/>Choose <strong>3</strong> answers from the options given below." },
                     new Question { QuestionId = 46, CertificationId = 3, NumberOfCorrectAnswers = 2, Text = "When creating security groups, which of the following is a responsibility of the customer?<br/>Choose <strong>2</strong> answers from the options given below." },

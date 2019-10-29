@@ -13,7 +13,7 @@ namespace BlzrQuiz.Pages
         [Parameter] public RenderFragment QuizFragments { get; set; }
         [Inject] protected QuizService QService { get; set; }
         [Inject] protected AuthenticationStateProvider Auth { get; set; }
-        public  IEnumerable<EF.UserQuiz> UserQuizzes { get; set; } = new List<EF.UserQuiz>();
+        public  IList<EF.UserQuiz> UserQuizzes { get; set; } = new List<EF.UserQuiz>();
         private System.Security.Claims.ClaimsPrincipal User { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -25,15 +25,31 @@ namespace BlzrQuiz.Pages
 
         private async Task AddQuizzes()
         {
-            UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false);
+            UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
 
-            var quizzesAdded = false;
-            quizzesAdded = await CreateMutlChoiceQuiz(quizzesAdded);
+            if (await CreateQuizes())
+                UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
+        }
 
-            quizzesAdded = await CreateMultiSelectQuiz(quizzesAdded);
+        private async Task CreateNewQuiz()
+        {
+            var quiz = QService.CreateQuizForCertification("CLF-C01");
+            if (quiz != null)
+            {
+                var userQuiz = await QService.CreateUserQuiz(quiz.CertificationId, User.Identity.Name).ConfigureAwait(false);
+                if (userQuiz != null)
+                {
+                    UserQuizzes.Add(userQuiz);
+                }
+            }
+        }
 
-            if (quizzesAdded)
-                UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false);
+        private async Task<bool> CreateQuizes()
+        {
+            var quizzesAdded = await CreateDefaultMultipleChoiceQuiz();
+            //If CreateMultiSelectQuiz returns true return true, if not, if quizzesAdded is true return that. 
+            //If not, return false, as both creations failed
+            return await CreateMultiSelectQuiz(quizzesAdded) ? true : quizzesAdded ? true : false;
         }
 
         private async Task<bool> CreateMultiSelectQuiz(bool quizzesAdded)
@@ -47,15 +63,15 @@ namespace BlzrQuiz.Pages
             return quizzesAdded;
         }
 
-        private async Task<bool> CreateMutlChoiceQuiz(bool quizzesAdded)
+        private async Task<bool> CreateDefaultMultipleChoiceQuiz()
         {
+            EF.UserQuiz quiz = null;
             if (!UserQuizzes.Any(x => x.UserId == User.Identity.Name && x.Quiz.Name == "Test"))
             {
-                await QService.CreateUserQuiz(3, User.Identity.Name).ConfigureAwait(false);
-                quizzesAdded = true;
+                 quiz = await QService.CreateUserQuiz(3, User.Identity.Name).ConfigureAwait(false);
             }
 
-            return quizzesAdded;
+            return quiz != null ? true : false;
         }
     }
 }
