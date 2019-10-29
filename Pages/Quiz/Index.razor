@@ -3,10 +3,13 @@
 @using BlzrQuiz.ServiceLayer
 @using  EF = BlzrQuiz.Data.Entities
 @inject QuizService QService
-@inject NavigationManager NavManager
+
 <style>
     #qtable tr td:nth-child(3) {
         width: 10%;
+    }
+    #create-quiz-row {
+        margin-top: 20px;
     }
 </style>
 
@@ -27,9 +30,13 @@ else
                         <h5 class="card-title">ID: #@quiz.QuizId</h5>
                         <p class="card-text">Cert: @quiz.Certification.Description</p>
                         <p class="card-text">Created: @quiz.DateCreated</p>
+                        <button type="button" @onclick="@(() => CreateUserQuiz(quiz.QuizId))" class="btn btn-primary" disabled="@ButtonDisabled[quiz.QuizId]">@ButtonsText[quiz.QuizId]</button>
                     </div>
                 </div>
             </div>
         }
+    </div>
+    <div id="create-quiz-row" class="row">
+        <button id="btn-quiz-creator" type="button" class="btn btn-primary" @onclick="CreateNewQuiz">Create New Quiz</button>
     </div>
 }

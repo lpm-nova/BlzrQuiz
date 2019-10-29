@@ -20,28 +20,16 @@ namespace BlzrQuiz.Pages
         {
             var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
             User = authState.User;
+            UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
             await AddQuizzes();
         }
 
         private async Task AddQuizzes()
         {
-            UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
+           
 
             if (await CreateQuizes())
                 UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
-        }
-
-        private async Task CreateNewQuiz()
-        {
-            var quiz = QService.CreateQuizForCertification("CLF-C01");
-            if (quiz != null)
-            {
-                var userQuiz = await QService.CreateUserQuiz(quiz.CertificationId, User.Identity.Name).ConfigureAwait(false);
-                if (userQuiz != null)
-                {
-                    UserQuizzes.Add(userQuiz);
-                }
-            }
         }
 
         private async Task<bool> CreateQuizes()

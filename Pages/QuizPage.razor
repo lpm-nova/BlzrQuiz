@@ -1,6 +1,5 @@
 ﻿@page "/quizpage"
 @attribute [Authorize]
-@using BlzrQuiz.ServiceLayer
 @using EF = BlzrQuiz.Data.Entities
 
 <h3>QuizPage</h3>
@@ -27,8 +26,5 @@ else
                 </div>
             </div>
         }
-    </div>
-    <div class="row">
-       <button id="btn-quiz-creator" type="button" class="btn btn-primary" @onclick="CreateNewQuiz">Create New Quiz</button>
     </div>
 }

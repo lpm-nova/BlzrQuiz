@@ -140,6 +140,23 @@ namespace BlzrQuiz.ServiceLayer
             return userQuiz;
         }
 
+        public async Task<UserQuiz> CreateUserQuizByQuizId(int quizId, string userName)
+        {
+            UserQuiz userQuiz = null;
+            var quiz = await _context.Quizes.Include(x => x.QuizQuestions).ThenInclude(x => x.Question).ThenInclude(x => x.Answers).FirstOrDefaultAsync(x => x.QuizId == quizId).ConfigureAwait(false) ?? CreateQuiz();
+
+            userQuiz = new UserQuiz { Quiz = quiz, UserId = userName, QuizId = quiz.QuizId };
+            await _context.UserQuizzes.AddAsync(userQuiz);
+
+            await _context.SaveChangesAsync();
+            foreach (var q in userQuiz.Quiz.QuizQuestions)
+            {
+                await CreateDefaultAnswersForNewUserQuiz(q, userQuiz.UserQuizId).ConfigureAwait(false);
+            }
+            await _context.SaveChangesAsync();
+            return userQuiz;
+        }
+
         public async Task<UserQuiz> CreateMultipleSelectionUserQuiz(string userName)
         {
             var quiz = await CreateMultipleSelectionQuiz().ConfigureAwait(false);
@@ -229,7 +246,7 @@ namespace BlzrQuiz.ServiceLayer
             byte questionNumber = 1;
             foreach (var q in questions)
             {
-                _context.QuizQuestions.Add(
+                _context.QuizQuestions.AddAsync(
                      new QuizQuestion
                      {
                          QuizId = quiz.QuizId,
@@ -243,7 +260,7 @@ namespace BlzrQuiz.ServiceLayer
             return quiz;
         }
 
-        public Quiz CreateQuizForCertification(string certName)
+        public async Task<Quiz> CreateQuizForCertification(string certName)
         {
             var certId = _context.Certifications.First(x => x.Name == certName).CertificationId;
             var questions = _context.Questions.Where(x => x.CertificationId == certId).Include(x => x.Answers).OrderBy(x => Guid.NewGuid()).Take(50);
@@ -251,9 +268,9 @@ namespace BlzrQuiz.ServiceLayer
             if (questions.Count() == 0)
                 throw new Exception("No questions for quiz");
 
-            var quiz = new Quiz { CertificationId = certId, Name = "Test", DateCreated = DateTime.UtcNow };
-            _context.Quizes.Add(quiz);
-            _context.SaveChanges();
+            var quiz = new Quiz { CertificationId = certId, Name = certName, DateCreated = DateTime.UtcNow };
+            await _context.Quizes.AddAsync(quiz);
+            await _context.SaveChangesAsync();
             byte questionNumber = 1;
             foreach (var q in questions)
             {
@@ -271,6 +288,7 @@ namespace BlzrQuiz.ServiceLayer
             _context.SaveChanges();
             return quiz;
         }
+
         public async Task<Quiz> CreateMultipleSelectionQuiz()
         {
             var cert = await _context.Certifications.FirstAsync(x => x.Name == "CLF-C01");
