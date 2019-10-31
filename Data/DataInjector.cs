@@ -20,7 +20,7 @@ namespace BlzrQuiz.Core
             di.AddAnswers();
             di.AddExplanations();
             di.AddTags();
-            di.AddQuestionTags();
+            //di.AddQuestionTags();
             di.AddCertificationTags();
         }
 
