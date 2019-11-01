@@ -1351,7 +1351,7 @@ namespace BlzrQuiz.Core
                     new Tag
                     {
                         TagId = 22,
-                        Name = "subnet"
+                        Name = "Subnet"
                     },
 
                     new Tag
@@ -1495,8 +1495,27 @@ namespace BlzrQuiz.Core
                     {
                         TagId = 46,
                         Name = "Amazon CloudWatch"
+                    },
+                    new Tag
+                    {
+                        TagId = 47,
+                        Name = "Core AWS Service"
+                    },
+                    new Tag
+                    {
+                        TagId = 48,
+                        Name = "AWS SNS"
+                    },
+                    new Tag
+                    {
+                        TagId = 48,
+                        Name = "AWS SQS"
+                    },
+                    new Tag
+                    {
+                        TagId = 48,
+                        Name = "AWS Elastic Load Balancer"
                     }
-
                 );
         }
         private void AddQuestionTags()
@@ -1612,7 +1631,7 @@ namespace BlzrQuiz.Core
                     TagId = 20,
                     CertificationId = 3
                 },
-                //Amazon VPC
+                 //Amazon VPC
                  new CertificationTag
                  {
                      TagId = 21,
