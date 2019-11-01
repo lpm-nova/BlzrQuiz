@@ -33,7 +33,8 @@ namespace BlzrQuiz
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
+            //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
+            services.AddDbContext<BlzrQuizContext>(options => options.UseMySql(Configuration.GetConnectionString("maria")));
             services.AddDefaultIdentity<IdentityUser>(
              o =>
              {
@@ -100,8 +101,8 @@ namespace BlzrQuiz
                 if (context.QuizQuestions.Count() == 0)
                 {
                     var q = new QuizService(context);
-                    q.CreateQuiz();
-                    q.CreateMultipleSelectionQuiz();
+                    _ = q.CreateQuiz();
+                    _ = q.CreateMultipleSelectionQuiz();
                 }
             }
         }

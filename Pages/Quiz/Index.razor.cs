@@ -20,10 +20,10 @@ namespace BlzrQuiz.Pages.Quiz
 
         protected override async Task OnInitializedAsync()
         {
-            Quizzes = await QService.GetQuizes() as List<EF.Quiz>;
+            Quizzes = await QService.GetQuizes().ConfigureAwait(false) as List<EF.Quiz>;
             var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
             User = authState.User;
-            await SetButtons();
+            await SetButtons().ConfigureAwait(false);
         }
 
       

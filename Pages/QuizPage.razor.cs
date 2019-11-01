@@ -20,13 +20,13 @@ namespace BlzrQuiz.Pages
         {
             var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
             User = authState.User;
-            UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
-            await AddQuizzes();
+            //UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
+            await AddQuizzes().ConfigureAwait(false);
         }
 
         private async Task AddQuizzes()
         {
-            if (await CreateQuizes())
+            if (await CreateQuizes().ConfigureAwait(false))
                 UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
         }
 
@@ -36,10 +36,10 @@ namespace BlzrQuiz.Pages
         }
         private async Task<bool> CreateQuizes()
         {
-            var quizzesAdded = await CreateDefaultMultipleChoiceQuiz();
+            var quizzesAdded = await CreateDefaultMultipleChoiceUserQuiz().ConfigureAwait(false);
             //If CreateMultiSelectQuiz returns true return true, if not, if quizzesAdded is true return that. 
             //If not, return false, as both creations failed
-            return await CreateMultiSelectQuiz(quizzesAdded) ? true : quizzesAdded ? true : false;
+            return await CreateMultiSelectQuiz(quizzesAdded).ConfigureAwait(false) || quizzesAdded;
         }
 
         private async Task<bool> CreateMultiSelectQuiz(bool quizzesAdded)
@@ -53,15 +53,15 @@ namespace BlzrQuiz.Pages
             return quizzesAdded;
         }
 
-        private async Task<bool> CreateDefaultMultipleChoiceQuiz()
+        private async Task<bool> CreateDefaultMultipleChoiceUserQuiz()
         {
             EF.UserQuiz quiz = null;
-            if (!UserQuizzes.Any(x => x.UserId == User.Identity.Name && x.Quiz.Name == "Test"))
+            if (!UserQuizzes.Any(x => x.UserId == User.Identity.Name))
             {
                 quiz = await QService.CreateUserQuiz(3, User.Identity.Name).ConfigureAwait(false);
             }
 
-            return quiz != null ? true : false;
+            return quiz != null;
         }
     }
 }

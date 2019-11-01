@@ -1508,12 +1508,12 @@ namespace BlzrQuiz.Core
                     },
                     new Tag
                     {
-                        TagId = 48,
+                        TagId = 49,
                         Name = "AWS SQS"
                     },
                     new Tag
                     {
-                        TagId = 48,
+                        TagId = 50,
                         Name = "AWS Elastic Load Balancer"
                     }
                 );
@@ -1568,6 +1568,7 @@ namespace BlzrQuiz.Core
                   }
             );
         }
+        
         public void AddCertificationTags()
         {
             modelBuilder.Entity<CertificationTag>().HasData(

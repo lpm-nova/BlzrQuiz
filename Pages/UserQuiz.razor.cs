@@ -174,11 +174,14 @@ namespace BlzrQuiz.Pages
 
         private void SetProperties()
         {
-            UQuestion = QuestionList.ElementAt(counter);
-            Explanation = UQuestion.Question.Explanation != null ? UQuestion.Question.Explanation.ToMarkup() : new MarkupString("No explanation available");
-            SetButtonClasses();
-            if (ExplanationWindig == "-")
-                ToggleExplanation();
+            if (QuestionList != null)
+            {
+                UQuestion = QuestionList.ElementAt(counter);
+                Explanation = UQuestion.Question.Explanation != null ? UQuestion.Question.Explanation.ToMarkup() : new MarkupString("No explanation available");
+                SetButtonClasses();
+                if (ExplanationWindig == "-")
+                    ToggleExplanation();
+            }
         }
 
         private void SetButtonClasses()
