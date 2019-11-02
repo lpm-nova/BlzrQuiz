@@ -52,7 +52,7 @@ namespace BlzrQuiz.Pages
             try
             {
                 await GetUserQuiz().ConfigureAwait(false);
-                QuestionList = ThisUserQuiz.Quiz.QuizQuestions;
+                QuestionList = ThisUserQuiz.Quiz.QuizQuestions.OrderBy(x => x.QuestionNumber);
                 questionListCount = QuestionList.Count() - 1;
                 counter = 0;
                 SetProperties();
@@ -174,7 +174,7 @@ namespace BlzrQuiz.Pages
 
         private void SetProperties()
         {
-            if (QuestionList != null)
+            if (QuestionList != null && (QuestionList.Count() - 1) >= counter)
             {
                 UQuestion = QuestionList.ElementAt(counter);
                 Explanation = UQuestion.Question.Explanation != null ? UQuestion.Question.Explanation.ToMarkup() : new MarkupString("No explanation available");

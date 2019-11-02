@@ -34,7 +34,7 @@ namespace BlzrQuiz
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
-            services.AddDbContext<BlzrQuizContext>(options => options.UseMySql(Configuration.GetConnectionString("maria")));
+            services.AddDbContext<BlzrQuizContext>(options => options.UseMySql(Configuration.GetConnectionString("maria")).EnableDetailedErrors());
             services.AddDefaultIdentity<IdentityUser>(
              o =>
              {

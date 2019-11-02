@@ -737,7 +737,7 @@ namespace BlzrQuiz.Core
                 new Answer { AnswerId = 716, QuestionId = 180, Text = "MySQL Installed on two Amazon EC2 Instances in a single Availability Zone", IsCorrect = false },
                 new Answer { AnswerId = 717, QuestionId = 180, Text = "Amazon RDS for MySQL with Multi-AZ", IsCorrect = false },
                 new Answer { AnswerId = 718, QuestionId = 180, Text = "Amazon ElastiCache", IsCorrect = true },
-                new Answer { AnswerId = 719, QuestionId = 180, Text = "Amazon DynamoDB1", IsCorrect = false },
+                new Answer { AnswerId = 719, QuestionId = 180, Text = "Amazon DynamoDB", IsCorrect = false },
                 new Answer { AnswerId = 720, QuestionId = 181, Text = "Store the EBS volume in S3", IsCorrect = false },
                 new Answer { AnswerId = 721, QuestionId = 181, Text = "Store the EBS volume in an RDS database", IsCorrect = false },
                 new Answer { AnswerId = 722, QuestionId = 181, Text = "Create an EBS snapshot", IsCorrect = true },
@@ -1518,6 +1518,7 @@ namespace BlzrQuiz.Core
                     }
                 );
         }
+
         private void AddQuestionTags()
         {
             modelBuilder.Entity<QuestionTag>().HasData(
@@ -1568,7 +1569,7 @@ namespace BlzrQuiz.Core
                   }
             );
         }
-        
+
         public void AddCertificationTags()
         {
             modelBuilder.Entity<CertificationTag>().HasData(
@@ -1723,7 +1724,6 @@ namespace BlzrQuiz.Core
                     CertificationId = 3
                 }
                 );
-
         }
     }
 }
