@@ -1,5 +1,4 @@
-﻿using BlzrQuiz.Data.Entities;
-using BlzrQuiz.ServiceLayer;
+﻿using BlzrQuiz.ServiceLayer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -8,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using EF = BlzrQuiz.Data.Entities;
 
-namespace BlzrQuiz.Pages
+namespace BlzrQuiz.Pages.UserQuiz
 {
-    public partial class UserQuiz
+    public partial class Index
     {
         [Parameter]
         public int QuizId { get; set; }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Linq;
 
-namespace BlzrQuiz.Pages
+namespace BlzrQuiz.Pages.UserQuizzes
 {
-    public partial class QuizPage
+    public partial class Index
     {
         [Parameter] public RenderFragment QuizFragments { get; set; }
         [Inject] protected QuizService QService { get; set; }

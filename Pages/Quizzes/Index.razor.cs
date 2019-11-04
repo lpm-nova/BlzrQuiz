@@ -1,13 +1,11 @@
-﻿using BlzrQuiz.ServiceLayer;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EF = BlzrQuiz.Data.Entities;
 
-namespace BlzrQuiz.Pages.Quiz
+namespace BlzrQuiz.Pages.Quizzes
 {
     public partial class Index
     {
@@ -67,7 +65,7 @@ namespace BlzrQuiz.Pages.Quiz
             var userQuiz = await QService.CreateUserQuizByQuizId(quizId, User.Identity.Name).ConfigureAwait(false);
             if (userQuiz != null)
             {
-                NavManager.NavigateTo($"/quizes/userquiz/{userQuiz.UserQuizId}");
+                NavManager.NavigateTo($"/userquiz/{userQuiz.UserQuizId}");
             }
         }
     }
