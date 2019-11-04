@@ -1,5 +1,4 @@
-﻿using BlzrQuiz.Data.Entities;
-using BlzrQuiz.ServiceLayer;
+﻿using BlzrQuiz.ServiceLayer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -8,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using EF = BlzrQuiz.Data.Entities;
 
-namespace BlzrQuiz.Pages
+namespace BlzrQuiz.Pages.UserQuiz
 {
-    public partial class UserQuiz
+    public partial class Index
     {
         [Parameter]
         public int QuizId { get; set; }
@@ -52,7 +51,7 @@ namespace BlzrQuiz.Pages
             try
             {
                 await GetUserQuiz().ConfigureAwait(false);
-                QuestionList = ThisUserQuiz.Quiz.QuizQuestions;
+                QuestionList = ThisUserQuiz.Quiz.QuizQuestions.OrderBy(x => x.QuestionNumber);
                 questionListCount = QuestionList.Count() - 1;
                 counter = 0;
                 SetProperties();
@@ -174,11 +173,14 @@ namespace BlzrQuiz.Pages
 
         private void SetProperties()
         {
-            UQuestion = QuestionList.ElementAt(counter);
-            Explanation = UQuestion.Question.Explanation != null ? UQuestion.Question.Explanation.ToMarkup() : new MarkupString("No explanation available");
-            SetButtonClasses();
-            if (ExplanationWindig == "-")
-                ToggleExplanation();
+            if (QuestionList != null && (QuestionList.Count() - 1) >= counter)
+            {
+                UQuestion = QuestionList.ElementAt(counter);
+                Explanation = UQuestion.Question.Explanation != null ? UQuestion.Question.Explanation.ToMarkup() : new MarkupString("No explanation available");
+                SetButtonClasses();
+                if (ExplanationWindig == "-")
+                    ToggleExplanation();
+            }
         }
 
         private void SetButtonClasses()

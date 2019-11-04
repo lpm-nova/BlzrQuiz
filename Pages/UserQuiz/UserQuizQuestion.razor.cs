@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EF = BlzrQuiz.Data.Entities;
 
-namespace BlzrQuiz.Pages
+namespace BlzrQuiz.Pages.UserQuiz
 {
     public partial class UserQuizQuestion
     {

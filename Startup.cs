@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -33,7 +33,8 @@ namespace BlzrQuiz
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
+            //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
+            services.AddDbContext<BlzrQuizContext>(options => options.UseMySql(Configuration.GetConnectionString("maria")).EnableDetailedErrors());
             services.AddDefaultIdentity<IdentityUser>(
              o =>
              {
@@ -52,10 +53,11 @@ namespace BlzrQuiz
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<QuizService>();
+            services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public  void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -98,8 +100,8 @@ namespace BlzrQuiz
                 if (context.QuizQuestions.Count() == 0)
                 {
                     var q = new QuizService(context);
-                    q.CreateQuiz();
-                    q.CreateMultipleSelectionQuiz();
+                    _ = q.CreateQuiz();
+                    _ = q.CreateMultipleSelectionQuiz();
                 }
             }
         }

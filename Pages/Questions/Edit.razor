@@ -1,4 +1,5 @@
 ﻿@page "/questions/{QuestionId:int}"
+@attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
 @using  BlzrQuiz.Data.Entities
 @using System.Diagnostics
@@ -84,7 +85,7 @@
     {
         if (!Question.QuestionTags.Any(x => x.TagId == tagId && x.QuestionId == questionId))
         {
-           await QService.AddQuestionTagAsync(tagId, questionId);
+            await QService.AddQuestionTagAsync(tagId, questionId);
         }
     }
 

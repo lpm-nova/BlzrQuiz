@@ -1,4 +1,4 @@
-﻿@page "/quizpage"
+﻿@page "/userquizzes/index"
 @attribute [Authorize]
 @using EF = BlzrQuiz.Data.Entities
 
@@ -17,7 +17,8 @@ else
                 <div class="card" style="width: 18rem;">
                     <div class="card-header">@userQuiz.Quiz.Certification.Name</div>
                     <div class="card-body">
-                        <h5 class="card-title">ID: #@userQuiz.UserQuizId</h5>
+                        <h5 class="card-title">Quiz: #@userQuiz.UserQuizId</h5>
+                        <p class="card-text">Quiz: #@userQuiz.Quiz.QuizId</p>
                         <p class="card-text">Cert: @userQuiz.Quiz.Certification.Description</p>
                         <p class="card-text">Created: @userQuiz.Quiz.DateCreated</p>
                         <a href="/quizes/userquiz/@userQuiz.UserQuizId" class="btn btn-primary">Go To Quiz</a>
