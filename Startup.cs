@@ -17,6 +17,7 @@ using BlzrQuiz.Areas.Identity;
 using BlzrQuiz.Data;
 using BlzrQuiz.ServiceLayer;
 using BlzrQuiz.Shared;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace BlzrQuiz
 {
@@ -34,7 +35,14 @@ namespace BlzrQuiz
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
-            services.AddDbContext<BlzrQuizContext>(options => options.UseMySql(Configuration.GetConnectionString("maria")).EnableDetailedErrors());
+            services.AddDbContext<BlzrQuizContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("maria"),
+                    mySqlOptions =>
+                    {
+                        mySqlOptions.EnableRetryOnFailure();
+                    }
+                ).EnableDetailedErrors()
+            );
             services.AddDefaultIdentity<IdentityUser>(
              o =>
              {
@@ -71,14 +79,15 @@ namespace BlzrQuiz
                 app.UseHsts();
             }
             ConfigureDB(app);
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
             app.UseAuthentication();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseStaticFiles();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
