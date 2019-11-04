@@ -36,7 +36,7 @@ namespace BlzrQuiz
         {
             //services.AddDbContext<BlzrQuizContext>(options => options.UseSqlServer(Configuration.GetConnectionString($"{Environment.MachineName}Sql")));
             services.AddDbContext<BlzrQuizContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("maria"),
+                options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
                     mySqlOptions =>
                     {
                         mySqlOptions.EnableRetryOnFailure();
