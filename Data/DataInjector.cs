@@ -1200,12 +1200,7 @@ namespace BlzrQuiz.Core
                 Name = "WOPR",
                 Description = "Machine Learning"
             },
-            new Certification
-            {
-                CertificationId = 4,
-                Name = "AZ-900",
-                Description = "Microsoft Azure Fundamentals"
-            },
+
             new Certification
             {
                 CertificationId = 2,
@@ -1217,7 +1212,26 @@ namespace BlzrQuiz.Core
                 CertificationId = 3,
                 Name = "CLF-C01",
                 Description = "AWS Cloud Practitioner"
-            });
+            },
+            new Certification
+            {
+                CertificationId = 4,
+                Name = "AZ-900",
+                Description = "Microsoft Azure Fundamentals"
+            },
+             new Certification
+             {
+                 CertificationId = 5,
+                 Name = "DVA-C01",
+                 Description = "AWS Certified Developer–Associate"
+             },
+             new Certification
+              {
+                CertificationId = 6,
+                 Name = "ANS-C00",
+                 Description = "AWS Certified Advanced Networking–Specialty"
+             }
+            );
         }
 
         private void AddTags()
@@ -1515,6 +1529,66 @@ namespace BlzrQuiz.Core
                     {
                         TagId = 50,
                         Name = "AWS Elastic Load Balancer"
+                    },
+                    new Tag
+                    {
+                        TagId = 51,
+                        Name = "Deployment"
+                    },
+                    new Tag
+                    {
+                        TagId = 52,
+                        Name = "Development with AWS Service"
+                    },
+                    new Tag
+                    {
+                        TagId = 53,
+                        Name = "Refactoring"
+                    },
+                    new Tag
+                    {
+                        TagId = 54,
+                        Name = "Monitory and Troubleshooting"
+                    },
+                    new Tag
+                    {
+                        TagId = 55,
+                        Name = "Hybrid IT Network Architectures"
+                    },
+                    new Tag
+                    {
+                        TagId = 56,
+                        Name = "Implement AWS newtorks"
+                    },
+                    new Tag
+                    {
+                        TagId = 57,
+                        Name = "Automate AWS tasks"
+                    },
+                    new Tag
+                    {
+                        TagId = 58,
+                        Name = "Network integration with application services"
+                    },
+                    new Tag
+                    {
+                        TagId = 59,
+                        Name = "Security and Compliance"
+                    },
+                    new Tag
+                    {
+                        TagId = 60,
+                        Name = "Manage newtork"
+                    },
+                    new Tag
+                    {
+                        TagId = 61,
+                        Name = "Optimize newtork"
+                    },
+                    new Tag
+                    {
+                        TagId = 62,
+                        Name = "Troubleshoot newtork"
                     }
                 );
         }
