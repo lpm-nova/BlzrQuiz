@@ -21,10 +21,10 @@
 }
 else
 {
-    <div class="row">
+    
         @foreach (EF.Quiz quiz in Quizzes)
         {
-            <div class="col-lg-3">
+            @*<div class="col-lg-3">
                 <div class="card" style="width: 18rem;">
                     <div class="card-header">@quiz.Certification.Name</div>
                     <div class="card-body">
@@ -34,9 +34,8 @@ else
                         <button type="button" @onclick="@(() => CreateUserQuiz(quiz.QuizId))" class="btn btn-primary" disabled="@ButtonDisabled[quiz.QuizId]">@ButtonsText[quiz.QuizId]</button>
                     </div>
                 </div>
-            </div>
+            </div>*@
         }
-    </div>
     <div id="create-quiz-row" class="row">
         <button id="btn-quiz-creator" type="button" class="btn btn-primary" @onclick="CreateNewQuiz">Create New Quiz</button>
     </div>

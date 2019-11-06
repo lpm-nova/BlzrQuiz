@@ -1,0 +1,17 @@
+﻿@using  EF = BlzrQuiz.Data.Entities
+@inject QuizService QService
+@using BlzrQuiz.ServiceLayer
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-header">@Quiz.Certification.Name</div>
+            <div class="card-body">
+                <h5 class="card-title">ID: #@Quiz.QuizId</h5>
+                <p class="card-text">Cert: @Quiz.Certification.Description</p>
+                <p class="card-text">Created: @Quiz.DateCreated</p>
+                <button type="button" @onclick="@(() => CreateUserQuiz(Quiz.QuizId))" class="btn btn-primary" disabled="@ButtonDisabled[Quiz.QuizId]">@ButtonsText[quiz.QuizId]</button>
+            </div>
+        </div>
+    </div>
+</div>
+
