@@ -12,14 +12,14 @@ namespace BlzrQuiz.Pages.Quizzes
         [Parameter] public EF.Quiz Quiz { get; set; }
         [Parameter] public System.Security.Claims.ClaimsPrincipal User { get; set; }
         [Parameter] public Dictionary<int, bool> ButtonDisabled { get; set; } = new Dictionary<int, bool>();
-        private Dictionary<int, string> ButtonsText { get; set; } = new Dictionary<int, string>();
+        [Parameter] public Dictionary<int, string> ButtonsText { get; set; } = new Dictionary<int, string>();
         [Inject] protected NavigationManager NavManager { get; set; }
 
 
         protected override async Task OnInitializedAsync()
         {
 
-            await SetButtons().ConfigureAwait(false);
+
         }
         private async Task CreateUserQuiz(int quizId)
         {
@@ -29,8 +29,8 @@ namespace BlzrQuiz.Pages.Quizzes
                 NavManager.NavigateTo($"/userquiz/{userQuiz.UserQuizId}");
             }
         }
-       
-  
+
+
 
         private void AddNewButton(int quizId)
         {

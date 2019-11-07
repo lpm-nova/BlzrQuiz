@@ -1,7 +1,5 @@
 ﻿@page "/userquiz/{quizId:int}"
 @attribute [Authorize]
-@using BlzrQuiz.ServiceLayer
-
 
 <div class="container-fluid">
     @if (QuestionList.Count() == 0)

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlzrQuiz.ServiceLayer;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using EF = BlzrQuiz.Data.Entities;
 
@@ -10,12 +10,13 @@ namespace BlzrQuiz.Pages.Quizzes
     public partial class Index
     {
         [Inject] protected AuthenticationStateProvider Auth { get; set; }
-
+        [Inject] protected QuizService QService { get; set; }
 
         public List<QuizCarousel> CarouselRows { get; set; }
         public IList<EF.Quiz> Quizzes { get; set; } = new List<EF.Quiz>();
         public IList<EF.UserQuiz> UserQuizzes { get; set; } = new List<EF.UserQuiz>();
-
+        public Dictionary<int, bool> ButtonDisabled { get; set; } = new Dictionary<int, bool>();
+        public Dictionary<int, string> ButtonsText { get; set; } = new Dictionary<int, string>();
         private System.Security.Claims.ClaimsPrincipal User { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -24,6 +25,7 @@ namespace BlzrQuiz.Pages.Quizzes
             UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
             var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
             User = authState.User;
+            await SetButtons().ConfigureAwait(false);
         }
 
         private async Task CreateNewQuiz()
@@ -32,27 +34,27 @@ namespace BlzrQuiz.Pages.Quizzes
             if (quiz != null)
             {
                 Quizzes.Add(quiz);
-                AddNewButton(quiz.QuizId);
+                //AddNewButton(quiz.QuizId);
             }
         }
 
         private async Task SetButtons()
         {
-            ButtonDisabled.Clear();
-            ButtonsText.Clear();
+            //ButtonDisabled.Clear();
+            //ButtonsText.Clear();
 
-            foreach (var q in Quizzes)
-            {
-                if (userQuizzes.Any(x => x.QuizId == q.QuizId))
-                {
-                    ButtonsText.Add(q.QuizId, "In Your List");
-                    ButtonDisabled.Add(q.QuizId, true);
-                }
-                else
-                {
-                    AddNewButton(q.QuizId);
-                }
-            }
+            //foreach (var q in Quizzes)
+            //{
+            //    if (userQuizzes.Any(x => x.QuizId == q.QuizId))
+            //    {
+            //        ButtonsText.Add(q.QuizId, "In Your List");
+            //        ButtonDisabled.Add(q.QuizId, true);
+            //    }
+            //    else
+            //    {
+            //        AddNewButton(q.QuizId);
+            //    }
+            //}
         }
 
     }

@@ -9,7 +9,7 @@
                 <h5 class="card-title">ID: #@Quiz.QuizId</h5>
                 <p class="card-text">Cert: @Quiz.Certification.Description</p>
                 <p class="card-text">Created: @Quiz.DateCreated</p>
-                <button type="button" @onclick="@(() => CreateUserQuiz(Quiz.QuizId))" class="btn btn-primary" disabled="@ButtonDisabled[Quiz.QuizId]">@ButtonsText[quiz.QuizId]</button>
+                <button type="button" @onclick="@(() => CreateUserQuiz(Quiz.QuizId))" class="btn btn-primary" disabled="@ButtonDisabled[Quiz.QuizId]">@ButtonsText[Quiz.QuizId]</button>
             </div>
         </div>
     </div>

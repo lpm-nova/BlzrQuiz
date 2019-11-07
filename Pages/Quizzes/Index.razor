@@ -2,7 +2,7 @@
 @attribute [Authorize]
 @using BlzrQuiz.ServiceLayer
 @using  EF = BlzrQuiz.Data.Entities
-@inject QuizService QService
+
 
 <style>
     #qtable tr td:nth-child(3) {
@@ -21,21 +21,10 @@
 }
 else
 {
-    
-        @foreach (EF.Quiz quiz in Quizzes)
-        {
-            @*<div class="col-lg-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-header">@quiz.Certification.Name</div>
-                    <div class="card-body">
-                        <h5 class="card-title">ID: #@quiz.QuizId</h5>
-                        <p class="card-text">Cert: @quiz.Certification.Description</p>
-                        <p class="card-text">Created: @quiz.DateCreated</p>
-                        <button type="button" @onclick="@(() => CreateUserQuiz(quiz.QuizId))" class="btn btn-primary" disabled="@ButtonDisabled[quiz.QuizId]">@ButtonsText[quiz.QuizId]</button>
-                    </div>
-                </div>
-            </div>*@
-        }
+    @foreach (EF.Quiz quiz in Quizzes)
+    {
+        <QuizCarousel Quiz="quiz" User="User" ButtonDisabled="ButtonDisabled" ButtonsText="ButtonsText"></QuizCarousel>
+    }
     <div id="create-quiz-row" class="row">
         <button id="btn-quiz-creator" type="button" class="btn btn-primary" @onclick="CreateNewQuiz">Create New Quiz</button>
     </div>

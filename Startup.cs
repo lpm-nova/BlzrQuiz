@@ -35,7 +35,8 @@ namespace BlzrQuiz
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BlzrQuizContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
+                //options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
+                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
                     mySqlOptions =>
                     {
                         mySqlOptions.EnableRetryOnFailure();
@@ -83,14 +84,15 @@ namespace BlzrQuiz
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseStaticFiles();
             app.UseAuthorization();
+            app.UseHttpsRedirection();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
