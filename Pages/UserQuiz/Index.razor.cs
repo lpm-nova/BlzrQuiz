@@ -14,13 +14,14 @@ namespace BlzrQuiz.Pages.UserQuiz
         [Parameter]
         public int QuizId { get; set; }
 
-        [Parameter]
+        [Parameter] 
         public int CertId { get; set; }
 
-        [Inject]
+        [Inject] 
         private QuizService QService { get; set; }
+        [Inject] 
+        protected AuthenticationStateProvider Auth { get; set; }
 
-        [Inject] private AuthenticationStateProvider Auth { get; set; }
 
         private const string Enabled = "btn btn-outline-secondary";
         private const string Disabled = "btn btn-outline-secondary disabled";

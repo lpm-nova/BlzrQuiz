@@ -7,10 +7,12 @@ using EF = BlzrQuiz.Data.Entities;
 
 namespace BlzrQuiz.Pages.Quizzes
 {
-    public partial class Index
+    public partial class Index 
     {
-        [Inject] protected AuthenticationStateProvider Auth { get; set; }
-        [Inject] protected QuizService QService { get; set; }
+        [Inject] 
+        protected AuthenticationStateProvider Auth { get; set; }
+        [Inject] 
+        protected QuizService QService { get; set; }
 
         public Dictionary<string, QuizCarousel> CarouselRows { get; set; } = new Dictionary<string, QuizCarousel>();
         public IList<EF.Quiz> Quizzes { get; set; } = new List<EF.Quiz>();
