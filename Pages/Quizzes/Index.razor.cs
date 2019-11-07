@@ -12,7 +12,7 @@ namespace BlzrQuiz.Pages.Quizzes
         [Inject] protected AuthenticationStateProvider Auth { get; set; }
         [Inject] protected QuizService QService { get; set; }
 
-        public List<QuizCarousel> CarouselRows { get; set; }
+        public Dictionary<string, QuizCarousel> CarouselRows { get; set; } = new Dictionary<string, QuizCarousel>();
         public IList<EF.Quiz> Quizzes { get; set; } = new List<EF.Quiz>();
         public IList<EF.UserQuiz> UserQuizzes { get; set; } = new List<EF.UserQuiz>();
         public Dictionary<int, bool> ButtonDisabled { get; set; } = new Dictionary<int, bool>();

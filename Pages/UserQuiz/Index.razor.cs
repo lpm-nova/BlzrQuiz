@@ -54,7 +54,7 @@ namespace BlzrQuiz.Pages.UserQuiz
                 QuestionList = ThisUserQuiz.Quiz.QuizQuestions.OrderBy(x => x.QuestionNumber);
                 questionListCount = QuestionList.Count() - 1;
                 counter = 0;
-                SetProperties();
+                SetUserQuizComponentProperties();
                 SetButtons();
             }
             catch (InvalidOperationException ex)
@@ -121,7 +121,7 @@ namespace BlzrQuiz.Pages.UserQuiz
             {
                 --counter;
             }
-            SetProperties();
+            SetUserQuizComponentProperties();
             SetButtons();
             this.StateHasChanged();
         }
@@ -136,7 +136,7 @@ namespace BlzrQuiz.Pages.UserQuiz
             {
                 ++counter;
             }
-            SetProperties();
+            SetUserQuizComponentProperties();
             SetButtons();
             if (Alert == AlertBase)
                 Alert = AlertBase + Invisible;
@@ -171,7 +171,7 @@ namespace BlzrQuiz.Pages.UserQuiz
             }
         }
 
-        private void SetProperties()
+        private void SetUserQuizComponentProperties()
         {
             if (QuestionList != null && (QuestionList.Count() - 1) >= counter)
             {

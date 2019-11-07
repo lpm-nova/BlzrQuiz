@@ -9,7 +9,7 @@ namespace BlzrQuiz.Pages.Quizzes
 {
     public partial class QuizCarousel
     {
-        [Parameter] public EF.Quiz Quiz { get; set; }
+
         [Parameter] public System.Security.Claims.ClaimsPrincipal User { get; set; }
         [Parameter] public Dictionary<int, bool> ButtonDisabled { get; set; } = new Dictionary<int, bool>();
         [Parameter] public Dictionary<int, string> ButtonsText { get; set; } = new Dictionary<int, string>();
