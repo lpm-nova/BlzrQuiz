@@ -1,5 +1,8 @@
-﻿using BlzrQuiz.Data.Entities;
+﻿using System;
+using BlzrQuiz.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 
 namespace BlzrQuiz.Core
 {
@@ -15,6 +18,7 @@ namespace BlzrQuiz.Core
         public static void Inject(ModelBuilder modelBuilder)
         {
             var di = new DataInjector(modelBuilder);
+            di.AddIdentity();
             di.AddCertifications();
             di.AddQuestions();
             di.AddAnswers();
@@ -992,6 +996,11 @@ namespace BlzrQuiz.Core
                 );
         }
 
+        private void AddIdentity()
+        {
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "User", NormalizedName = "USER", Id = Guid.NewGuid().ToString(), ConcurrencyStamp = Guid.NewGuid().ToString() });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN", Id = Guid.NewGuid().ToString(), ConcurrencyStamp = Guid.NewGuid().ToString() });
+        }
         private void AddQuestions()
         {
             modelBuilder.Entity<Question>().HasData(

@@ -44,18 +44,19 @@ namespace BlzrQuiz
                 ).EnableDetailedErrors()
             );
             services.AddDefaultIdentity<IdentityUser>(
-             o =>
-             {
-                 o.Password.RequireDigit = false;
-                 o.Password.RequireLowercase = false;
-                 o.Password.RequireUppercase = false;
-                 o.Password.RequiredLength = 6;
-                 o.Password.RequireNonAlphanumeric = false;
-                 // User settings.
-                 o.User.AllowedUserNameCharacters =
-                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-             })
-               .AddEntityFrameworkStores<BlzrQuizContext>();
+                     o =>
+                     {
+                         o.Password.RequireDigit = false;
+                         o.Password.RequireLowercase = false;
+                         o.Password.RequireUppercase = false;
+                         o.Password.RequiredLength = 6;
+                         o.Password.RequireNonAlphanumeric = false;
+                         // User settings.
+                         o.User.AllowedUserNameCharacters =
+                         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                     })
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<BlzrQuizContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
