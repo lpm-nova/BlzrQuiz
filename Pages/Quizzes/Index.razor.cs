@@ -36,7 +36,7 @@ namespace BlzrQuiz.Pages.Quizzes
                 await SetButtons().ConfigureAwait(false);
             }
         }
-
+ 
         public void CreateCarousels()
         {
             foreach(var quiz in Quizzes)

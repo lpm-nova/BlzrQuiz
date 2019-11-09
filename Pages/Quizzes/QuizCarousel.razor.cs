@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using M = BlzrQuiz.Models;
 using EF = BlzrQuiz.Data.Entities;
-using BlzrQuiz.ServiceLayer;
+using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
 namespace BlzrQuiz.Pages.Quizzes
@@ -12,6 +12,8 @@ namespace BlzrQuiz.Pages.Quizzes
     public partial class QuizCarousel
     {
 
+        [Inject]
+        protected IJSRuntime JSRuntime { get; set; }
         [Parameter] 
         public System.Security.Claims.ClaimsPrincipal User { get; set; }
         //[Parameter]
@@ -21,12 +23,20 @@ namespace BlzrQuiz.Pages.Quizzes
         [Parameter]
         public List<M.QuizCard> Quizzes { get; set; } = new List<M.QuizCard>();
         public RenderFragment ChildContent { get; set; }
+
+
         //protected override async Task OnInitializedAsync()
         //{
 
 
         //}
-     
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await JSRuntime.InvokeAsync<string>("initializeCarousel");
+            }
+        }
 
 
 
