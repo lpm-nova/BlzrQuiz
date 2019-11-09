@@ -1,7 +1,7 @@
 ﻿@page "/quizzes/index"
 @attribute [Authorize]
-@using BlzrQuiz.ServiceLayer
 @using  EF = BlzrQuiz.Data.Entities
+@using M = BlzrQuiz.Models
 
 
 <style>
@@ -21,9 +21,9 @@
 }
 else
 {
-    @foreach (EF.Quiz quiz in Quizzes)
+    @foreach (KeyValuePair<string, List<M.QuizCard>> kvp in CarouselRows)
     {
-        <QuizCarousel Quiz="quiz" User="User" ButtonDisabled="ButtonDisabled" ButtonsText="ButtonsText"></QuizCarousel>
+        <QuizCarousel Quizzes="kvp.Value" User="User"></QuizCarousel>
     }
     <div id="create-quiz-row" class="row">
         <button id="btn-quiz-creator" type="button" class="btn btn-primary" @onclick="CreateNewQuiz">Create New Quiz</button>

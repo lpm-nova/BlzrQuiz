@@ -1,0 +1,13 @@
+﻿@using  EF = BlzrQuiz.Data.Entities
+@using  M = BlzrQuiz.Models
+<div class="col-sm-3">
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">@Card.Quiz.Certification.Name</div>
+        <div class="card-body">
+            <h5 class="card-title">ID: #@Card.Quiz.QuizId</h5>
+            <p class="card-text">Cert: @Card.Quiz.Certification.Description</p>
+            <p class="card-text">Created: @Card.Quiz.DateCreated</p>
+            <button type="button" @onclick="@(() => CreateUserQuiz(Card.Quiz.QuizId))" class="btn btn-primary" disabled="@Card.IsDisabled">@Card.Text</button>
+        </div>
+    </div>
+</div>
