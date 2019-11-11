@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlzrQuiz.Areas.Identity;
-using BlzrQuiz.Data;
 using BlzrQuiz.ServiceLayer;
-using BlzrQuiz.Shared;
-using Microsoft.AspNetCore.HttpOverrides;
+using BlzrQuiz.Data;
 
 namespace BlzrQuiz
 {
@@ -35,32 +34,32 @@ namespace BlzrQuiz
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BlzrQuizContext>(options =>
-                //options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-                    mySqlOptions =>
-                    {
-                        mySqlOptions.EnableRetryOnFailure();
-                    }
-                ).EnableDetailedErrors()
-            );
+                  //options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
+                  options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                      mySqlOptions =>
+                      {
+                          mySqlOptions.EnableRetryOnFailure();
+                      }
+                  ).EnableDetailedErrors()
+              );
             services.AddDefaultIdentity<IdentityUser>(
-                     o =>
-                     {
-                         o.Password.RequireDigit = false;
-                         o.Password.RequireLowercase = false;
-                         o.Password.RequireUppercase = false;
-                         o.Password.RequiredLength = 6;
-                         o.Password.RequireNonAlphanumeric = false;
-                         // User settings.
-                         o.User.AllowedUserNameCharacters =
-                         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                     })
-                    .AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<BlzrQuizContext>();
+                                o =>
+                                {
+                                    o.Password.RequireDigit = false;
+                                    o.Password.RequireLowercase = false;
+                                    o.Password.RequireUppercase = false;
+                                    o.Password.RequiredLength = 20;
+                                    o.Password.RequireNonAlphanumeric = false;
+                                    // User settings.
+                                    o.User.AllowedUserNameCharacters =
+                                               "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                                    o.SignIn.RequireConfirmedAccount = true;
+                                })
+                               .AddRoles<IdentityRole>()
+                               .AddEntityFrameworkStores<BlzrQuizContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
             services.AddScoped<QuizService>();
             services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
         }
@@ -79,6 +78,8 @@ namespace BlzrQuiz
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
             ConfigureDB(app);
             app.UseAuthentication();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -86,9 +87,8 @@ namespace BlzrQuiz
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
             app.UseRouting();
-            app.UseStaticFiles();
             app.UseAuthorization();
-            app.UseHttpsRedirection();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
@@ -97,7 +97,6 @@ namespace BlzrQuiz
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
-
         private void ConfigureDB(IApplicationBuilder app)
         {
             var rebuild = Configuration.GetValue<bool>("rebuild");

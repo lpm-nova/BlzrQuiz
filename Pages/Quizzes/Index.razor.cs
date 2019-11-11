@@ -33,7 +33,7 @@ namespace BlzrQuiz.Pages.Quizzes
                 Quizzes = await QService.GetQuizes().ConfigureAwait(false) as List<EF.Quiz>;
                 UserQuizzes = await QService.GetUserQuizzesById(User.Identity.Name).ConfigureAwait(false) as List<EF.UserQuiz>;
                 CreateCarousels();
-                await SetButtons().ConfigureAwait(false);
+                SetButtons();//.ConfigureAwait(false);
             }
         }
  
@@ -80,7 +80,7 @@ namespace BlzrQuiz.Pages.Quizzes
             return qz;
         }
 
-        private async Task SetButtons()
+        private void SetButtons()
         {
             //ButtonDisabled.Clear();
             //ButtonsText.Clear();
