@@ -29,6 +29,7 @@ bld/
 
 # Keep out the Development settings
 appsettings.Development.json
+appsettings.Production.json
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

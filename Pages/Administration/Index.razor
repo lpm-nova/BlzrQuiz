@@ -114,31 +114,35 @@
         <p>You're not loggged in.</p>
     </NotAuthorized>
 </AuthorizeView>
+
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
-    string ADMINISTRATION_ROLE = "Admin";
+    const string ADMINISTRATION_ROLE = "Admin";
+    const string USER_ROLE = "User";
     System.Security.Claims.ClaimsPrincipal CurrentUser;
     // Property used to add or edit the currently selected user
     IdentityUser objUser = new IdentityUser();
     // Tracks the selected role for the currently selected user
-    string CurrentUserRole { get; set; } = "Users";
+    string CurrentUserRole { get; set; } = USER_ROLE;
     // Collection to display the existing users
     List<IdentityUser> ColUsers = new List<IdentityUser>();
     // Options to display in the roles dropdown when editing a user
-    List<string> Options = new List<string>() { "User", "Admin" };
+    List<string> Options = new List<string>() { "None", USER_ROLE, ADMINISTRATION_ROLE };
     // To hold any possible errors
     string strError = "";
     // To enable showing the Popup
     bool ShowPopup = false;
+
     protected override async Task OnInitializedAsync()
     {
         // Get the current logged in user
         CurrentUser = (await authenticationStateTask).User;
-         // Get the users
+        // Get the users
         GetUsers();
     }
-   void AddNewUser()
+
+    void AddNewUser()
     {
         // Make new user
         objUser = new IdentityUser();
@@ -148,6 +152,7 @@
         // Open the Popup
         ShowPopup = true;
     }
+
     async Task SaveUser()
     {
         try
@@ -155,7 +160,7 @@
             // Is this an existing user?
             if (objUser.Id != "")
             {
-                 // Get the user
+                // Get the user
                 var user = await _UserManager.FindByIdAsync(objUser.Id);
                 // Update Email
                 user.Email = objUser.Email;
@@ -165,22 +170,13 @@
                 // is not the default value
                 if (objUser.PasswordHash != "*****")
                 {
-                    var resetToken = 
-                        await _UserManager.GeneratePasswordResetTokenAsync(user);
-                    var passworduser = 
-                        await _UserManager.ResetPasswordAsync(
-                            user, 
-                            resetToken, 
-                            objUser.PasswordHash);
+                    var resetToken = await _UserManager.GeneratePasswordResetTokenAsync(user);
+                    var passworduser = await _UserManager.ResetPasswordAsync(user, resetToken, objUser.PasswordHash);
                     if (!passworduser.Succeeded)
                     {
                         if (passworduser.Errors.FirstOrDefault() != null)
                         {
-                            strError = 
-                                passworduser
-                                .Errors
-                                .FirstOrDefault()
-                                .Description;
+                            strError = passworduser.Errors.FirstOrDefault().Description;
                         }
                         else
                         {
@@ -192,57 +188,38 @@
                 }
                 // Handle Roles
                 // Is user in administrator role?
-                var UserResult = 
-                    await _UserManager
-                    .IsInRoleAsync(user, ADMINISTRATION_ROLE);
-                // Is Administrator role selected 
+                var UserResult = await _UserManager.IsInRoleAsync(user, ADMINISTRATION_ROLE);
+                // Is Administrator role selected
                 // but user is not an Administrator?
-                if (
-                    (CurrentUserRole == ADMINISTRATION_ROLE) 
-                    & 
-                    (!UserResult))
+                if ((CurrentUserRole == ADMINISTRATION_ROLE) & (!UserResult))
                 {
                     // Put admin in Administrator role
-                    await _UserManager
-                        .AddToRoleAsync(user, ADMINISTRATION_ROLE);
+                    await _UserManager.AddToRoleAsync(user, ADMINISTRATION_ROLE);
                 }
                 else
                 {
-                    // Is Administrator role not selected 
+                    // Is Administrator role not selected
                     // but user is an Administrator?
-                    if ((CurrentUserRole != ADMINISTRATION_ROLE) 
-                        & 
-                        (UserResult))
+                    if ((CurrentUserRole != ADMINISTRATION_ROLE) & (UserResult))
                     {
                         // Remove user from Administrator role
-                        await _UserManager
-                            .RemoveFromRoleAsync(user, ADMINISTRATION_ROLE);
+                        await _UserManager.RemoveFromRoleAsync(user, ADMINISTRATION_ROLE);
+                    }else
+                    {
+                        await _UserManager.AddToRoleAsync(user, USER_ROLE);
                     }
                 }
             }
             else
             {
                 // Insert new user
-                var NewUser =
-                    new IdentityUser
-                    {
-                        UserName = objUser.UserName,
-                        Email = objUser.Email
-                    };
-                var CreateResult =
-                    await _UserManager
-                    .CreateAsync(NewUser, objUser.PasswordHash);
+                var NewUser = new IdentityUser { UserName = objUser.UserName, Email = objUser.Email };
+                var CreateResult = await _UserManager.CreateAsync(NewUser, objUser.PasswordHash);
                 if (!CreateResult.Succeeded)
                 {
-                    if (CreateResult
-                        .Errors
-                        .FirstOrDefault() != null)
+                    if (CreateResult.Errors.FirstOrDefault() != null)
                     {
-                        strError =
-                            CreateResult
-                            .Errors
-                            .FirstOrDefault()
-                            .Description;
+                        strError = CreateResult.Errors.FirstOrDefault().Description;
                     }
                     else
                     {
@@ -257,8 +234,7 @@
                     if (CurrentUserRole == ADMINISTRATION_ROLE)
                     {
                         // Put admin in Administrator role
-                        await _UserManager
-                            .AddToRoleAsync(NewUser, ADMINISTRATION_ROLE);
+                        await _UserManager.AddToRoleAsync(NewUser, ADMINISTRATION_ROLE);
                     }
                 }
             }
@@ -272,6 +248,7 @@
             strError = ex.GetBaseException().Message;
         }
     }
+
     async Task EditUser(IdentityUser _IdentityUser)
     {
         // Set the selected user
@@ -282,22 +259,29 @@
         if (user != null)
         {
             // Is user in administrator role?
-            var UserResult =
-                await _UserManager
-                .IsInRoleAsync(user, ADMINISTRATION_ROLE);
-            if (UserResult)
+            var UserResult = await _UserManager.IsInRoleAsync(user, ADMINISTRATION_ROLE);
+            var userRoles = await _UserManager.GetRolesAsync(user);
+            if (userRoles != null && userRoles.Count >= 1)
             {
-                CurrentUserRole = ADMINISTRATION_ROLE;
-            }
-            else
+                CurrentUserRole = userRoles.Contains(ADMINISTRATION_ROLE) ? ADMINISTRATION_ROLE : USER_ROLE;
+            }else
             {
-                CurrentUserRole = "User";
+                CurrentUserRole = "None";
             }
+            //if (UserResult)
+            //{
+            //    CurrentUserRole = ADMINISTRATION_ROLE;
+            //}
+            //else
+            //{
+            //    CurrentUserRole = USER_ROLE;
+            //}
         }
         // Open the Popup
         ShowPopup = true;
     }
-  async Task DeleteUser()
+
+    async Task DeleteUser()
     {
         // Close the Popup
         ShowPopup = false;
@@ -311,11 +295,13 @@
         // Refresh Users
         GetUsers();
     }
+
     void ClosePopup()
     {
         // Close the Popup
         ShowPopup = false;
     }
+
     public void GetUsers()
     {
         // clear any error messages
