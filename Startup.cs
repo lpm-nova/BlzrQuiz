@@ -33,6 +33,7 @@ namespace BlzrQuiz
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var minPasswordLength = Configuration.GetValue<int>("PasswordLength");
             services.AddDbContext<BlzrQuizContext>(options =>
                   //options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
                   options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
@@ -48,7 +49,7 @@ namespace BlzrQuiz
                                     o.Password.RequireDigit = false;
                                     o.Password.RequireLowercase = false;
                                     o.Password.RequireUppercase = false;
-                                    o.Password.RequiredLength = 20;
+                                    o.Password.RequiredLength = minPasswordLength;
                                     o.Password.RequireNonAlphanumeric = false;
                                     // User settings.
                                     o.User.AllowedUserNameCharacters =
