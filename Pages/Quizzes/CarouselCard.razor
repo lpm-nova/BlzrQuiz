@@ -1,0 +1,35 @@
+﻿@using M = BlzrQuiz.Models
+
+@inject BlzrQuiz.ServiceLayer.QuizService QService
+
+<div class="col-sm-3">
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">@Card.Quiz.Certification.Name</div>
+        <div class="card-body">
+            <h5 class="card-title">ID: #@Card.Quiz.QuizId</h5>
+            <p class="card-text">Cert: @Card.Quiz.Certification.Description</p>
+            <p class="card-text">Created: @Card.Quiz.DateCreated</p>
+            <button type="button" @onclick="@(() => CreateUserQuiz(Card.Quiz.QuizId))" class="btn btn-primary" disabled="@Card.IsDisabled">@Card.Text</button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Inject]
+    private NavigationManager NavManager { get; set; }
+
+
+    [Parameter]
+    public M.QuizCard Card { get; set; }
+    [Parameter]
+    public System.Security.Claims.ClaimsPrincipal User { get; set; }
+    private async Task CreateUserQuiz(int quizId)
+    {
+        var userQuiz = await QService.CreateUserQuizByQuizId(quizId, User.Identity.Name).ConfigureAwait(false);
+        if (userQuiz != null)
+        {
+            NavManager.NavigateTo($"/userquiz/{userQuiz.UserQuizId}");
+        }
+    }
+}
