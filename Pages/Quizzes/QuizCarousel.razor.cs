@@ -24,10 +24,10 @@ namespace BlzrQuiz.Pages.Quizzes
         public List<M.QuizCard> QuizCards { get; set; } = new List<M.QuizCard>();
         public RenderFragment ChildContent { get; set; }
 
-        private string IsActive(int counter)
-        {
-            return counter < 5 ? "active" : string.Empty;
-        }
+        //private string IsActive(int counter)
+        //{
+        //    return counter < 5 ? "active" : string.Empty;
+        //}
         //protected override async Task OnInitializedAsync()
         //{
 

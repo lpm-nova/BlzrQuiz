@@ -2,6 +2,9 @@
 @using  M = BlzrQuiz.Models
 <div class="carousel-item py-5 @IsActive">
     <div class="row">
-        <CarouselCard Card="Card"></CarouselCard>
+        @foreach (var card in Cards)
+        {
+            <CarouselCard Card="card"></CarouselCard>
+        }
     </div>
 </div>

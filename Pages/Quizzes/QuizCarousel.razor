@@ -2,16 +2,39 @@
     <div class="row mx-auto my-auto">
         <div id="quiz-carousel" class="carousel slide w-100" data-ride="carousel">
             <div class="carousel-inner" role="listbox">
-               
-                 <CarouselItem Cards="QuizCards" User="User"></CarouselItem>*@
+                @{
+                    var counter = 0;
+                    var cards = new List<BlzrQuiz.Models.QuizCard>();
+                    var isActive = "active";
+                    foreach (var quiz in Quizzes)
+                    {
+                        if (counter == 2)
+                        {
+                            cards.Add(quiz);
+                            <CarouselItem Cards="cards" User="User" IsActive="@isActive"></CarouselItem>
+                            cards = new List<BlzrQuiz.Models.QuizCard>();
+                            isActive = string.Empty;
+                            counter = 0;
+                        }
+                        else
+                        {
+                            cards.Add(quiz);
+                            counter++;
+                        }
+                    }
+                    if (cards.Count > 0)
+                    {
+                        <CarouselItem Cards="cards" User="User"></CarouselItem>
+                    }
+                }
             </div>
             <!-- Left and right controls -->
-            <a id="quiz-carousel-prev" class="carousel-control-prev" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
+            <a id="quiz-carousel-prev" class="carousel-control-prev bg-danger" role="button" data-slide="prev">
+                <span class="icon-prev"></span>
                 <span class="sr-only">Previous</span>
             </a>
             <a id="quiz-carousel-next" class="carousel-control-next" role="button" data-slide="next">
-                <span class="carousel-control-next-icon btn-danger"></span>
+                <span class="icon-next"></span>
                 <span class="sr-only">Next</span>
             </a>
         </div>
