@@ -75,7 +75,7 @@ namespace BlzrQuiz.Pages.Quizzes
             else
             {
                 qz.Text = "Take This Quiz";
-                qz.IsDisabled = true;
+                qz.IsDisabled = false;
             }
             return qz;
         }
