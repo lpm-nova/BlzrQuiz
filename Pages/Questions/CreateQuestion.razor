@@ -1,0 +1,46 @@
+﻿@using BlzrQuiz.Data.Entities
+
+@if (IsVisible)
+{
+<div class="modal fade" id="create-question-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Question</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@Question" OnValidSubmit="@AddNewQuestion">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <label for="classification">Primary Classification: </label>
+                    <InputText id="name" @bind-Value="@Question.Text" />
+                    @foreach(var answer in Answers){
+                    
+                    }
+                    <button type="submit">Submit</button>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@code {
+    bool IsVisible { get; set; } = true;
+    private Question Question { get; set; } = new Question();
+    private List<Answer> Answers { get; set; } = new List<Answer>();
+
+    private void AddNewQuestion()
+    {
+
+        IsVisible = false;
+    }
+
+    }

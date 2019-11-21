@@ -22,4 +22,8 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.0.0-rc3.final" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BlazorModal\src\BlazorModal\BlazorModal.csproj" />
+  </ItemGroup>
+
 </Project>

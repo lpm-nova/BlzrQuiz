@@ -41,23 +41,8 @@ else
     </table>
 }
 
-<h3>Create</h3>
-
-<h4>Question</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-
-        <EditForm Model="@Question" OnValidSubmit="@AddNewQuestion">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <label for="classification">Primary Classification: </label>
-            <InputText id="name" @bind-Value="@Question.Text" />
-
-            <button type="submit">Submit</button>
-        </EditForm>
-    </div>
-</div>
+<button
 
 @code {
     IEnumerable<Question> QuestionList;

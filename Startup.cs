@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using BlzrQuiz.Areas.Identity;
 using BlzrQuiz.ServiceLayer;
 using BlzrQuiz.Data;
+using BlazorModal;
 
 namespace BlzrQuiz
 {
@@ -63,6 +64,7 @@ namespace BlzrQuiz
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<QuizService>();
             services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
+            services.AddBlazorModal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
