@@ -17,7 +17,8 @@ using Microsoft.Extensions.Hosting;
 using BlzrQuiz.Areas.Identity;
 using BlzrQuiz.ServiceLayer;
 using BlzrQuiz.Data;
-using BlazorModal;
+using Blazored.Modal;
+using System.Diagnostics;
 
 namespace BlzrQuiz
 {
@@ -34,6 +35,10 @@ namespace BlzrQuiz
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            Debug.WriteLine("");
+            Debug.Write("()-------------------------> ");
+            Debug.WriteLine(Configuration.GetValue<string>("DefaultConnection"));
+            Debug.WriteLine("");
             var minPasswordLength = Configuration.GetValue<int>("PasswordLength");
             services.AddDbContext<BlzrQuizContext>(options =>
                   //options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
@@ -64,7 +69,7 @@ namespace BlzrQuiz
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<QuizService>();
             services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
-            services.AddBlazorModal();
+            services.AddBlazoredModal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -102,6 +107,7 @@ namespace BlzrQuiz
         }
         private void ConfigureDB(IApplicationBuilder app)
         {
+           
             var rebuild = Configuration.GetValue<bool>("rebuild");
             if (rebuild)
             {

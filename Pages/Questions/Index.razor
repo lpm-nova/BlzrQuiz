@@ -4,6 +4,8 @@
 @using  BlzrQuiz.Data.Entities
 @inject QuizService QService
 @inject NavigationManager NavManager
+@inject IModalService Modal
+
 <style>
     #qtable tr td:nth-child(3) {
         width: 10%;
@@ -42,11 +44,12 @@ else
 }
 
 <hr />
-<button
+<button @onclick="@(() => Modal.Show<SimpleForm>("My Movies"))" class="btn btn-primary">View Movies</button>
 
 @code {
     IEnumerable<Question> QuestionList;
     IEnumerable<Certification> Certifications;
+    bool ModalIsVisible { get; set; } = false;
     public Question Question { get; set; } = new Question();
 
     protected override async Task OnInitializedAsync()
@@ -66,5 +69,19 @@ else
     {
         QService.DeleteQuestion(entity);
         QuestionList = await QService.GetQuestions();
+    }
+
+    void ModalClosed(ModalResult modalResult)
+    {
+        if (modalResult.Cancelled)
+        {
+            Console.WriteLine("Modal was cancelled");
+        }
+        else
+        {
+            Console.WriteLine(modalResult.Data);
+        }
+
+        Modal.OnClose -= ModalClosed;
     }
 }

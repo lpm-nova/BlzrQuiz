@@ -6,9 +6,10 @@
                     var counter = 0;
                     var cards = new List<BlzrQuiz.Models.QuizCard>();
                     var isActive = "active";
+                    var length = Quizzes.Count - 1;
                     foreach (var quiz in Quizzes)
                     {
-                        if (counter == 3)
+                        if (counter == 3 || counter == length)
                         {
                             cards.Add(quiz);
                             <CarouselItem Cards="cards" User="User" IsActive="@isActive"></CarouselItem>
