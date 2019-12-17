@@ -231,50 +231,72 @@ namespace BlzrQuiz.ServiceLayer
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        //TODO FIX. HARD CODED Cert ID
         public async Task<Quiz> CreateQuiz()
         {
             var quiz = await CreateQuizForCertification("CLF-C01").ConfigureAwait(false);
             return quiz;
         }
-
         public async Task<Quiz> CreateQuizForCertification(string certName)
         {
             Quiz quiz = null;
-            var cert = _context.Certifications.FirstOrDefault(x => x.Name == certName);
+            var cert = await _context.Certifications.FirstOrDefaultAsync(x => x.Name == certName).ConfigureAwait(false);
             if (cert != null)
             {
-                var qQuery = _context.Questions.Where(x => x.CertificationId == cert.CertificationId);
-                var total = qQuery.Count() - 1;
-                Random r = new Random();
-
-                List<Question> questions = new List<Question>();
-                for (var i = 0; i < 50; i++)
-                {
-                    AddToQuestionsList(total, r, questions);
-                }
-
-                if (questions.Count == 0)
-                    throw new Exception("No questions for quiz");
-
-                quiz = new Quiz { CertificationId = cert.CertificationId, Name = certName, DateCreated = DateTime.UtcNow };
-                _ = await _context.Quizes.AddAsync(quiz).ConfigureAwait(false);
-                _ = await _context.SaveChangesAsync().ConfigureAwait(false);
-                byte questionNumber = 1;
-                foreach (var q in questions)
-                {
-                    _context.QuizQuestions.Add(
-                         new QuizQuestion
-                         {
-                             QuizId = quiz.QuizId,
-                             Question = q,
-                             QuestionId = q.QuestionId,
-                             QuestionNumber = questionNumber++
-                         }
-                     );
-                }
-                _context.SaveChanges();
+                quiz = await CreateNewQuiz(certName, cert).ConfigureAwait(false);
+                await PopulateQuizQuestions(quiz);
             }
             return quiz;
+        }
+
+        public async Task PopulateQuizQuestions(Quiz quiz)
+        {
+            List<Question> questions = CreateNewListOfQuestions(quiz.CertificationId);
+            if (questions.Count == 0)
+                throw new Exception("No questions for quiz");
+
+            CreateQuizQuestions(quiz, questions);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<Quiz> CreateNewQuiz(string certName, Certification cert)
+        {
+            Quiz quiz = new Quiz { CertificationId = cert.CertificationId, Name = certName, DateCreated = DateTime.UtcNow };
+            _ = await _context.Quizes.AddAsync(quiz).ConfigureAwait(false);
+            _ = await _context.SaveChangesAsync().ConfigureAwait(false);
+            return quiz;
+        }
+
+        public List<Question> CreateNewListOfQuestions(int certId)
+        {
+            var query = _context.Questions.Where(x => x.CertificationId == certId);
+            var total = query.Count() - 1;
+            Random r = new Random();
+
+            List<Question> questions = new List<Question>();
+            for (var i = 0; i < 50; i++)
+            {
+                AddToQuestionsList(total, r, questions);
+            }
+
+            return questions;
+        }
+
+        public void CreateQuizQuestions(Quiz quiz, List<Question> questions)
+        {
+            byte questionNumber = 1;
+            foreach (var q in questions)
+            {
+                _context.QuizQuestions.Add(
+                     new QuizQuestion
+                     {
+                         QuizId = quiz.QuizId,
+                         Question = q,
+                         QuestionId = q.QuestionId,
+                         QuestionNumber = questionNumber++
+                     }
+                 );
+            }
         }
 
         private void AddToQuestionsList(int total, Random r, List<Question> questions)
@@ -284,7 +306,8 @@ namespace BlzrQuiz.ServiceLayer
             if (!questions.Any(x => x.QuestionId == entry.QuestionId))
             {
                 questions.Add(entry);
-            }else
+            }
+            else
             {
                 AddToQuestionsList(total, r, questions);
             }

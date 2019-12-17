@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using EF = BlzrQuiz.Data.Entities;
 
@@ -14,12 +15,12 @@ namespace BlzrQuiz.Pages.UserQuiz
         [Parameter]
         public int QuizId { get; set; }
 
-        [Parameter] 
+        [Parameter]
         public int CertId { get; set; }
 
-        [Inject] 
+        [Inject]
         private QuizService QService { get; set; }
-        [Inject] 
+        [Inject]
         protected AuthenticationStateProvider Auth { get; set; }
 
 
@@ -45,30 +46,44 @@ namespace BlzrQuiz.Pages.UserQuiz
         private EF.UserQuiz ThisUserQuiz { get; set; }
         private Dictionary<int, string> ButtonClasses { get; set; } = new Dictionary<int, string>();
         public string UserName { get; set; } = "No One";
-
+        private bool IsPageLoaded { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
             CertId = 3;
+            var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
+            var user = authState.User;
+            UserName = user.Identity.Name ?? "Nada";
             try
             {
-                await GetUserQuiz().ConfigureAwait(false);
-                QuestionList = ThisUserQuiz.Quiz.QuizQuestions.OrderBy(x => x.QuestionNumber);
-                questionListCount = QuestionList.Count() - 1;
-                counter = 0;
-                SetUserQuizComponentProperties();
-                SetButtons();
+                await GetUserQuiz(user).ConfigureAwait(false);
+                if (ThisUserQuiz != null)
+                {
+                    await PopulateQuestionList(user);
+                    questionListCount = QuestionList.Count() > 0 ? QuestionList.Count() - 1 : 0;
+                    counter = 0;
+                    SetUserQuizComponentProperties();
+                    SetButtons();
+                }
             }
             catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"Exception caught in UserQuiz: {ex.Message}");
             }
+            IsPageLoaded = true;
         }
 
-        protected async Task GetUserQuiz()
+        private async Task PopulateQuestionList(ClaimsPrincipal user)
         {
-            var authState = await Auth.GetAuthenticationStateAsync().ConfigureAwait(false);
-            var user = authState.User;
-            UserName = user.Identity.Name ?? "Nada";
+            if (ThisUserQuiz.Quiz.QuizQuestions.Count <= 0)
+            {
+                await QService.PopulateQuizQuestions(ThisUserQuiz.Quiz);
+                ThisUserQuiz = await QService.GetUserQuizQuestions(QuizId, user.Identity.Name).ConfigureAwait(false);
+            }
+            QuestionList = ThisUserQuiz.Quiz.QuizQuestions.OrderBy(x => x.QuestionNumber);
+        }
+
+        protected async Task GetUserQuiz(ClaimsPrincipal user)
+        {
             ThisUserQuiz = await QService.GetUserQuizQuestions(QuizId, user.Identity.Name).ConfigureAwait(false);
 
             if (ThisUserQuiz is null)

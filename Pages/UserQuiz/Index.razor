@@ -2,12 +2,14 @@
 @attribute [Authorize]
 
 <div class="container-fluid">
-    @if (QuestionList.Count() == 0)
+    @if (!IsPageLoaded)
     {
         <p><em>Loading...</em></p>
     }
     else
     {
+        if (QuestionList.Count() > 0)
+        {
         <div class="row col-lg-12">
             <div class="col-lg-3">
                 <h3>Question: @UQuestion.QuestionNumber of @QuestionList.Count()</h3>
@@ -35,5 +37,9 @@
              title="Some questions may have multiple correct answers">
             <strong>Score: </strong> @Score out of @CorrectAnswerCount possible correct answers.
         </div>
+        }else
+        {
+            <div>No questions were loaded. Something went wrong.</div>
+        }
     }
 </div>
