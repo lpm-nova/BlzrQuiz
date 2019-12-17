@@ -19,6 +19,9 @@
 }
 else
 {
+<button @onclick="ShowModal" class="btn btn-primary">Show Modal</button>
+    <hr />
+
     <table class="table table-striped" id="qtable">
         <thead>
             <tr>
@@ -43,8 +46,6 @@ else
     </table>
 }
 
-<hr />
-<button @onclick="@(() => Modal.Show<SimpleForm>("My Movies"))" class="btn btn-primary">View Movies</button>
 
 @code {
     IEnumerable<Question> QuestionList;
@@ -71,15 +72,26 @@ else
         QuestionList = await QService.GetQuestions();
     }
 
+    void ShowModal()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("FormId", 11);
+
+        Modal.OnClose += ModalClosed;
+        Modal.Show<SimpleForm>("Sign Up Form", parameters);
+    }
+
     void ModalClosed(ModalResult modalResult)
     {
+        Console.WriteLine("Modal has closed");
+
         if (modalResult.Cancelled)
         {
-            Console.WriteLine("Modal was cancelled");
+            Console.WriteLine("Modal was Cancelled");
         }
         else
         {
-            Console.WriteLine(modalResult.Data);
+            Console.WriteLine(modalResult.Data.ToString());
         }
 
         Modal.OnClose -= ModalClosed;
