@@ -1,19 +1,19 @@
-﻿<div class="input-group mb-3">
-    <div class="input-group-prepend">
-        <div class="input-group-text">
-            <input type="@InputType()" aria-label="@InputType() for following text input">
-        </div>
-    </div>
-    <input type="text" class="form-control" aria-label="Text input with @InputType()">
+﻿@using  BlzrQuiz.Data.Entities
+<div class="row">
+    <input @bind=Answer.IsCorrect type="checkbox" class="form-control" />
+    <input @bind="Answer.Text" type="text" class="form-control" placeholder="Enter Answer Text" />
 </div>
 
 @code {
     [Parameter]
-    public bool IsCheckbox { get; set; } = false;
+    public int Index { get; set; }
+    //[Parameter]
+    //public bool IsCheckbox { get; set; } = false;
+    public Answer Answer { get; set; } = new Answer();
+    //private string InputType()
+    //{
 
-    private string InputType() {
-
-        return IsCheckbox ? "checkbox" : "radio";
-    }
+    //    return IsCheckbox ? "checkbox" : "radio";
+    //}
 
 }

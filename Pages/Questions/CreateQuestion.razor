@@ -1,47 +1,62 @@
 ﻿@using BlzrQuiz.Data.Entities
 @inject IModalService ModalService
-@if (IsVisible)
+@inject NavigationManager NavManager
+@if (ShowForm)
 {
-    <div class="modal fade" id="create-question-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Question</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <EditForm Model="@Question" OnValidSubmit="@AddNewQuestion">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-                        <label for="classification">Primary Classification: </label>
-                        <InputText id="name" @bind-Value="@Question.Text" />
-                        @foreach (var answer in Answers)
-                        {
+    <div class="simple-form" id="create-question-modal">
+        <div class="form-group">
 
-                        }
-                        <button type="submit">Submit</button>
-                    </EditForm>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
-                </div>
-            </div>
+            <label for="question-text">Text: </label>
+            <textarea @bind="Question.Text" id="question-text" type="text" class="form-control" placeholder="Enter Answer Text" />
+
         </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-sm">
+                <span class=""></span>Add Answer
+            </button>
+            @foreach (var answer in Answers)
+            {
+                @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
+                <AnswerEntry Index="1"></AnswerEntry>
+            }
+        </div>
+        <div>
+            <button @onclick="SubmitForm" class="btn btn-primary">Submit</button>
+            <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-success" role="alert">
+        Submitted<br />
+        <button class="btn btn-primary" @onclick="Done">Done</button>
     </div>
 }
 
 @code {
-    [ParameterAttribute]
-    public bool IsVisible { get; set; } = true;
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+    [CascadingParameter] BlazoredModal BlazoredModal { get; set; }
+    bool ShowForm { get; set; } = true;
     private Question Question { get; set; } = new Question();
     private List<Answer> Answers { get; set; } = new List<Answer>();
-
-    private void AddNewQuestion()
+    protected override void OnInitialized()
     {
-        IsVisible = false;
+
+        BlazoredModal.SetTitle("Create Question");
+    }
+    void SubmitForm()
+    {
+        ShowForm = false;
+    }
+    void Done()
+    {
+        ModalService.Close(ModalResult.Ok($"Question was created successfully."));
+    }
+
+    void Cancel()
+    {
+        ModalService.Close(ModalResult.Cancel());
     }
 
 }

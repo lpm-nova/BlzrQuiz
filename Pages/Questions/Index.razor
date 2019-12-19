@@ -19,7 +19,9 @@
 }
 else
 {
-<button @onclick="ShowModal" class="btn btn-primary">Show Modal</button>
+    <BlazoredModal />
+
+    <button @onclick="ShowModal" class="btn btn-primary">Show Modal</button>
     <hr />
 
     <table class="table table-striped" id="qtable">
@@ -78,7 +80,7 @@ else
         parameters.Add("FormId", 11);
 
         Modal.OnClose += ModalClosed;
-        Modal.Show<SimpleForm>("Sign Up Form", parameters);
+        Modal.Show<CreateQuestion>("Sign Up Form", parameters);
     }
 
     void ModalClosed(ModalResult modalResult)
