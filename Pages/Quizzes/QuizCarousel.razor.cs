@@ -23,23 +23,5 @@ namespace BlzrQuiz.Pages.Quizzes
         public List<M.QuizCard> Quizzes { get; set; } = new List<M.QuizCard>();
         public List<M.QuizCard> QuizCards { get; set; } = new List<M.QuizCard>();
         public RenderFragment ChildContent { get; set; }
-
-        //private string IsActive(int counter)
-        //{
-        //    return counter < 5 ? "active" : string.Empty;
-        //}
-        //protected override async Task OnInitializedAsync()
-        //{
-
-
-        //}
- 
-
-
-        //private void AddNewButton(int quizId)
-        //{
-        //    ButtonsText.Add(quizId, "Take This Quiz");
-        //    ButtonDisabled.Add(quizId, false);
-        //}
     }
 }

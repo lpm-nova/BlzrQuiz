@@ -1,0 +1,36 @@
+﻿@using BlzrQuiz.Data.Entities
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 2%">Crt</th>
+            <th style="width: 93%">Text</th>
+            <th style="width: 5%">Remove</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var answer in Answers)
+            {
+                @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
+                <tr>
+                    <AnswerEntry Answer="answer"></AnswerEntry>
+                    <td><button @onclick="()=> RemoveAnswer(answer)" class="btn btn-primary">Delete</button></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<button @onclick="AddAnswer" class="btn btn-primary">Add</button>
+@code {
+    [Parameter]
+    public List<Answer> Answers { get; set; } = new List<Answer>();
+
+    private void AddAnswer()
+    {
+        Answers.Add(new Answer());
+    }
+    private void RemoveAnswer(Answer answer)
+    {
+        Answers.Remove(answer);
+    }
+}

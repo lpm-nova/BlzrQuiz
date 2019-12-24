@@ -1,19 +1,14 @@
 ﻿@using  BlzrQuiz.Data.Entities
-<div class="row">
-    <input @bind=Answer.IsCorrect type="checkbox" class="form-control" />
-    <input @bind="Answer.Text" type="text" class="form-control" placeholder="Enter Answer Text" />
-</div>
+
+        <td><input @bind=Answer.IsCorrect type="checkbox" class="form-control-sm" /></td>
+        <td><input @bind="Answer.Text" type="text" class="form-control" placeholder="Enter Answer Text" /></td>
 
 @code {
-    [Parameter]
-    public int Index { get; set; }
+
     //[Parameter]
     //public bool IsCheckbox { get; set; } = false;
+    [Parameter]
     public Answer Answer { get; set; } = new Answer();
-    //private string InputType()
-    //{
-
-    //    return IsCheckbox ? "checkbox" : "radio";
-    //}
+ 
 
 }

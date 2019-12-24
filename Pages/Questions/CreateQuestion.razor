@@ -3,22 +3,14 @@
 @inject NavigationManager NavManager
 @if (ShowForm)
 {
-    <div class="simple-form" id="create-question-modal">
+    <div class="simple-form answer-modal" id="create-question-modal">
         <div class="form-group">
-
             <label for="question-text">Text: </label>
             <textarea @bind="Question.Text" id="question-text" type="text" class="form-control" placeholder="Enter Answer Text" />
-
         </div>
+ 
         <div class="form-group">
-            <button type="button" class="btn btn-default btn-sm">
-                <span class=""></span>Add Answer
-            </button>
-            @foreach (var answer in Answers)
-            {
-                @*Referencing Child Blazor Components: <ChildComponentName ChildComponent-Property="ThisComponent-Property></ChildComponentName>"*@
-                <AnswerEntry Index="1"></AnswerEntry>
-            }
+            <AnswerBlock Answers="Answers"></AnswerBlock>
         </div>
         <div>
             <button @onclick="SubmitForm" class="btn btn-primary">Submit</button>
