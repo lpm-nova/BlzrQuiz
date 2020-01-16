@@ -21,7 +21,7 @@ else
 {
     <BlazoredModal Style="blazored-custom-modal" />
 
-    <button @onclick="ShowModal" class="btn btn-primary">Show Modal</button>
+    <button @onclick="ShowModal" class="btn btn-primary">Create New Question</button>
     <hr />
 
     <table class="table table-striped" id="qtable">
@@ -58,7 +58,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         QuestionList = await QService.GetQuestions();
-        Certifications = await QService.GetCertifications();
+        Certifications = await QService.GetCertificationsAsync();
     }
 
     async Task AddNewQuestion()

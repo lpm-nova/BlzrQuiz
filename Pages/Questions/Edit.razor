@@ -59,7 +59,7 @@
     protected override async Task OnInitializedAsync()
     {
         await PopulateQuestions();
-        Certifications = await QService.GetCertifications();
+        Certifications = await QService.GetCertificationsAsync();
         await PopulateCertTags();
     }
 

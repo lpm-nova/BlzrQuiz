@@ -41,7 +41,6 @@ namespace BlzrQuiz
             Debug.WriteLine("");
             var minPasswordLength = Configuration.GetValue<int>("PasswordLength");
             services.AddDbContext<BlzrQuizContext>(options =>
-                  //options.UseMySql(Configuration.GetConnectionString($"{Environment.MachineName}Sql"),
                   options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
                       mySqlOptions =>
                       {

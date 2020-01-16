@@ -80,7 +80,7 @@ namespace BlzrQuiz.ServiceLayer
             return _context.Questions.Include(x => x.QuestionTags).ThenInclude(x => x.Tag).FirstOrDefaultAsync(x => x.QuestionId == id);
         }
 
-        public async Task<IEnumerable<Certification>> GetCertifications()
+        public async Task<IEnumerable<Certification>> GetCertificationsAsync()
         {
             return await _context.Certifications.ToListAsync().ConfigureAwait(false);
         }
