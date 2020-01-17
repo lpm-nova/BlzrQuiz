@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlzrQuiz.Data.Entities
 {
-    public partial class Question
+    public partial class Question : IValidatableObject
     {
         public int QuestionId { get; set; }
-        public Certification Certification { get; set; }
         [Required]
+        public Certification Certification { get; set; }
         public int CertificationId { get; set; }
         public Explanation Explanation { get; set; }
 
@@ -16,6 +16,9 @@ namespace BlzrQuiz.Data.Entities
         [StringLength(500, MinimumLength = 10)]
         public string Text { get; set; }
         public byte NumberOfCorrectAnswers { get; set; }
+
+        [Required]
+        [MinLength(2)]
         public virtual ICollection<Answer> Answers { get; set; }
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
         public ICollection<QuestionTag> QuestionTags { get; set; }
@@ -29,6 +32,11 @@ namespace BlzrQuiz.Data.Entities
         public MarkupString ToMarkup()
         {
             return new MarkupString(Text);
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

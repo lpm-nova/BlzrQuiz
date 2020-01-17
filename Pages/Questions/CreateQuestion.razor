@@ -17,13 +17,14 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="row">
-                <label for="cert-dropdown">Certification: </label>
+                <label for="cert-dropdown">Certification: &nbsp;</label>
                 <InputSelectNumber id="cert-dropdown" @bind-Value="Question.CertificationId">
                     @foreach (var opt in Certifications)
                     {
                     <option value="@opt.CertificationId">@opt.Name</option>
                     }
                 </InputSelectNumber>
+                <br/>
                 <InputTextArea id="name" class="col-lg-10" @bind-Value="Question.Text" />
                 <div class="form-group">
                     <AnswerBlock Answers="Answers"></AnswerBlock>
