@@ -7,8 +7,9 @@ namespace BlzrQuiz.Data.Entities
     public partial class Question : IValidatableObject
     {
         public int QuestionId { get; set; }
-        [Required]
+
         public Certification Certification { get; set; }
+        [Required]
         public int CertificationId { get; set; }
         public Explanation Explanation { get; set; }
 
