@@ -13,7 +13,7 @@
     }
     else
     {
-        <EditForm class="col-lg-12" Model="@Question" OnValidSubmit="@SubmitForm">
+        <EditForm class="col-12" Model="@Question" OnValidSubmit="@SubmitForm">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="row">
@@ -25,15 +25,15 @@
                     }
                 </InputSelectNumber>
                 <br/>
-                <InputTextArea id="name" class="col-lg-10" @bind-Value="Question.Text" />
+                <InputTextArea id="name" class="col-10" @bind-Value="Question.Text" />
                 <div class="form-group">
                     <AnswerBlock Answers="Answers"></AnswerBlock>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-10">
                 </div>
-                <div class="col-lg-2">
+                <div class="col-2">
                     <button type="submit">Submit</button>
                     <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
                 </div>
